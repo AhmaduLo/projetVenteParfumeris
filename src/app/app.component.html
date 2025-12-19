@@ -1,0 +1,34 @@
+<!-- Application principale -->
+<div class="app">
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Contenu principal -->
+  <main class="main-content">
+    <!-- Section Hero -->
+    <app-hero></app-hero>
+
+    <!-- Section Catalogue -->
+    <app-catalogue (productSelected)="onProductSelected($event)"></app-catalogue>
+
+    <!-- Section À propos -->
+    <app-about></app-about>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+  <!-- Modal Produit -->
+  <app-product-modal
+    [product]="selectedProduct"
+    (closeModal)="closeProductModal()"
+    (openContact)="openContactModal($event)">
+  </app-product-modal>
+
+  <!-- Modal Contact -->
+  <app-contact-modal
+    [isOpen]="isContactModalOpen"
+    [product]="contactProduct"
+    (closeModal)="closeContactModal()">
+  </app-contact-modal>
+</div>

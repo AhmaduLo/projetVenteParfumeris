@@ -1,0 +1,30 @@
+<!-- Section Hero avec image de fond -->
+<section class="hero" id="hero">
+  <!-- Overlay pour améliorer la lisibilité du texte -->
+  <div class="hero-overlay"></div>
+
+  <!-- Contenu principal -->
+  <div class="hero-content">
+    <h1 class="hero-title fade-in-down">
+      Découvrez nos Fragrances Exceptionnelles
+    </h1>
+
+    <p class="hero-subtitle fade-in-up delay-1">
+      Parfums de luxe et incenses artisanaux
+    </p>
+
+    <button
+      class="hero-cta fade-in-up delay-2"
+      (click)="scrollToCatalogue()"
+      aria-label="Voir le catalogue de produits">
+      Voir le catalogue
+    </button>
+  </div>
+
+  <!-- Indicateur de scroll -->
+  <div class="scroll-indicator">
+    <svg class="scroll-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M12 5v14M5 12l7 7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>

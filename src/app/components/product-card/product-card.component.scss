@@ -1,0 +1,113 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.product-card {
+  position: relative;
+  background-color: $white;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  cursor: pointer;
+  @include card-shadow(true);
+  transition: all $transition-speed-normal $transition-ease;
+
+  &:hover {
+    .product-image {
+      transform: scale(1.1);
+    }
+
+    .product-overlay {
+      opacity: 1;
+    }
+  }
+
+  &:focus {
+    outline: 2px solid $accent-color;
+    outline-offset: 2px;
+  }
+}
+
+.product-badge {
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+  background-color: $accent-color;
+  color: $secondary-color;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+  box-shadow: $shadow-md;
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; // Ratio 1:1
+  overflow: hidden;
+  background-color: $light-bg;
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  @include image-cover;
+  transition: transform $transition-speed-slow $transition-ease;
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  @include flex-center;
+  background-color: rgba($secondary-color, 0.7);
+  opacity: 0;
+  transition: opacity $transition-speed-normal $transition-ease;
+}
+
+.product-overlay-text {
+  font-family: $font-body;
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: $white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-info {
+  padding: $spacing-sm;
+  @include flex-column;
+  gap: $spacing-xs;
+}
+
+.product-category {
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  color: $primary-color;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-name {
+  font-family: $font-heading;
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $secondary-color;
+  margin: 0;
+  @include text-truncate;
+}
+
+.product-price {
+  font-family: $font-body;
+  font-size: $font-size-md;
+  font-weight: 700;
+  color: $accent-color;
+  margin: 0;
+}

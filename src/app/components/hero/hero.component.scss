@@ -1,0 +1,130 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+@import '../../../styles/animations';
+
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  @include flex-center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #8B7355 0%, #D4AF37 50%, #8B7355 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+
+  // Alternative avec image de fond
+  // Décommenter et ajouter une vraie image si disponible
+  /*
+  background-image: url('https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=1920');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  */
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: $white;
+  max-width: 800px;
+  padding: $spacing-md;
+  @include flex-column;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.hero-title {
+  font-family: $font-heading;
+  font-size: $font-size-xxl;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  @include tablet {
+    font-size: $font-size-xxxl;
+  }
+
+  @include desktop {
+    font-size: 5rem;
+  }
+}
+
+.hero-subtitle {
+  font-family: $font-body;
+  font-size: $font-size-md;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.95;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+
+  @include tablet {
+    font-size: $font-size-lg;
+  }
+
+  @include desktop {
+    font-size: $font-size-xl;
+  }
+}
+
+.hero-cta {
+  @include button-accent;
+  font-size: $font-size-md;
+  padding: $spacing-sm $spacing-lg;
+  margin-top: $spacing-md;
+  box-shadow: $shadow-lg;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-xl;
+  }
+
+  @include tablet {
+    font-size: $font-size-lg;
+    padding: $spacing-md $spacing-xl;
+  }
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: $spacing-md;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  animation: bounce 2s ease-in-out infinite;
+
+  .scroll-icon {
+    width: 40px;
+    height: 40px;
+    color: $white;
+    opacity: 0.8;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}

@@ -1,0 +1,81 @@
+<!-- Modal overlay -->
+<div
+  class="modal-overlay"
+  *ngIf="product"
+  [class.animating]="isAnimating"
+  (click)="onOverlayClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'Détails du produit ' + product.nom">
+
+  <!-- Conteneur du modal -->
+  <div class="modal-container" [class.animating]="isAnimating">
+    <!-- Bouton de fermeture -->
+    <button
+      class="modal-close"
+      (click)="close()"
+      aria-label="Fermer le modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M6 6l12 12M6 18L18 6" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Contenu du modal -->
+    <div class="modal-content">
+      <!-- Image du produit -->
+      <div class="modal-image-container">
+        <img
+          [src]="product.image"
+          [alt]="product.nom"
+          class="modal-image">
+
+        <!-- Badge nouveau -->
+        <div class="modal-badge" *ngIf="product.nouveau">
+          Nouveau
+        </div>
+      </div>
+
+      <!-- Informations du produit -->
+      <div class="modal-info">
+        <span class="modal-category">{{ getCategoryLabel() }}</span>
+        <h2 class="modal-title">{{ product.nom }}</h2>
+        <p class="modal-price">{{ product.prix }}€</p>
+
+        <p class="modal-description">{{ product.description }}</p>
+
+        <!-- Caractéristiques -->
+        <div class="modal-characteristics">
+          <h3 class="characteristics-title">Caractéristiques</h3>
+
+          <div class="characteristic-item" *ngIf="product.caracteristiques.contenance">
+            <span class="characteristic-label">Contenance :</span>
+            <span class="characteristic-value">{{ product.caracteristiques.contenance }}</span>
+          </div>
+
+          <div class="characteristic-item">
+            <span class="characteristic-label">Origine :</span>
+            <span class="characteristic-value">{{ product.caracteristiques.origine }}</span>
+          </div>
+
+          <div class="characteristic-item" *ngIf="product.caracteristiques.notes">
+            <span class="characteristic-label">Notes :</span>
+            <span class="characteristic-value">{{ product.caracteristiques.notes }}</span>
+          </div>
+
+          <div class="characteristic-item" *ngIf="product.caracteristiques.duree">
+            <span class="characteristic-label">Durée :</span>
+            <span class="characteristic-value">{{ product.caracteristiques.duree }}</span>
+          </div>
+        </div>
+
+        <!-- Bouton de contact -->
+        <button
+          class="modal-cta"
+          (click)="contactForProduct()"
+          aria-label="Contacter pour ce produit">
+          Contacter pour ce produit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

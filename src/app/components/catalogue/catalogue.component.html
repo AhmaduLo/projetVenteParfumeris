@@ -1,0 +1,59 @@
+<!-- Section catalogue -->
+<section class="catalogue" id="catalogue">
+  <div class="catalogue-container">
+    <!-- En-tête du catalogue -->
+    <div class="catalogue-header">
+      <h2 class="catalogue-title">Notre Catalogue</h2>
+      <p class="catalogue-subtitle">
+        Découvrez notre sélection exclusive de parfums et d'encens
+      </p>
+    </div>
+
+    <!-- Filtres de catégorie -->
+    <div class="catalogue-filters">
+      <button
+        class="filter-button"
+        [class.active]="activeFilter === 'all'"
+        (click)="filterByCategory('all')"
+        aria-label="Afficher tous les produits">
+        Tous
+      </button>
+
+      <button
+        class="filter-button"
+        [class.active]="activeFilter === 'parfum'"
+        (click)="filterByCategory('parfum')"
+        aria-label="Afficher uniquement les parfums">
+        Parfums
+      </button>
+
+      <button
+        class="filter-button"
+        [class.active]="activeFilter === 'incense'"
+        (click)="filterByCategory('incense')"
+        aria-label="Afficher uniquement les encens">
+        Encens
+      </button>
+    </div>
+
+    <!-- Compteur de produits -->
+    <p class="product-count">
+      {{ getProductCount() }} produit{{ getProductCount() > 1 ? 's' : '' }}
+    </p>
+
+    <!-- Grille de produits -->
+    <div class="catalogue-grid">
+      <app-product-card
+        *ngFor="let product of filteredProducts; trackBy: trackByProductId"
+        [product]="product"
+        (productClick)="onProductClick($event)"
+        class="catalogue-grid-item fade-in">
+      </app-product-card>
+    </div>
+
+    <!-- Message si aucun produit -->
+    <div class="no-products" *ngIf="filteredProducts.length === 0">
+      <p>Aucun produit dans cette catégorie pour le moment.</p>
+    </div>
+  </div>
+</section>

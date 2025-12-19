@@ -1,0 +1,63 @@
+<!-- Section À propos -->
+<section class="about" id="about">
+  <div class="about-container">
+    <!-- En-tête -->
+    <div class="about-header">
+      <h2 class="about-title">Notre Histoire</h2>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="about-content">
+      <!-- Histoire -->
+      <div class="about-story">
+        <p class="story-text">
+          Bienvenue chez <strong>Parfums & Incenses d'Orient</strong>, votre destination privilégiée
+          pour découvrir l'excellence de la parfumerie orientale traditionnelle.
+        </p>
+
+        <p class="story-text">
+          Depuis notre création, nous nous consacrons à la sélection et à l'importation des plus belles
+          fragrances du Moyen-Orient et d'Asie. Chaque produit de notre catalogue est choisi avec le plus
+          grand soin pour vous offrir une expérience olfactive unique et authentique.
+        </p>
+
+        <p class="story-text">
+          Nos parfums et encens sont élaborés selon des méthodes ancestrales, utilisant uniquement des
+          ingrédients naturels de première qualité. Que vous recherchiez un parfum envoûtant pour une
+          occasion spéciale ou un encens apaisant pour votre méditation quotidienne, vous trouverez chez
+          nous le produit parfait.
+        </p>
+      </div>
+
+      <!-- Image illustrative -->
+      <div class="about-image">
+        <img
+          src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&h=600&fit=crop"
+          alt="Parfums et encens traditionnels"
+          loading="lazy">
+      </div>
+    </div>
+
+    <!-- Nos valeurs -->
+    <div class="values-section">
+      <h3 class="values-title">Nos Valeurs</h3>
+
+      <div class="values-grid">
+        <div
+          *ngFor="let value of values; let i = index"
+          class="value-card"
+          [class]="'fade-in-up delay-' + (i + 1)">
+
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path [attr.d]="value.icon" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <h4 class="value-title">{{ value.title }}</h4>
+          <p class="value-description">{{ value.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

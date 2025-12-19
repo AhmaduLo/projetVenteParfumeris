@@ -1,0 +1,32 @@
+<!-- Carte produit cliquable -->
+<article
+  class="product-card"
+  (click)="onCardClick()"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="'Voir les détails de ' + product.nom">
+
+  <!-- Badge nouveau produit -->
+  <div class="product-badge" *ngIf="product.nouveau">
+    Nouveau
+  </div>
+
+  <!-- Image du produit -->
+  <div class="product-image-container">
+    <img
+      [src]="product.image"
+      [alt]="product.nom"
+      class="product-image"
+      loading="lazy">
+    <div class="product-overlay">
+      <span class="product-overlay-text">Voir détails</span>
+    </div>
+  </div>
+
+  <!-- Informations du produit -->
+  <div class="product-info">
+    <span class="product-category">{{ getCategoryLabel() }}</span>
+    <h3 class="product-name">{{ product.nom }}</h3>
+    <p class="product-price">{{ product.prix }}€</p>
+  </div>
+</article>

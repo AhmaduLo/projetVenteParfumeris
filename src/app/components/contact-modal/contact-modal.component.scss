@@ -1,0 +1,271 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+@import '../../../styles/animations';
+
+.modal-overlay {
+  @include overlay($overlay-dark);
+  @include flex-center;
+  padding: $spacing-md;
+  opacity: 0;
+  animation: fadeIn $transition-speed-normal $transition-ease forwards;
+  overflow-y: auto;
+
+  &.animating {
+    opacity: 1;
+  }
+}
+
+.modal-container {
+  position: relative;
+  background-color: $white;
+  border-radius: $border-radius-lg;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: $shadow-xl;
+  transform: scale(0.9);
+  opacity: 0;
+  animation: scaleIn $transition-speed-normal $transition-ease forwards;
+
+  &.animating {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  @include reset-button;
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+  width: 40px;
+  height: 40px;
+  @include flex-center;
+  background-color: $white;
+  border-radius: 50%;
+  box-shadow: $shadow-md;
+  z-index: 10;
+  transition: all $transition-speed-normal $transition-ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $secondary-color;
+  }
+
+  &:hover {
+    background-color: $primary-color;
+    transform: rotate(90deg);
+
+    svg {
+      color: $white;
+    }
+  }
+}
+
+.modal-content {
+  padding: $spacing-lg $spacing-md;
+
+  @include tablet {
+    padding: $spacing-lg;
+  }
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: $spacing-md;
+}
+
+.modal-title {
+  font-family: $font-heading;
+  font-size: $font-size-xl;
+  font-weight: 700;
+  color: $secondary-color;
+  margin: 0 0 $spacing-xs 0;
+}
+
+.modal-subtitle {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $text-color;
+  margin: 0;
+
+  strong {
+    color: $primary-color;
+  }
+}
+
+// Contact rapide
+.quick-contact {
+  background-color: $light-bg;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+  margin-bottom: $spacing-md;
+}
+
+.quick-contact-title {
+  font-family: $font-heading;
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: $secondary-color;
+  margin: 0 0 $spacing-sm 0;
+}
+
+.contact-item {
+  @include flex-between;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.contact-item-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  flex: 1;
+  min-width: 200px;
+}
+
+.contact-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  &.whatsapp {
+    color: #25D366;
+  }
+}
+
+.contact-label {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.contact-value {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $text-color;
+}
+
+.btn-copy {
+  @include button-secondary;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
+  min-height: auto;
+
+  &.copied {
+    background-color: $success-color;
+    color: $white;
+    border-color: $success-color;
+  }
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.btn-action {
+  @include button-base;
+  @include flex-center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  font-size: $font-size-sm;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &.btn-whatsapp {
+    background-color: #25D366;
+    color: $white;
+
+    &:hover {
+      background-color: darken(#25D366, 10%);
+    }
+  }
+
+  &.btn-phone {
+    background-color: $accent-color;
+    color: $secondary-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+}
+
+// Formulaire
+.contact-form {
+  @include flex-column;
+  gap: $spacing-sm;
+}
+
+.form-title {
+  font-family: $font-heading;
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: $secondary-color;
+  margin: 0 0 $spacing-sm 0;
+  text-align: center;
+}
+
+.form-group {
+  @include flex-column;
+  gap: $spacing-xs;
+}
+
+.form-label {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.form-input,
+.form-textarea {
+  padding: $spacing-sm;
+  border: 2px solid rgba($text-color, 0.2);
+  border-radius: $border-radius-md;
+  font-family: $font-body;
+  font-size: $font-size-base;
+  color: $text-color;
+  transition: border-color $transition-speed-normal $transition-ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+
+  &.invalid {
+    border-color: $error-color;
+  }
+
+  &::placeholder {
+    color: rgba($text-color, 0.4);
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-error {
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  color: $error-color;
+  margin-top: -$spacing-xs;
+}
+
+.btn-submit {
+  @include button-primary;
+  width: 100%;
+  margin-top: $spacing-sm;
+}

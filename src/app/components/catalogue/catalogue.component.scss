@@ -1,0 +1,108 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+@import '../../../styles/animations';
+
+.catalogue {
+  padding: $spacing-xl 0;
+  background-color: $light-bg;
+}
+
+.catalogue-container {
+  @include container;
+}
+
+.catalogue-header {
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.catalogue-title {
+  font-family: $font-heading;
+  font-size: $font-size-xl;
+  font-weight: 700;
+  color: $secondary-color;
+  margin: 0 0 $spacing-sm 0;
+
+  @include tablet {
+    font-size: $font-size-xxl;
+  }
+}
+
+.catalogue-subtitle {
+  font-family: $font-body;
+  font-size: $font-size-md;
+  color: $text-color;
+  margin: 0;
+  opacity: 0.8;
+
+  @include tablet {
+    font-size: $font-size-lg;
+  }
+}
+
+.catalogue-filters {
+  @include flex-center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  @include button-secondary;
+  min-width: 120px;
+
+  &.active {
+    background-color: $primary-color;
+    color: $white;
+    border-color: $primary-color;
+  }
+
+  @include mobile {
+    flex: 1;
+    min-width: auto;
+  }
+}
+
+.product-count {
+  text-align: center;
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $text-color;
+  margin: 0 0 $spacing-md 0;
+  opacity: 0.7;
+}
+
+.catalogue-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.catalogue-grid-item {
+  animation: fadeInUp $transition-speed-slow $transition-ease;
+
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+      animation-fill-mode: both;
+    }
+  }
+}
+
+.no-products {
+  text-align: center;
+  padding: $spacing-xl;
+  font-family: $font-body;
+  font-size: $font-size-lg;
+  color: $text-color;
+  opacity: 0.6;
+}
