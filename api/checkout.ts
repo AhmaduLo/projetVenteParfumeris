@@ -111,6 +111,10 @@ export default async function handler(
       // 🔥 ADRESSE DE FACTURATION OBLIGATOIRE
       billing_address_collection: 'required',
 
+      // 🔥 DEMANDER L'EMAIL DU CLIENT (pour les notifications)
+      customer_creation: 'always',
+      customer_email: undefined, // Stripe demandera l'email dans le formulaire
+
       // ===== OPTIONS DE LIVRAISON (Optionnel) =====
       // Vous pouvez définir plusieurs options de livraison
       shipping_options: [
