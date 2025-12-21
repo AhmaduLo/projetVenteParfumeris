@@ -36,28 +36,6 @@
           {{ category }}
         </button>
       </div>
-
-      <!-- Tri par prix -->
-      <div class="sort-section">
-        <label>Trier par prix :</label>
-        <button
-          class="sort-btn"
-          [class.active]="sortOrder === 'asc'"
-          (click)="sortByPrice('asc')">
-          Prix croissant ↑
-        </button>
-        <button
-          class="sort-btn"
-          [class.active]="sortOrder === 'desc'"
-          (click)="sortByPrice('desc')">
-          Prix décroissant ↓
-        </button>
-        <button
-          class="sort-btn reset-btn"
-          (click)="resetFilters()">
-          Réinitialiser
-        </button>
-      </div>
     </div>
   </div>
 
