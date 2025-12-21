@@ -6,8 +6,7 @@ export const environment = {
   production: true,
 
   // URL de l'API Vercel en production
-  // Remplacer par votre URL Vercel après déploiement
-  apiUrl: 'https://votre-app.vercel.app/api',
+  apiUrl: 'https://boutique-parfums.vercel.app/api',
 
   // Nom de l'application
   appName: 'Parfums & Incenses d\'Orient',
