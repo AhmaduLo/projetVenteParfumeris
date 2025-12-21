@@ -35,7 +35,11 @@ export default async function handler(
     'http://localhost:3000'
   ];
 
-  if (allowedOrigins.includes(origin)) {
+  // Vérifier si l'origine est autorisée (domaine exact ou preview Vercel)
+  const isAllowed = allowedOrigins.includes(origin) ||
+                    origin.endsWith('.vercel.app') && origin.includes('boutique-parfums');
+
+  if (isAllowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
