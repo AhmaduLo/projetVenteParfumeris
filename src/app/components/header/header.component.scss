@@ -161,6 +161,7 @@
   height: 24px;
   z-index: $z-index-modal + 1;
   margin-left: $spacing-sm;
+  position: relative; // S'assurer qu'il reste dans le header fixe
 
   @include tablet {
     display: none;
@@ -197,7 +198,7 @@
 // Menu mobile
 .mobile-menu {
   position: fixed;
-  top: 70px;
+  top: 70px; // Juste en dessous du header fixe
   left: 0;
   right: 0;
   bottom: 0;
@@ -206,6 +207,7 @@
   transition: transform $transition-speed-normal $transition-ease;
   z-index: $z-index-modal;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; // Smooth scroll sur iOS
 
   &.open {
     transform: translateX(0);
