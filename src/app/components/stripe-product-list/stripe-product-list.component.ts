@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StripeProduct } from '../../models/stripe-product.model';
@@ -46,6 +46,9 @@ export class StripeProductListComponent implements OnInit {
 
   /** Tri par prix */
   sortOrder: 'asc' | 'desc' | null = null;
+
+  /** Événement émis lors du clic sur un produit pour ouvrir le modal */
+  @Output() productSelected = new EventEmitter<StripeProduct>();
 
   constructor(
     private productService: StripeProductService,
@@ -240,5 +243,13 @@ export class StripeProductListComponent implements OnInit {
    */
   trackByProductId(index: number, product: StripeProduct): string {
     return product.id;
+  }
+
+  /**
+   * Ouvre le modal de détails du produit
+   */
+  openProductModal(product: StripeProduct): void {
+    console.log(`🔍 Ouverture du modal pour: ${product.name}`);
+    this.productSelected.emit(product);
   }
 }

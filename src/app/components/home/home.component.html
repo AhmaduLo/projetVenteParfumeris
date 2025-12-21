@@ -4,7 +4,9 @@
   <app-hero></app-hero>
 
   <!-- Section Catalogue Stripe -->
-  <app-stripe-product-list></app-stripe-product-list>
+  <app-stripe-product-list
+    (productSelected)="onProductSelected($event)">
+  </app-stripe-product-list>
 
   <!-- Section À propos -->
   <app-about></app-about>

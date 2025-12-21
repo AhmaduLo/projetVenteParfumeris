@@ -6,6 +6,7 @@ import { ProductModalComponent } from '../product-modal/product-modal.component'
 import { ContactModalComponent } from '../contact-modal/contact-modal.component';
 import { AboutComponent } from '../about/about.component';
 import { Product } from '../../models/product.model';
+import { StripeProduct } from '../../models/stripe-product.model';
 
 /**
  * Composant de la page d'accueil
@@ -35,9 +36,20 @@ export class HomeComponent {
   contactProduct?: Product;
 
   /**
-   * Gère la sélection d'un produit
+   * Gère la sélection d'un produit (converti depuis StripeProduct)
    */
-  onProductSelected(product: Product): void {
+  onProductSelected(stripeProduct: StripeProduct): void {
+    // Convertir StripeProduct en Product pour le modal
+    const product: Product = {
+      id: parseInt(stripeProduct.id.replace('prod_', ''), 36), // Conversion ID string → number
+      nom: stripeProduct.name,
+      description: stripeProduct.description,
+      prix: stripeProduct.price?.amount || 0,
+      image: stripeProduct.images[0] || '/assets/default-product.jpg',
+      categorie: stripeProduct.metadata['category'] || 'autre',
+      stock: parseInt(stripeProduct.metadata['stock'] || '999', 10)
+    };
+
     this.selectedProduct = product;
   }
 

@@ -111,7 +111,7 @@
         </div>
 
         <!-- Image du produit -->
-        <div class="product-image">
+        <div class="product-image" (click)="openProductModal(product)" style="cursor: pointer;">
           <img
             [src]="getProductImage(product)"
             [alt]="product.name"
@@ -127,7 +127,7 @@
           </span>
 
           <!-- Nom -->
-          <h3 class="product-name">{{ product.name }}</h3>
+          <h3 class="product-name" (click)="openProductModal(product)" style="cursor: pointer;">{{ product.name }}</h3>
 
           <!-- Description -->
           <p class="product-description">{{ product.description }}</p>
