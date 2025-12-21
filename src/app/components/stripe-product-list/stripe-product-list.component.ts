@@ -73,11 +73,8 @@ export class StripeProductListComponent implements OnInit {
         this.filteredProducts = products;
         this.extractCategories();
         this.loading = false;
-
-        console.log(`✅ ${products.length} produits chargés`);
       },
       error: (error) => {
-        console.error('❌ Erreur chargement produits:', error);
         this.error = 'Impossible de charger les produits. Veuillez réessayer.';
         this.loading = false;
       }
@@ -109,7 +106,6 @@ export class StripeProductListComponent implements OnInit {
       return;
     }
 
-    console.log(`🛒 Ajout au panier: ${product.name}`);
     this.cartService.addToCart(product, 1);
 
     // Afficher une notification de succès
@@ -125,8 +121,6 @@ export class StripeProductListComponent implements OnInit {
       alert('Ce produit n\'a pas de prix configuré');
       return;
     }
-
-    console.log(`🛒 Achat de ${quantity}x ${product.name}`);
 
     // Redirection vers Stripe Checkout
     // La collecte d'adresse et téléphone est configurée dans api/checkout.ts
@@ -249,7 +243,6 @@ export class StripeProductListComponent implements OnInit {
    * Ouvre le modal de détails du produit
    */
   openProductModal(product: StripeProduct): void {
-    console.log(`🔍 Ouverture du modal pour: ${product.name}`);
     this.productSelected.emit(product);
   }
 }

@@ -29,7 +29,6 @@ export class OrdersComponent implements OnInit {
   loadOrders(): void {
     this.orders = this.orderService.getOrders();
     this.loading = false;
-    console.log(`📦 ${this.orders.length} commande(s) chargée(s)`);
   }
 
   /**

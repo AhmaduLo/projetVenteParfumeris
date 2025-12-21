@@ -39,9 +39,6 @@ export class HomeComponent {
    * Gère la sélection d'un produit (converti depuis StripeProduct)
    */
   onProductSelected(stripeProduct: StripeProduct): void {
-    console.log('🔍 Produit sélectionné:', stripeProduct);
-    console.log('📋 Métadonnées reçues:', stripeProduct.metadata);
-
     // Fonction helper pour récupérer une métadonnée (gère les espaces)
     const getMeta = (key: string): string | undefined => {
       // Essayer la clé exacte
@@ -72,8 +69,6 @@ export class HomeComponent {
       nouveau: getMeta('featured') === 'true' || false
     };
 
-    console.log('✅ Produit converti:', product);
-    console.log('🔧 Caractéristiques extraites:', product.caracteristiques);
     this.selectedProduct = product;
   }
 

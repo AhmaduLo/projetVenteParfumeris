@@ -101,7 +101,6 @@ export class OrderService {
     if (!exists) {
       currentOrders.unshift(order); // Ajouter au début
       this.saveOrders(currentOrders);
-      console.log('✅ Commande ajoutée à l\'historique:', order.id);
     }
   }
 
@@ -129,7 +128,6 @@ export class OrderService {
     if (order) {
       order.deliveryStatus = status;
       this.saveOrders(orders);
-      console.log(`✅ Statut de livraison mis à jour: ${orderId} -> ${status}`);
     }
   }
 

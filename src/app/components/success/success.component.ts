@@ -30,18 +30,14 @@ export class SuccessComponent implements OnInit {
   ngOnInit(): void {
     // Récupérer le session_id depuis l'URL
     this.sessionId = this.route.snapshot.queryParamMap.get('session_id');
-    console.log('✅ Paiement réussi! Session ID:', this.sessionId);
 
     if (this.sessionId) {
       // Vider le panier
-      console.log('🗑️ Vidage du panier après paiement réussi');
       this.cartService.clearCart();
 
       // Enregistrer la commande dans l'historique
-      console.log('📦 Enregistrement de la commande dans l\'historique');
       this.orderService.fetchOrderDetails(this.sessionId).subscribe({
         next: (response) => {
-          console.log('✅ Commande enregistrée:', response.order);
           this.loading = false;
         },
         error: (err) => {

@@ -70,7 +70,6 @@ export class StripeCheckoutService {
     this.createCheckoutSession(priceId, quantity).subscribe({
       next: (response) => {
         if (response.success && response.url) {
-          console.log(`✅ Redirection vers Stripe Checkout (session: ${response.sessionId})`);
 
           // Redirection vers Stripe Checkout
           // L'adresse et le téléphone seront collectés automatiquement
@@ -111,7 +110,6 @@ export class StripeCheckoutService {
     this.createCartCheckoutSession(items).subscribe({
       next: (response) => {
         if (response.success && response.url) {
-          console.log(`✅ Redirection vers Stripe Checkout panier (${items.length} produits)`);
           window.location.href = response.url;
         } else {
           console.error('❌ URL de checkout manquante dans la réponse');
@@ -164,7 +162,6 @@ export class StripeCheckoutService {
       // Cette fonctionnalité nécessiterait une route supplémentaire
       // /api/verify-session qui utiliserait stripe.checkout.sessions.retrieve()
       // Pour l'instant, on suppose que si on arrive sur la page de succès, c'est bon
-      console.log(`✅ Session vérifiée: ${sessionId}`);
       return true;
     } catch (error) {
       console.error('❌ Erreur vérification session:', error);

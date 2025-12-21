@@ -98,7 +98,6 @@ export class CartComponent implements OnInit {
       quantity: item.quantity
     }));
 
-    console.log(`🛒 Checkout de ${this.cartItems.length} produit(s) différent(s)`);
 
     // Rediriger vers Stripe Checkout avec tous les produits
     this.checkoutService.redirectToCartCheckout(checkoutItems);

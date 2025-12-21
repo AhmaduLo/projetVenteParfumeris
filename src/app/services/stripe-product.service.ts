@@ -61,7 +61,6 @@ export class StripeProductService {
         // Mettre à jour le cache
         this.productsSubject.next(products);
         this.loadingSubject.next(false);
-        console.log(`✅ ${products.length} produits chargés depuis Stripe`);
       }),
       catchError(error => {
         this.handleError(error);
