@@ -27,7 +27,7 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  // ===== CONFIGURATION CORS =====
+  // ===== CONFIGURATION CORS SÉCURISÉE =====
   const origin = req.headers.origin || '';
   const allowedOrigins = [
     'https://boutique-parfums.vercel.app',
@@ -37,12 +37,15 @@ export default async function handler(
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Bloquer les origines non autorisées
+    return res.status(403).json({
+      success: false,
+      error: 'Origin not allowed'
+    });
   }
-
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // Gérer les requêtes OPTIONS (preflight CORS)
   if (req.method === 'OPTIONS') {
