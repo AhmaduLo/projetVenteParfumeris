@@ -46,14 +46,14 @@
 
           <!-- Image produit -->
           <div class="item-image">
-            <img [src]="item.product.image" [alt]="item.product.nom" loading="lazy">
+            <img [src]="getProductImage(item)" [alt]="item.product.name" loading="lazy">
           </div>
 
           <!-- Infos produit -->
           <div class="item-info">
-            <h3 class="item-name">{{ item.product.nom }}</h3>
-            <p class="item-category">{{ item.product.categorie === 'parfum' ? 'Parfum' : 'Encens' }}</p>
-            <p class="item-price">{{ item.product.prix }}€ / unité</p>
+            <h3 class="item-name">{{ item.product.name }}</h3>
+            <p class="item-category" *ngIf="item.product.metadata['category']">{{ item.product.metadata['category'] }}</p>
+            <p class="item-price">{{ item.product.price?.formatted }} / unité</p>
           </div>
 
           <!-- Quantité -->
@@ -76,7 +76,7 @@
 
           <!-- Total article -->
           <div class="item-total">
-            <p class="total-price">{{ (item.product.prix * item.quantity).toFixed(2) }}€</p>
+            <p class="total-price">{{ ((item.product.price?.amount || 0) * item.quantity).toFixed(2) }}€</p>
           </div>
 
           <!-- Bouton supprimer -->

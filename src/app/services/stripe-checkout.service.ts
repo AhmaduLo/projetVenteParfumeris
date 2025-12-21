@@ -88,6 +88,44 @@ export class StripeCheckoutService {
   }
 
   /**
+   * Crée une session Checkout pour un panier complet (plusieurs produits)
+   *
+   * @param items - Tableau d'items avec priceId et quantity
+   * @returns Observable<CheckoutResponse>
+   */
+  createCartCheckoutSession(items: Array<{ priceId: string, quantity: number }>): Observable<CheckoutResponse> {
+    return this.http.post<CheckoutResponse>(
+      `${this.apiUrl}/checkout-cart`,
+      { items }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Crée une session Checkout pour le panier et redirige vers Stripe
+   *
+   * @param items - Tableau d'items avec priceId et quantity
+   */
+  redirectToCartCheckout(items: Array<{ priceId: string, quantity: number }>): void {
+    this.createCartCheckoutSession(items).subscribe({
+      next: (response) => {
+        if (response.success && response.url) {
+          console.log(`✅ Redirection vers Stripe Checkout panier (${items.length} produits)`);
+          window.location.href = response.url;
+        } else {
+          console.error('❌ URL de checkout manquante dans la réponse');
+          alert('Erreur: Impossible de créer la session de paiement');
+        }
+      },
+      error: (error) => {
+        console.error('❌ Erreur création session checkout panier:', error);
+        alert('Erreur lors de la création de la session de paiement. Veuillez réessayer.');
+      }
+    });
+  }
+
+  /**
    * Ouvre Stripe Checkout dans un nouvel onglet (optionnel)
    * Utile si vous ne voulez pas quitter la page actuelle
    *

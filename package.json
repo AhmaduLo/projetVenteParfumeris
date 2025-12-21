@@ -19,11 +19,11 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@stripe/stripe-js": "^2.4.0",
+    "@vercel/node": "^3.0.12",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.14.3",
     "stripe": "^14.11.0",
-    "@vercel/node": "^3.0.12"
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.0",
@@ -38,6 +38,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.2",
-    "vercel": "^33.0.1"
+    "vercel": "^33.7.1"
   }
 }

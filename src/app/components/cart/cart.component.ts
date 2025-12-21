@@ -1,12 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/cart.service';
-import { StripeService } from '../../services/stripe.service';
-import { ProductService } from '../../services/product.service';
-import { CartItem } from '../../models/product.model';
+import { StripeCartService, StripeCartItem } from '../../services/stripe-cart.service';
+import { StripeCheckoutService } from '../../services/stripe-checkout.service';
 
 /**
- * Composant panier avec checkout Stripe (sans backend)
+ * Composant panier avec checkout Stripe
  */
 @Component({
   selector: 'app-cart',
@@ -23,7 +21,7 @@ export class CartComponent implements OnInit {
   @Output() closeCart = new EventEmitter<void>();
 
   /** Articles du panier */
-  cartItems: CartItem[] = [];
+  cartItems: StripeCartItem[] = [];
 
   /** Montant total */
   totalPrice = 0;
@@ -35,9 +33,8 @@ export class CartComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private cartService: CartService,
-    private stripeService: StripeService,
-    private productService: ProductService
+    private cartService: StripeCartService,
+    private checkoutService: StripeCheckoutService
   ) {}
 
   ngOnInit(): void {
@@ -50,14 +47,14 @@ export class CartComponent implements OnInit {
   loadCart(): void {
     this.cartService.cart$.subscribe(items => {
       this.cartItems = items;
-      this.totalPrice = this.cartService.getTotalPrice();
+      this.totalPrice = this.cartService.getTotalPrice(); // price.amount is already in euros
     });
   }
 
   /**
    * Met à jour la quantité d'un article
    */
-  updateQuantity(productId: number, quantity: number): void {
+  updateQuantity(productId: string, quantity: number): void {
     if (quantity >= 1) {
       this.cartService.updateQuantity(productId, quantity);
     }
@@ -66,7 +63,7 @@ export class CartComponent implements OnInit {
   /**
    * Supprime un article du panier
    */
-  removeItem(productId: number): void {
+  removeItem(productId: string): void {
     this.cartService.removeFromCart(productId);
   }
 
@@ -80,8 +77,7 @@ export class CartComponent implements OnInit {
   }
 
   /**
-   * Paiement Stripe (un seul produit à la fois avec Payment Links)
-   * Si le panier contient plusieurs produits, on guide vers WhatsApp/Email
+   * Procéder au paiement Stripe Checkout pour tous les produits du panier
    */
   proceedToCheckout(): void {
     if (this.cartItems.length === 0) {
@@ -89,17 +85,23 @@ export class CartComponent implements OnInit {
       return;
     }
 
-    // Si un seul produit et qu'il a un Payment Link configuré
-    if (this.cartItems.length === 1) {
-      const item = this.cartItems[0];
-      if (this.stripeService.hasPaymentLink(item.product.id)) {
-        this.stripeService.checkoutSingleProduct(item.product.id, item.quantity);
-        return;
-      }
+    // Vérifier que tous les produits ont un prix
+    const invalidItems = this.cartItems.filter(item => !item.product.price);
+    if (invalidItems.length > 0) {
+      this.errorMessage = 'Certains produits n\'ont pas de prix configuré';
+      return;
     }
 
-    // Sinon, proposer WhatsApp ou Email
-    this.errorMessage = 'Pour commander plusieurs produits, utilisez WhatsApp ou Email ci-dessous.';
+    // Construire le tableau d'items pour Stripe
+    const checkoutItems = this.cartItems.map(item => ({
+      priceId: item.product.price!.id,
+      quantity: item.quantity
+    }));
+
+    console.log(`🛒 Checkout de ${this.cartItems.length} produit(s) différent(s)`);
+
+    // Rediriger vers Stripe Checkout avec tous les produits
+    this.checkoutService.redirectToCartCheckout(checkoutItems);
   }
 
   /**
@@ -107,25 +109,42 @@ export class CartComponent implements OnInit {
    */
   checkoutViaWhatsApp(): void {
     if (this.cartItems.length === 0) {
-      this.errorMessage = 'Votre panier est vide';
+      alert('Votre panier est vide');
       return;
     }
 
-    const contactInfo = this.productService.getContactInfo();
-    this.stripeService.checkoutViaWhatsApp(this.cartItems, contactInfo.whatsapp);
+    let message = 'Bonjour! Je souhaite commander:\n\n';
+
+    this.cartItems.forEach(item => {
+      message += `${item.quantity}x ${item.product.name} - ${item.product.price?.formatted}\n`;
+    });
+
+    message += `\nTotal: ${this.totalPrice.toFixed(2)}€`;
+
+    const phoneNumber = '33123456789'; // TODO: Mettre le vrai numéro
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
   }
 
   /**
-   * Commander via Email
+   * Commander par Email
    */
   checkoutViaEmail(): void {
     if (this.cartItems.length === 0) {
-      this.errorMessage = 'Votre panier est vide';
+      alert('Votre panier est vide');
       return;
     }
 
-    const contactInfo = this.productService.getContactInfo();
-    this.stripeService.checkoutViaEmail(this.cartItems, contactInfo.email);
+    let body = 'Bonjour,%0D%0A%0D%0AJe souhaite commander:%0D%0A%0D%0A';
+
+    this.cartItems.forEach(item => {
+      body += `${item.quantity}x ${item.product.name} - ${item.product.price?.formatted}%0D%0A`;
+    });
+
+    body += `%0D%0ATotal: ${this.totalPrice.toFixed(2)}€%0D%0A%0D%0AMerci!`;
+
+    const email = 'contact@example.com'; // TODO: Mettre le vrai email
+    window.location.href = `mailto:${email}?subject=Commande&body=${body}`;
   }
 
   /**
@@ -147,7 +166,16 @@ export class CartComponent implements OnInit {
   /**
    * Tracking pour ngFor
    */
-  trackByCartItem(index: number, item: CartItem): number {
+  trackByCartItem(index: number, item: StripeCartItem): string {
     return item.product.id;
+  }
+
+  /**
+   * Récupère l'image d'un produit
+   */
+  getProductImage(item: StripeCartItem): string {
+    return item.product.images && item.product.images.length > 0
+      ? item.product.images[0]
+      : 'assets/images/placeholder.jpg';
   }
 }

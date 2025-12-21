@@ -143,22 +143,28 @@
             <span class="stock-value">{{ getStock(product) }} unité(s)</span>
           </div>
 
-          <!-- Bouton Acheter -->
-          <button
-            class="btn-buy"
-            (click)="buyProduct(product)"
-            [disabled]="!product.price || !isInStock(product)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2"/>
-            </svg>
-            <span *ngIf="isInStock(product)">Acheter maintenant</span>
-            <span *ngIf="!isInStock(product)">Indisponible</span>
-          </button>
+          <!-- Boutons d'action -->
+          <div class="product-actions">
+            <!-- Bouton Ajouter au panier -->
+            <button
+              class="btn-add-cart"
+              (click)="addToCart(product)"
+              [disabled]="!product.price || !isInStock(product)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2"/>
+              </svg>
+              Ajouter au panier
+            </button>
 
-          <!-- Note sur la collecte d'adresse -->
-          <p class="checkout-note" *ngIf="isInStock(product)">
-            ✓ Adresse de livraison collectée automatiquement
-          </p>
+            <!-- Bouton Acheter maintenant -->
+            <button
+              class="btn-buy"
+              (click)="buyProduct(product)"
+              [disabled]="!product.price || !isInStock(product)">
+              <span *ngIf="isInStock(product)">Acheter maintenant</span>
+              <span *ngIf="!isInStock(product)">Indisponible</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -167,18 +173,5 @@
     <div class="results-count" *ngIf="filteredProducts.length > 0">
       {{ filteredProducts.length }} produit(s) affiché(s)
     </div>
-  </div>
-
-  <!-- Information sur Stripe -->
-  <div class="stripe-info">
-    <p>
-      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-      Les produits sont automatiquement synchronisés depuis votre Dashboard Stripe.
-      Ajoutez ou modifiez un produit dans Stripe pour le voir apparaître ici.
-    </p>
   </div>
 </div>

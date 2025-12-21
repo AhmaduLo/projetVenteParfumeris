@@ -1,6 +1,6 @@
 import { Component, HostListener, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/cart.service';
+import { StripeCartService } from '../../services/stripe-cart.service';
 
 /**
  * Composant Header avec navigation et menu burger responsive
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   /** Événement d'ouverture du panier */
   @Output() openCart = new EventEmitter<void>();
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: StripeCartService) {}
 
   ngOnInit(): void {
     // S'abonner au compteur de panier

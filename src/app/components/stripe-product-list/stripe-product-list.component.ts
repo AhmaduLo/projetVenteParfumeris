@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { StripeProduct } from '../../models/stripe-product.model';
 import { StripeProductService } from '../../services/stripe-product.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
+import { StripeCartService } from '../../services/stripe-cart.service';
 
 /**
  * Composant d'affichage de la liste des produits Stripe
@@ -48,7 +49,8 @@ export class StripeProductListComponent implements OnInit {
 
   constructor(
     private productService: StripeProductService,
-    private checkoutService: StripeCheckoutService
+    private checkoutService: StripeCheckoutService,
+    private cartService: StripeCartService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +95,22 @@ export class StripeProductListComponent implements OnInit {
     });
 
     this.categories = Array.from(categorySet).sort();
+  }
+
+  /**
+   * Ajoute un produit au panier
+   */
+  addToCart(product: StripeProduct): void {
+    if (!product.price) {
+      alert('Ce produit n\'a pas de prix configuré');
+      return;
+    }
+
+    console.log(`🛒 Ajout au panier: ${product.name}`);
+    this.cartService.addToCart(product, 1);
+
+    // Afficher une notification de succès
+    alert(`✅ ${product.name} ajouté au panier!`);
   }
 
   /**
