@@ -1,40 +1,15 @@
 <!-- Application principale -->
-<router-outlet></router-outlet>
-
 <div class="app">
   <!-- Header avec event binding pour le panier -->
   <app-header (openCart)="openCart()"></app-header>
 
-  <!-- Contenu principal -->
-  <main class="main-content">
-    <!-- Section Hero -->
-    <app-hero></app-hero>
-
-    <!-- Section Catalogue Stripe -->
-    <app-stripe-product-list></app-stripe-product-list>
-
-    <!-- Section À propos -->
-    <app-about></app-about>
-  </main>
+  <!-- Contenu dynamique via router -->
+  <router-outlet></router-outlet>
 
   <!-- Footer -->
   <app-footer></app-footer>
 
-  <!-- Modal Produit -->
-  <app-product-modal
-    [product]="selectedProduct"
-    (closeModal)="closeProductModal()"
-    (openContact)="openContactModal($event)">
-  </app-product-modal>
-
-  <!-- Modal Contact -->
-  <app-contact-modal
-    [isOpen]="isContactModalOpen"
-    [product]="contactProduct"
-    (closeModal)="closeContactModal()">
-  </app-contact-modal>
-
-  <!-- Panier -->
+  <!-- Panier (global à toute l'application) -->
   <app-cart
     [isOpen]="isCartOpen"
     (closeCart)="closeCart()">

@@ -71,7 +71,26 @@ export class HeaderComponent implements OnInit {
    * Scroll smooth vers une section
    */
   scrollToSection(sectionId: string): void {
-    const element = document.getElementById(sectionId);
+    // Vérifier si on est sur la page d'accueil
+    if (this.router.url !== '/' && this.router.url !== '') {
+      // Si on n'est pas sur l'accueil, naviguer d'abord vers l'accueil
+      this.router.navigate(['/']).then(() => {
+        // Attendre un court instant pour que la page se charge
+        setTimeout(() => {
+          this.scrollToElement(sectionId);
+        }, 100);
+      });
+    } else {
+      // Si on est déjà sur l'accueil, scroller directement
+      this.scrollToElement(sectionId);
+    }
+  }
+
+  /**
+   * Scroll vers un élément par son ID
+   */
+  private scrollToElement(elementId: string): void {
+    const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       this.closeMenu();
