@@ -116,6 +116,8 @@
             [src]="getProductImage(product)"
             [alt]="product.name"
             loading="lazy"
+            decoding="async"
+            fetchpriority="high"
           />
         </div>
 

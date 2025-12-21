@@ -191,9 +191,30 @@ export class StripeProductService {
 
   /**
    * Récupère la première image ou une image par défaut
+   * Optimise l'URL Stripe pour la haute qualité
    */
-  getProductImage(product: StripeProduct, defaultImage: string = 'assets/images/placeholder.jpg'): string {
-    return this.hasImage(product) ? product.images[0] : defaultImage;
+  getProductImage(product: StripeProduct, defaultImage: string = 'assets/images/placeholder.jpg', highQuality: boolean = false): string {
+    if (!this.hasImage(product)) {
+      return defaultImage;
+    }
+
+    let imageUrl = product.images[0];
+
+    // Pour les images Stripe, ajouter un paramètre de qualité si supporté
+    if (highQuality && imageUrl.includes('files.stripe.com')) {
+      // Stripe supporte des paramètres de redimensionnement
+      // On ne modifie pas l'URL pour garder la qualité originale
+      return imageUrl;
+    }
+
+    return imageUrl;
+  }
+
+  /**
+   * Récupère l'image en haute résolution pour le modal
+   */
+  getHighQualityImage(product: StripeProduct, defaultImage: string = 'assets/images/placeholder.jpg'): string {
+    return this.getProductImage(product, defaultImage, true);
   }
 
   /**

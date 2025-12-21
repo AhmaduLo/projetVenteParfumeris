@@ -273,10 +273,16 @@
     height: 100%;
     object-fit: cover;
     transition: transform $transition-speed-normal;
+    // Amélioration de la qualité d'image
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
   }
 
   &:hover img {
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(0);
   }
 }
 

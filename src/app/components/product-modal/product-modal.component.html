@@ -27,7 +27,10 @@
         <img
           [src]="product.image"
           [alt]="product.nom"
-          class="modal-image">
+          class="modal-image"
+          loading="eager"
+          decoding="sync"
+          fetchpriority="high">
 
         <!-- Badge nouveau -->
         <div class="modal-badge" *ngIf="product.nouveau">

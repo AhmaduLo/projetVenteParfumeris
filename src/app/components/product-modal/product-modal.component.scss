@@ -77,16 +77,31 @@
   position: relative;
   width: 100%;
   background-color: $light-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
 
   @include tablet {
-    min-height: 500px;
+    min-height: 600px;
   }
 }
 
 .modal-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  // Optimisation pour images haute qualité
+  image-rendering: high-quality;
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform: translateZ(0);
+  max-height: 600px;
+
+  @include tablet {
+    max-height: 700px;
+  }
 }
 
 .modal-badge {
