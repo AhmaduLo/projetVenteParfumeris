@@ -40,6 +40,20 @@ export class HomeComponent {
    */
   onProductSelected(stripeProduct: StripeProduct): void {
     console.log('🔍 Produit sélectionné:', stripeProduct);
+    console.log('📋 Métadonnées reçues:', stripeProduct.metadata);
+
+    // Fonction helper pour récupérer une métadonnée (gère les espaces)
+    const getMeta = (key: string): string | undefined => {
+      // Essayer la clé exacte
+      if (stripeProduct.metadata[key]) return stripeProduct.metadata[key];
+      // Essayer avec un espace à la fin
+      if (stripeProduct.metadata[key + ' ']) return stripeProduct.metadata[key + ' '];
+      // Essayer avec majuscule
+      const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
+      if (stripeProduct.metadata[capitalized]) return stripeProduct.metadata[capitalized];
+      if (stripeProduct.metadata[capitalized + ' ']) return stripeProduct.metadata[capitalized + ' '];
+      return undefined;
+    };
 
     // Convertir StripeProduct en Product pour le modal
     const product: Product = {
@@ -48,17 +62,18 @@ export class HomeComponent {
       description: stripeProduct.description,
       prix: stripeProduct.price?.amount || 0,
       image: stripeProduct.images[0] || '/assets/default-product.jpg',
-      categorie: (stripeProduct.metadata['category'] as 'parfum' | 'incense') || 'parfum',
+      categorie: (getMeta('category') as 'parfum' | 'incense') || 'parfum',
       caracteristiques: {
-        contenance: stripeProduct.metadata['contenance'] || undefined,
-        origine: stripeProduct.metadata['origine'] || 'Non spécifié',
-        notes: stripeProduct.metadata['notes'] || undefined,
-        duree: stripeProduct.metadata['duree'] || undefined
+        contenance: getMeta('contenance') || undefined,
+        origine: getMeta('origine') || 'Non spécifié',
+        notes: getMeta('notes') || undefined,
+        duree: getMeta('duree') || getMeta('durée') || undefined
       },
-      nouveau: stripeProduct.metadata['featured'] === 'true' || false
+      nouveau: getMeta('featured') === 'true' || false
     };
 
     console.log('✅ Produit converti:', product);
+    console.log('🔧 Caractéristiques extraites:', product.caracteristiques);
     this.selectedProduct = product;
   }
 
