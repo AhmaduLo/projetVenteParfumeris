@@ -1,0 +1,72 @@
+@import '../../../styles/_variables';
+
+.cancel-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+  padding: $spacing-md;
+}
+
+.cancel-container {
+  background: white;
+  border-radius: 16px;
+  padding: $spacing-xl;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.cancel-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto $spacing-lg;
+  color: #ef4444;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+h1 {
+  color: $text-color;
+  font-size: 2rem;
+  margin-bottom: $spacing-md;
+}
+
+.cancel-message {
+  color: $text-color;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: $spacing-md;
+}
+
+.help-text {
+  color: $text-color;
+  font-size: 0.95rem;
+  margin-bottom: $spacing-lg;
+}
+
+.actions {
+  margin-top: $spacing-lg;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $primary-color, $accent-color);
+  color: white;
+  border: none;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba($primary-color, 0.3);
+  }
+}

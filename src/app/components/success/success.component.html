@@ -1,0 +1,25 @@
+<div class="success-page">
+  <div class="success-container">
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+
+    <h1>Paiement réussi !</h1>
+
+    <p class="success-message">
+      Merci pour votre commande. Vous allez recevoir un email de confirmation à l'adresse indiquée.
+    </p>
+
+    <div class="session-info" *ngIf="sessionId">
+      <p class="session-id">Numéro de commande : <strong>{{ sessionId }}</strong></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" (click)="goHome()">
+        Retour à l'accueil
+      </button>
+    </div>
+  </div>
+</div>

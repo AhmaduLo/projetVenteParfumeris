@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { HeroComponent } from './components/hero/hero.component';
-import { CatalogueComponent } from './components/catalogue/catalogue.component';
+import { StripeProductListComponent } from './components/stripe-product-list/stripe-product-list.component';
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
 import { AboutComponent } from './components/about/about.component';
@@ -18,9 +19,10 @@ import { Product } from './models/product.model';
   standalone: true,
   imports: [
     CommonModule,
+    RouterOutlet,
     HeaderComponent,
     HeroComponent,
-    CatalogueComponent,
+    StripeProductListComponent,
     ProductModalComponent,
     ContactModalComponent,
     AboutComponent,

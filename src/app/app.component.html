@@ -1,4 +1,6 @@
 <!-- Application principale -->
+<router-outlet></router-outlet>
+
 <div class="app">
   <!-- Header avec event binding pour le panier -->
   <app-header (openCart)="openCart()"></app-header>
@@ -8,8 +10,8 @@
     <!-- Section Hero -->
     <app-hero></app-hero>
 
-    <!-- Section Catalogue -->
-    <app-catalogue (productSelected)="onProductSelected($event)"></app-catalogue>
+    <!-- Section Catalogue Stripe -->
+    <app-stripe-product-list></app-stripe-product-list>
 
     <!-- Section À propos -->
     <app-about></app-about>

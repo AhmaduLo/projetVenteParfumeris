@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
 
-  // URL de l'API Vercel en développement local
-  // Démarrer Vercel local avec : vercel dev
-  apiUrl: 'http://localhost:3000/api',
+  // URL de l'API Vercel (pointe vers production temporairement)
+  // TODO: Remettre http://localhost:3000/api quand vercel dev fonctionne
+  apiUrl: 'https://boutique-parfums.vercel.app/api',
 
   // Nom de l'application
   appName: 'Parfums & Incenses d\'Orient',

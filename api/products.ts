@@ -28,10 +28,19 @@ export default async function handler(
   res: VercelResponse
 ) {
   // ===== CONFIGURATION CORS =====
-  // Autoriser les requêtes depuis votre domaine Angular
-  // En développement : '*' autorise tous les domaines
-  // En production : remplacer par 'https://votre-domaine.com'
-  res.setHeader('Access-Control-Allow-Origin', process.env['FRONTEND_URL'] || '*');
+  const origin = req.headers.origin || '';
+  const allowedOrigins = [
+    'https://boutique-parfums.vercel.app',
+    'http://localhost:4200',
+    'http://localhost:3000'
+  ];
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -112,11 +121,15 @@ export default async function handler(
   } catch (error: any) {
     // Gestion des erreurs
     console.error('❌ Erreur Stripe API:', error);
+    console.error('❌ Message:', error.message);
+    console.error('❌ Stack:', error.stack);
 
     return res.status(500).json({
       success: false,
       error: 'Erreur lors de la récupération des produits',
-      message: process.env['NODE_ENV'] === 'development' ? error.message : undefined,
+      message: error.message, // Afficher temporairement même en production
+      type: error.type,
+      stripeKey: process.env['STRIPE_SECRET_KEY'] ? 'Present' : 'Missing',
     });
   }
 }
