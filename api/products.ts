@@ -37,7 +37,7 @@ export default async function handler(
 
   // Vérifier si l'origine est autorisée (domaine exact ou preview Vercel)
   const isAllowed = allowedOrigins.includes(origin) ||
-                    origin.endsWith('.vercel.app') && origin.includes('boutique-parfums');
+                    (origin.endsWith('.vercel.app') && origin.includes('boutique-parfums'));
 
   if (isAllowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
