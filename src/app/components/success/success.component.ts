@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StripeCartService } from '../../services/stripe-cart.service';
+import { OrderService } from '../../services/order.service';
 
 /**
  * Page de succès après paiement Stripe
@@ -16,11 +17,14 @@ import { StripeCartService } from '../../services/stripe-cart.service';
 })
 export class SuccessComponent implements OnInit {
   sessionId: string | null = null;
+  loading = true;
+  error: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private cartService: StripeCartService
+    private cartService: StripeCartService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -28,10 +32,27 @@ export class SuccessComponent implements OnInit {
     this.sessionId = this.route.snapshot.queryParamMap.get('session_id');
     console.log('✅ Paiement réussi! Session ID:', this.sessionId);
 
-    // Vider le panier après un paiement réussi
     if (this.sessionId) {
+      // Vider le panier
       console.log('🗑️ Vidage du panier après paiement réussi');
       this.cartService.clearCart();
+
+      // Enregistrer la commande dans l'historique
+      console.log('📦 Enregistrement de la commande dans l\'historique');
+      this.orderService.fetchOrderDetails(this.sessionId).subscribe({
+        next: (response) => {
+          console.log('✅ Commande enregistrée:', response.order);
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('❌ Erreur enregistrement commande:', err);
+          this.error = 'Impossible de récupérer les détails de la commande';
+          this.loading = false;
+        }
+      });
+    } else {
+      this.loading = false;
+      this.error = 'Aucun ID de session fourni';
     }
   }
 
@@ -40,5 +61,12 @@ export class SuccessComponent implements OnInit {
    */
   goHome(): void {
     this.router.navigate(['/']);
+  }
+
+  /**
+   * Voir mes commandes
+   */
+  viewOrders(): void {
+    this.router.navigate(['/orders']);
   }
 }

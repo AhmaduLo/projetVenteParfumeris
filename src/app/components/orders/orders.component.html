@@ -1,0 +1,117 @@
+<div class="orders-page">
+  <div class="orders-container">
+    <h1 class="page-title">Mes Commandes</h1>
+
+    <!-- État de chargement -->
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement de vos commandes...</p>
+    </div>
+
+    <!-- Aucune commande -->
+    <div *ngIf="!loading && orders.length === 0" class="empty-state">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2>Aucune commande</h2>
+      <p>Vous n'avez pas encore passé de commande</p>
+      <button class="btn-primary" (click)="goHome()">Commencer mes achats</button>
+    </div>
+
+    <!-- Liste des commandes -->
+    <div *ngIf="!loading && orders.length > 0" class="orders-list">
+      <div *ngFor="let order of orders" class="order-card">
+        <!-- En-tête de la commande -->
+        <div class="order-header">
+          <div class="order-info">
+            <h3 class="order-id">Commande #{{ order.id.substring(0, 12) }}...</h3>
+            <p class="order-date">{{ formatDate(order.createdAt) }}</p>
+          </div>
+          <div class="order-status">
+            <span class="status-badge" [ngClass]="getDeliveryStatusClass(order.deliveryStatus)">
+              {{ getDeliveryStatusLabel(order.deliveryStatus) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Informations client -->
+        <div class="order-customer">
+          <div class="customer-section">
+            <h4>Informations client</h4>
+            <p><strong>Nom:</strong> {{ order.customer.name }}</p>
+            <p><strong>Email:</strong> {{ order.customer.email }}</p>
+            <p><strong>Téléphone:</strong> {{ order.customer.phone }}</p>
+          </div>
+
+          <div class="customer-section" *ngIf="order.shippingAddress">
+            <h4>Adresse de livraison</h4>
+            <p>{{ formatAddress(order) }}</p>
+          </div>
+        </div>
+
+        <!-- Produits -->
+        <div class="order-products">
+          <h4>Produits ({{ getTotalItems(order) }} article(s))</h4>
+          <div class="product-list">
+            <div *ngFor="let product of order.products" class="product-item">
+              <div class="product-image">
+                <img
+                  [src]="product.image || 'assets/images/placeholder.jpg'"
+                  [alt]="product.name"
+                  loading="lazy">
+              </div>
+              <div class="product-info">
+                <h5>{{ product.name }}</h5>
+                <p class="product-description">{{ product.description }}</p>
+                <p class="product-quantity">Quantité: {{ product.quantity }}</p>
+              </div>
+              <div class="product-price">
+                <p class="unit-price">{{ product.unitPrice.toFixed(2) }}€ / unité</p>
+                <p class="total-price">{{ product.totalPrice.toFixed(2) }}€</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Résumé du paiement -->
+        <div class="order-summary">
+          <div class="summary-row">
+            <span>Sous-total:</span>
+            <span>{{ order.payment.amountSubtotal.toFixed(2) }}€</span>
+          </div>
+          <div class="summary-row" *ngIf="order.payment.amountShipping > 0">
+            <span>Livraison:</span>
+            <span>{{ order.payment.amountShipping.toFixed(2) }}€</span>
+          </div>
+          <div class="summary-row total">
+            <span><strong>Total payé:</strong></span>
+            <span><strong>{{ order.payment.amountTotal.toFixed(2) }}€</strong></span>
+          </div>
+          <div class="payment-status">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Paiement confirmé</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="order-actions">
+          <button
+            *ngIf="order.deliveryStatus !== 'delivered'"
+            class="btn-delivered"
+            (click)="markAsDelivered(order.id)">
+            Marquer comme livrée
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton retour -->
+    <div class="page-actions" *ngIf="!loading">
+      <button class="btn-secondary" (click)="goHome()">
+        Retour à l'accueil
+      </button>
+    </div>
+  </div>
+</div>
