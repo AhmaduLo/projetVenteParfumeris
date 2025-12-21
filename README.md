@@ -8,6 +8,7 @@ Site vitrine moderne et élégant pour une boutique de parfums et d'encens orien
 - [Fonctionnalités](#fonctionnalités)
 - [Technologies](#technologies)
 - [Installation](#installation)
+- [Configuration Stripe](#configuration-stripe)
 - [Configuration](#configuration)
 - [Personnalisation](#personnalisation)
 - [Structure du projet](#structure-du-projet)
@@ -35,6 +36,9 @@ Site vitrine responsive présentant une collection de parfums de luxe et d'encen
 - **Section Hero** : Grande bannière d'accueil avec call-to-action
 - **Catalogue produits** : Grille responsive avec filtres (Tous/Parfums/Encens)
 - **Détails produit** : Modal avec informations complètes
+- **Panier** : Gestion du panier avec quantités et persistance
+- **Paiement Stripe** : Paiement sécurisé avec collecte d'adresse de livraison
+- **Commande WhatsApp/Email** : Alternatives au paiement en ligne
 - **Contact** : Multiple options (formulaire, WhatsApp, téléphone, email)
 - **À propos** : Présentation de la boutique et ses valeurs
 - **Footer** : Coordonnées complètes et horaires d'ouverture
@@ -52,10 +56,12 @@ Site vitrine responsive présentant une collection de parfums de luxe et d'encen
 ## 🛠️ Technologies
 
 - **Framework** : Angular 17+ (standalone components)
+- **Paiement** : Stripe Payment Links (sans backend)
 - **Styles** : SCSS avec architecture modulaire
 - **Typographie** : Google Fonts (Playfair Display, Lato)
 - **Icons** : SVG inline
 - **Formulaires** : Reactive Forms
+- **Persistance** : LocalStorage pour le panier
 - **Build** : Angular CLI
 
 ## 📦 Installation
@@ -97,6 +103,54 @@ ng build --configuration production
 ```
 
 Les fichiers de production seront dans le dossier `dist/`.
+
+## 💳 Configuration Stripe
+
+### 🚀 Démarrage Rapide (30 minutes)
+
+Pour activer le paiement Stripe avec **collecte d'adresse de livraison et téléphone**, suivez ces guides :
+
+#### 📚 Guides disponibles
+
+1. **[Configuration Rapide (⚡ COMMENCER ICI)](CONFIGURATION_STRIPE_RAPIDE.md)**
+   - Checklist étape par étape
+   - Templates à remplir
+   - Configuration en 30 minutes
+
+2. **[Guide Complet avec Adresse de Livraison](GUIDE_STRIPE_ADRESSE_LIVRAISON.md)**
+   - Guide détaillé complet
+   - Configuration avancée
+   - FAQ et personnalisation
+
+3. **[Exemple de Commande Stripe](EXEMPLE_COMMANDE_STRIPE.md)**
+   - Ce que vous verrez dans le Dashboard
+   - Comment gérer les livraisons
+   - Export des commandes
+
+### ✅ Ce que Stripe va collecter pour vous
+
+- ✅ **Adresse complète** (rue, code postal, ville, pays)
+- ✅ **Numéro de téléphone** du client
+- ✅ **Email** du client
+- ✅ **Nom complet** du client
+- ✅ Tout est **visible dans votre Dashboard Stripe** pour préparer la livraison
+
+### 🎯 Résumé des étapes
+
+1. Créer un compte Stripe (gratuit) → https://dashboard.stripe.com/register
+2. Créer 6 Payment Links avec collecte d'adresse activée
+3. Copier les liens dans `src/app/services/stripe.service.ts` ligne 23
+4. Tester avec la carte `4242 4242 4242 4242`
+5. Voir les commandes dans Dashboard → Paiements
+
+### 💰 Frais Stripe
+
+- **2,9% + 0,25€** par transaction en Europe
+- Exemple : Pour 45€, vous recevez 43,44€
+
+**Pour plus d'informations, consultez les guides ci-dessus ! 📚**
+
+---
 
 ## ⚙️ Configuration
 
@@ -253,7 +307,9 @@ boutique-parfums/
 │   │   │   ├── about/            # À propos
 │   │   │   └── footer/           # Pied de page
 │   │   ├── services/
-│   │   │   └── product.service.ts    # Gestion des produits
+│   │   │   ├── product.service.ts    # Gestion des produits
+│   │   │   ├── cart.service.ts       # Gestion du panier
+│   │   │   └── stripe.service.ts     # Paiement Stripe
 │   │   ├── models/
 │   │   │   └── product.model.ts      # Interfaces TypeScript
 │   │   ├── app.component.*           # Composant racine

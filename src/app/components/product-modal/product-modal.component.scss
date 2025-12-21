@@ -192,10 +192,104 @@
   text-align: right;
 }
 
+// Sélecteur de quantité
+.product-quantity {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin: $spacing-md 0;
+}
+
+.quantity-label {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.quantity-selector {
+  @include flex-center;
+  gap: $spacing-sm;
+  background-color: $light-bg;
+  padding: $spacing-xs;
+  border-radius: $border-radius-md;
+}
+
+.qty-btn {
+  @include reset-button;
+  width: 36px;
+  height: 36px;
+  @include flex-center;
+  background-color: $primary-color;
+  color: $white;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-lg;
+  font-weight: 700;
+  transition: all $transition-speed-normal $transition-ease;
+
+  &:hover:not(:disabled) {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.qty-value {
+  font-family: $font-body;
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $secondary-color;
+  min-width: 40px;
+  text-align: center;
+}
+
+// Message de confirmation
+.added-message {
+  background-color: lighten($success-color, 40%);
+  color: $success-color;
+  padding: $spacing-sm;
+  border-radius: $border-radius-md;
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  text-align: center;
+  animation: fadeIn $transition-speed-normal $transition-ease;
+}
+
+// Boutons d'action
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
 .modal-cta {
   @include button-primary;
   width: 100%;
-  margin-top: $spacing-md;
   font-size: $font-size-md;
   padding: $spacing-sm $spacing-md;
+
+  &.modal-cta-cart {
+    @include flex-center;
+    gap: $spacing-xs;
+    background-color: $accent-color;
+    color: $secondary-color;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &.modal-cta-contact {
+    @include button-secondary;
+  }
 }

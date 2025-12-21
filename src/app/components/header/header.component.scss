@@ -107,6 +107,51 @@
   }
 }
 
+// Bouton panier
+.cart-button {
+  @include reset-button;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  @include flex-center;
+  border-radius: 50%;
+  background-color: $light-bg;
+  transition: all $transition-speed-normal $transition-ease;
+  margin-left: $spacing-sm;
+
+  .cart-icon {
+    width: 22px;
+    height: 22px;
+    color: $secondary-color;
+    transition: color $transition-speed-normal $transition-ease;
+  }
+
+  &:hover {
+    background-color: $primary-color;
+
+    .cart-icon {
+      color: $white;
+    }
+  }
+}
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  @include flex-center;
+  background-color: $accent-color;
+  color: $secondary-color;
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0 calc($spacing-xs / 2);
+  box-shadow: $shadow-sm;
+}
+
 // Menu burger
 .burger-button {
   @include reset-button;
@@ -115,6 +160,7 @@
   width: 30px;
   height: 24px;
   z-index: $z-index-modal + 1;
+  margin-left: $spacing-sm;
 
   @include tablet {
     display: none;

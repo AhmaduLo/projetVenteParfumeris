@@ -7,6 +7,7 @@ import { ProductModalComponent } from './components/product-modal/product-modal.
 import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
 import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { CartComponent } from './components/cart/cart.component';
 import { Product } from './models/product.model';
 
 /**
@@ -23,7 +24,8 @@ import { Product } from './models/product.model';
     ProductModalComponent,
     ContactModalComponent,
     AboutComponent,
-    FooterComponent
+    FooterComponent,
+    CartComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -34,6 +36,9 @@ export class AppComponent {
 
   /** État d'ouverture du modal de contact */
   isContactModalOpen = false;
+
+  /** État d'ouverture du panier */
+  isCartOpen = false;
 
   /** Produit pour le modal de contact */
   contactProduct?: Product;
@@ -66,5 +71,19 @@ export class AppComponent {
   closeContactModal(): void {
     this.isContactModalOpen = false;
     this.contactProduct = undefined;
+  }
+
+  /**
+   * Ouvre le panier
+   */
+  openCart(): void {
+    this.isCartOpen = true;
+  }
+
+  /**
+   * Ferme le panier
+   */
+  closeCart(): void {
+    this.isCartOpen = false;
   }
 }

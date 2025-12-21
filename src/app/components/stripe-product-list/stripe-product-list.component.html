@@ -1,0 +1,184 @@
+<div class="stripe-product-list-container">
+  <!-- En-tête avec titre et filtres -->
+  <div class="header-section">
+    <h1 class="title">Nos Produits</h1>
+    <p class="subtitle">Tous nos produits sont synchronisés automatiquement depuis Stripe</p>
+
+    <!-- Barre de recherche et filtres -->
+    <div class="filters-section">
+      <!-- Recherche -->
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          placeholder="Rechercher un produit..."
+          class="search-input"
+        />
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </div>
+
+      <!-- Filtres par catégorie -->
+      <div class="category-filters" *ngIf="categories.length > 0">
+        <button
+          class="category-btn"
+          [class.active]="selectedCategory === null"
+          (click)="filterByCategory(null)">
+          Tous
+        </button>
+        <button
+          *ngFor="let category of categories"
+          class="category-btn"
+          [class.active]="selectedCategory === category"
+          (click)="filterByCategory(category)">
+          {{ category }}
+        </button>
+      </div>
+
+      <!-- Tri par prix -->
+      <div class="sort-section">
+        <label>Trier par prix :</label>
+        <button
+          class="sort-btn"
+          [class.active]="sortOrder === 'asc'"
+          (click)="sortByPrice('asc')">
+          Prix croissant ↑
+        </button>
+        <button
+          class="sort-btn"
+          [class.active]="sortOrder === 'desc'"
+          (click)="sortByPrice('desc')">
+          Prix décroissant ↓
+        </button>
+        <button
+          class="sort-btn reset-btn"
+          (click)="resetFilters()">
+          Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- État de chargement -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement des produits depuis Stripe...</p>
+  </div>
+
+  <!-- Erreur -->
+  <div *ngIf="error" class="error-state">
+    <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <p class="error-message">{{ error }}</p>
+    <button class="retry-btn" (click)="loadProducts()">Réessayer</button>
+  </div>
+
+  <!-- Liste des produits -->
+  <div *ngIf="!loading && !error" class="products-container">
+    <!-- Aucun produit -->
+    <div *ngIf="filteredProducts.length === 0" class="no-products">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <p>Aucun produit trouvé</p>
+      <button class="reset-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    </div>
+
+    <!-- Grille de produits -->
+    <div class="products-grid" *ngIf="filteredProducts.length > 0">
+      <div
+        *ngFor="let product of filteredProducts; trackBy: trackByProductId"
+        class="product-card"
+        [class.featured]="isFeatured(product)"
+        [class.out-of-stock]="!isInStock(product)">
+
+        <!-- Badge "Mis en avant" -->
+        <div class="featured-badge" *ngIf="isFeatured(product)">
+          ⭐ Mis en avant
+        </div>
+
+        <!-- Badge "Rupture de stock" -->
+        <div class="stock-badge out" *ngIf="!isInStock(product)">
+          Rupture de stock
+        </div>
+
+        <!-- Image du produit -->
+        <div class="product-image">
+          <img
+            [src]="getProductImage(product)"
+            [alt]="product.name"
+            loading="lazy"
+          />
+        </div>
+
+        <!-- Informations du produit -->
+        <div class="product-info">
+          <!-- Catégorie -->
+          <span class="product-category" *ngIf="product.metadata['category']">
+            {{ product.metadata['category'] }}
+          </span>
+
+          <!-- Nom -->
+          <h3 class="product-name">{{ product.name }}</h3>
+
+          <!-- Description -->
+          <p class="product-description">{{ product.description }}</p>
+
+          <!-- Prix -->
+          <div class="product-price" *ngIf="product.price">
+            <span class="price-amount">{{ product.price.formatted }}</span>
+          </div>
+
+          <!-- Stock -->
+          <div class="product-stock" *ngIf="getStock(product) !== null">
+            <span class="stock-label">Stock :</span>
+            <span class="stock-value">{{ getStock(product) }} unité(s)</span>
+          </div>
+
+          <!-- Bouton Acheter -->
+          <button
+            class="btn-buy"
+            (click)="buyProduct(product)"
+            [disabled]="!product.price || !isInStock(product)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2"/>
+            </svg>
+            <span *ngIf="isInStock(product)">Acheter maintenant</span>
+            <span *ngIf="!isInStock(product)">Indisponible</span>
+          </button>
+
+          <!-- Note sur la collecte d'adresse -->
+          <p class="checkout-note" *ngIf="isInStock(product)">
+            ✓ Adresse de livraison collectée automatiquement
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nombre de résultats -->
+    <div class="results-count" *ngIf="filteredProducts.length > 0">
+      {{ filteredProducts.length }} produit(s) affiché(s)
+    </div>
+  </div>
+
+  <!-- Information sur Stripe -->
+  <div class="stripe-info">
+    <p>
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      Les produits sont automatiquement synchronisés depuis votre Dashboard Stripe.
+      Ajoutez ou modifiez un produit dans Stripe pour le voir apparaître ici.
+    </p>
+  </div>
+</div>

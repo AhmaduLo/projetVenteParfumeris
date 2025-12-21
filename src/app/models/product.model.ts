@@ -27,3 +27,19 @@ export interface ContactInfo {
   whatsapp: string;
   adresse: string;
 }
+
+/**
+ * Interface représentant un article dans le panier
+ */
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+/**
+ * Interface pour l'intention de paiement Stripe
+ */
+export interface StripePaymentIntent {
+  clientSecret: string;
+  amount: number;
+}

@@ -1,5 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
 
 /**
  * Composant Header avec navigation et menu burger responsive
@@ -11,12 +12,27 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   /** État du menu mobile */
   menuOpen = false;
 
   /** État du header sticky */
   isSticky = false;
+
+  /** Nombre d'articles dans le panier */
+  cartItemCount = 0;
+
+  /** Événement d'ouverture du panier */
+  @Output() openCart = new EventEmitter<void>();
+
+  constructor(private cartService: CartService) {}
+
+  ngOnInit(): void {
+    // S'abonner au compteur de panier
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartItemCount = count;
+    });
+  }
 
   /**
    * Détecte le scroll pour appliquer l'effet sticky
@@ -24,6 +40,13 @@ export class HeaderComponent {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isSticky = window.scrollY > 50;
+  }
+
+  /**
+   * Ouvre le panier
+   */
+  onCartClick(): void {
+    this.openCart.emit();
   }
 
   /**

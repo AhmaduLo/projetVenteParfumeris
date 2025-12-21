@@ -1,7 +1,7 @@
 <!-- Application principale -->
 <div class="app">
-  <!-- Header -->
-  <app-header></app-header>
+  <!-- Header avec event binding pour le panier -->
+  <app-header (openCart)="openCart()"></app-header>
 
   <!-- Contenu principal -->
   <main class="main-content">
@@ -31,4 +31,10 @@
     [product]="contactProduct"
     (closeModal)="closeContactModal()">
   </app-contact-modal>
+
+  <!-- Panier -->
+  <app-cart
+    [isOpen]="isCartOpen"
+    (closeCart)="closeCart()">
+  </app-cart>
 </div>

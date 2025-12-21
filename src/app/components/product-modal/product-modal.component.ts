@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
+import { CartService } from '../../services/cart.service';
 
 /**
  * Composant modal pour afficher les détails d'un produit
@@ -24,6 +25,14 @@ export class ProductModalComponent implements OnChanges {
 
   /** État d'animation du modal */
   isAnimating = false;
+
+  /** Quantité à ajouter au panier */
+  quantity = 1;
+
+  /** Message de confirmation d'ajout */
+  addedToCartMessage = false;
+
+  constructor(private cartService: CartService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product'] && this.product) {
@@ -63,6 +72,37 @@ export class ProductModalComponent implements OnChanges {
     if (this.product) {
       this.openContact.emit(this.product);
       this.close();
+    }
+  }
+
+  /**
+   * Augmente la quantité
+   */
+  increaseQuantity(): void {
+    this.quantity++;
+  }
+
+  /**
+   * Diminue la quantité
+   */
+  decreaseQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  /**
+   * Ajoute le produit au panier
+   */
+  addToCart(): void {
+    if (this.product) {
+      this.cartService.addToCart(this.product, this.quantity);
+      this.addedToCartMessage = true;
+
+      // Masquer le message après 2 secondes
+      setTimeout(() => {
+        this.addedToCartMessage = false;
+      }, 2000);
     }
   }
 
