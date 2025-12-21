@@ -19,8 +19,8 @@ import Stripe from 'stripe';
 // ⚠️ IMPORTANT : La clé secrète est dans les variables d'environnement Vercel
 // Ne JAMAIS la mettre dans le code !
 // Configuration : Vercel Dashboard > Settings > Environment Variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {
+  apiVersion: '2023-10-16',
 });
 
 export default async function handler(
@@ -31,7 +31,7 @@ export default async function handler(
   // Autoriser les requêtes depuis votre domaine Angular
   // En développement : '*' autorise tous les domaines
   // En production : remplacer par 'https://votre-domaine.com'
-  res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL || '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env['FRONTEND_URL'] || '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -116,7 +116,7 @@ export default async function handler(
     return res.status(500).json({
       success: false,
       error: 'Erreur lors de la récupération des produits',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      message: process.env['NODE_ENV'] === 'development' ? error.message : undefined,
     });
   }
 }

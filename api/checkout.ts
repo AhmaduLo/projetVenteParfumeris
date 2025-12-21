@@ -17,8 +17,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {
+  apiVersion: '2023-10-16',
 });
 
 export default async function handler(
@@ -26,7 +26,7 @@ export default async function handler(
   res: VercelResponse
 ) {
   // ===== CONFIGURATION CORS =====
-  res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL || '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env['FRONTEND_URL'] || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -146,10 +146,10 @@ export default async function handler(
 
       // ===== URLS DE REDIRECTION =====
       // URL après paiement réussi
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env['FRONTEND_URL'] || 'http://localhost:4200'}/success?session_id={CHECKOUT_SESSION_ID}`,
 
       // URL si le client annule
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/cancel`,
+      cancel_url: `${process.env['FRONTEND_URL'] || 'http://localhost:4200'}/cancel`,
 
       // ===== MÉTADONNÉES PERSONNALISÉES (Optionnel) =====
       // Utile pour tracker la source de la commande
@@ -184,7 +184,7 @@ export default async function handler(
     return res.status(500).json({
       success: false,
       error: 'Erreur lors de la création de la session',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      message: process.env['NODE_ENV'] === 'development' ? error.message : undefined,
     });
   }
 }
