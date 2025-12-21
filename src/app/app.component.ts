@@ -9,17 +9,16 @@ import { CartComponent } from './components/cart/cart.component';
  * Composant principal de l'application
  */
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    CartComponent
-  ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        CartComponent
+    ],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   /** État d'ouverture du panier */

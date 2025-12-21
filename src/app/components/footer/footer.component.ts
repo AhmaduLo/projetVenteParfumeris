@@ -7,11 +7,10 @@ import { ContactInfo } from '../../models/product.model';
  * Composant Footer avec coordonnées et informations
  */
 @Component({
-  selector: 'app-footer',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+    selector: 'app-footer',
+    imports: [CommonModule],
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
   /** Informations de contact */

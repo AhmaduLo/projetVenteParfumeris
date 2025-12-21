@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
  * Composant À propos avec l'histoire et les valeurs de la boutique
  */
 @Component({
-  selector: 'app-about',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
+    selector: 'app-about',
+    imports: [CommonModule],
+    templateUrl: './about.component.html',
+    styleUrls: ['./about.component.scss']
 })
 export class AboutComponent {
 

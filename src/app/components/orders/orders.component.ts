@@ -7,11 +7,10 @@ import { OrderService, Order } from '../../services/order.service';
  * Composant pour afficher l'historique des commandes
  */
 @Component({
-  selector: 'app-orders',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './orders.component.html',
-  styleUrl: './orders.component.scss'
+    selector: 'app-orders',
+    imports: [CommonModule],
+    templateUrl: './orders.component.html',
+    styleUrl: './orders.component.scss'
 })
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];

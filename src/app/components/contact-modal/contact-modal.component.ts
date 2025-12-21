@@ -8,11 +8,10 @@ import { ProductService } from '../../services/product.service';
  * Composant modal de contact avec formulaire
  */
 @Component({
-  selector: 'app-contact-modal',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './contact-modal.component.html',
-  styleUrls: ['./contact-modal.component.scss']
+    selector: 'app-contact-modal',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './contact-modal.component.html',
+    styleUrls: ['./contact-modal.component.scss']
 })
 export class ContactModalComponent implements OnInit, OnChanges {
   /** Produit sélectionné (optionnel) */

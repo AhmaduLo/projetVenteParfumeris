@@ -12,18 +12,17 @@ import { StripeProduct } from '../../models/stripe-product.model';
  * Composant de la page d'accueil
  */
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    HeroComponent,
-    StripeProductListComponent,
-    ProductModalComponent,
-    ContactModalComponent,
-    AboutComponent
-  ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    imports: [
+        CommonModule,
+        HeroComponent,
+        StripeProductListComponent,
+        ProductModalComponent,
+        ContactModalComponent,
+        AboutComponent
+    ],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
   /** Produit sélectionné pour le modal */

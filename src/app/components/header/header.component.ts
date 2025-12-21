@@ -7,11 +7,10 @@ import { StripeCartService } from '../../services/stripe-cart.service';
  * Composant Header avec navigation et menu burger responsive
  */
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    imports: [CommonModule],
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   /** État du menu mobile */

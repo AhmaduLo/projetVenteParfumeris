@@ -9,11 +9,10 @@ import { OrderService } from '../../services/order.service';
  * Affichée après redirection depuis Stripe Checkout
  */
 @Component({
-  selector: 'app-success',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './success.component.html',
-  styleUrl: './success.component.scss'
+    selector: 'app-success',
+    imports: [CommonModule],
+    templateUrl: './success.component.html',
+    styleUrl: './success.component.scss'
 })
 export class SuccessComponent implements OnInit {
   sessionId: string | null = null;

@@ -7,11 +7,10 @@ import { StripeCheckoutService } from '../../services/stripe-checkout.service';
  * Composant panier avec checkout Stripe
  */
 @Component({
-  selector: 'app-cart',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+    selector: 'app-cart',
+    imports: [CommonModule],
+    templateUrl: './cart.component.html',
+    styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
   /** État d'ouverture du panier */

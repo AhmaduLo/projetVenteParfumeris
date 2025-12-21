@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
  * Composant Hero - Section d'accueil avec image de fond
  */
 @Component({
-  selector: 'app-hero',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './hero.component.html',
-  styleUrls: ['./hero.component.scss']
+    selector: 'app-hero',
+    imports: [CommonModule],
+    templateUrl: './hero.component.html',
+    styleUrls: ['./hero.component.scss']
 })
 export class HeroComponent {
 

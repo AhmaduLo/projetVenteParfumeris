@@ -7,11 +7,10 @@ import { CartService } from '../../services/cart.service';
  * Composant modal pour afficher les détails d'un produit
  */
 @Component({
-  selector: 'app-product-modal',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './product-modal.component.html',
-  styleUrls: ['./product-modal.component.scss']
+    selector: 'app-product-modal',
+    imports: [CommonModule],
+    templateUrl: './product-modal.component.html',
+    styleUrls: ['./product-modal.component.scss']
 })
 export class ProductModalComponent implements OnChanges {
   /** Produit à afficher (null = modal fermé) */

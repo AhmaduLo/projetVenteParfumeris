@@ -7,11 +7,10 @@ import { Router } from '@angular/router';
  * Affichée quand l'utilisateur annule le checkout
  */
 @Component({
-  selector: 'app-cancel',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './cancel.component.html',
-  styleUrl: './cancel.component.scss'
+    selector: 'app-cancel',
+    imports: [CommonModule],
+    templateUrl: './cancel.component.html',
+    styleUrl: './cancel.component.scss'
 })
 export class CancelComponent {
   constructor(private router: Router) {}

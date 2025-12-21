@@ -16,11 +16,10 @@ import { StripeCartService } from '../../services/stripe-cart.service';
  * - Collecte automatiquement l'adresse et le téléphone du client
  */
 @Component({
-  selector: 'app-stripe-product-list',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './stripe-product-list.component.html',
-  styleUrls: ['./stripe-product-list.component.scss']
+    selector: 'app-stripe-product-list',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './stripe-product-list.component.html',
+    styleUrls: ['./stripe-product-list.component.scss']
 })
 export class StripeProductListComponent implements OnInit {
   /** Liste complète des produits */
