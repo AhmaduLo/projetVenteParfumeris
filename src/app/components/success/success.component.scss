@@ -7,6 +7,11 @@
   justify-content: center;
   background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
   padding: $spacing-md;
+
+  // Mobile: réduire padding pour éviter débordement
+  @media (max-width: 768px) {
+    padding: $spacing-sm;
+  }
 }
 
 .success-container {
@@ -17,6 +22,16 @@
   width: 100%;
   text-align: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+  // Mobile: adapter padding
+  @media (max-width: 768px) {
+    padding: $spacing-lg;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: $spacing-md;
+  }
 }
 
 .success-icon {
@@ -29,12 +44,28 @@
     width: 100%;
     height: 100%;
   }
+
+  // Mobile: icône plus petite
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+    margin-bottom: $spacing-md;
+  }
 }
 
 h1 {
   color: $text-color;
   font-size: 2rem;
   margin-bottom: $spacing-md;
+
+  // Mobile: titre plus petit
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 }
 
 .success-message {
@@ -42,6 +73,12 @@ h1 {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: $spacing-lg;
+
+  // Mobile: texte plus petit
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    margin-bottom: $spacing-md;
+  }
 }
 
 .session-info {
@@ -49,6 +86,7 @@ h1 {
   padding: $spacing-md;
   border-radius: 8px;
   margin-bottom: $spacing-lg;
+  overflow: hidden; // Éviter débordement
 
   .session-id {
     margin: 0;
@@ -61,12 +99,36 @@ h1 {
       font-family: monospace;
       display: block;
       margin-top: 0.5rem;
+      font-size: 0.75rem; // Taille fixe plus petite
+      line-height: 1.4;
+      overflow-wrap: break-word; // Forcer retour à la ligne
+      word-wrap: break-word;
+
+      // Mobile: encore plus petit
+      @media (max-width: 480px) {
+        font-size: 0.65rem;
+        letter-spacing: -0.5px; // Resserrer lettres
+      }
     }
+  }
+
+  // Mobile: réduire padding
+  @media (max-width: 480px) {
+    padding: $spacing-sm;
+    margin-bottom: $spacing-md;
   }
 }
 
 .actions {
   margin-top: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  // Mobile
+  @media (max-width: 480px) {
+    margin-top: $spacing-md;
+  }
 }
 
 .btn-primary {
@@ -79,9 +141,41 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%; // Pleine largeur
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba($primary-color, 0.3);
+  }
+
+  // Mobile: adapter taille texte
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: $text-color;
+  border: 2px solid $light-gray;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%; // Pleine largeur
+
+  &:hover {
+    background: $light-bg;
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+
+  // Mobile: adapter taille texte
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    padding: $spacing-sm $spacing-md;
   }
 }
