@@ -70,7 +70,6 @@ export default async function handler(
         'line_items.data.price.product',
         'customer',
         'payment_intent',
-        'shipping_details',
       ]
     });
 
