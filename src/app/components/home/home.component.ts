@@ -39,6 +39,8 @@ export class HomeComponent {
    * Gère la sélection d'un produit (converti depuis StripeProduct)
    */
   onProductSelected(stripeProduct: StripeProduct): void {
+    console.log('🔍 Produit sélectionné:', stripeProduct);
+
     // Convertir StripeProduct en Product pour le modal
     const product: Product = {
       id: parseInt(stripeProduct.id.replace('prod_', ''), 36), // Conversion ID string → number
@@ -46,10 +48,17 @@ export class HomeComponent {
       description: stripeProduct.description,
       prix: stripeProduct.price?.amount || 0,
       image: stripeProduct.images[0] || '/assets/default-product.jpg',
-      categorie: stripeProduct.metadata['category'] || 'autre',
-      stock: parseInt(stripeProduct.metadata['stock'] || '999', 10)
+      categorie: (stripeProduct.metadata['category'] as 'parfum' | 'incense') || 'parfum',
+      caracteristiques: {
+        contenance: stripeProduct.metadata['contenance'] || undefined,
+        origine: stripeProduct.metadata['origine'] || 'Non spécifié',
+        notes: stripeProduct.metadata['notes'] || undefined,
+        duree: stripeProduct.metadata['duree'] || undefined
+      },
+      nouveau: stripeProduct.metadata['featured'] === 'true' || false
     };
 
+    console.log('✅ Produit converti:', product);
     this.selectedProduct = product;
   }
 
