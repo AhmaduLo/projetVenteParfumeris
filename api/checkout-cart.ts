@@ -18,29 +18,34 @@ export default async function handler(
   res: VercelResponse
 ) {
   // ===== CONFIGURATION CORS SÉCURISÉE =====
-  const origin = req.headers.origin || '';
-  const allowedOrigins = [
-    'https://boutique-parfums.vercel.app',
-    'https://projet-vente-parfumeris.vercel.app',
-    'http://localhost:4200',
-    'http://localhost:3000'
-  ];
+  const origin = req.headers.origin;
 
-  // Vérifier si l'origine est autorisée (domaine exact ou preview Vercel)
-  const isAllowed = allowedOrigins.includes(origin) ||
-                    (origin.endsWith('.vercel.app') && (origin.includes('boutique-parfums') || origin.includes('projet-vente-parfumeris')));
+  // Si une origine est présente, vérifier qu'elle est autorisée
+  if (origin) {
+    const allowedOrigins = [
+      'https://boutique-parfums.vercel.app',
+      'https://projet-vente-parfumeris.vercel.app',
+      'http://localhost:4200',
+      'http://localhost:3000'
+    ];
 
-  if (isAllowed) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  } else {
-    // Bloquer les origines non autorisées
-    return res.status(403).json({
-      success: false,
-      error: 'Origin not allowed'
-    });
+    // Vérifier si l'origine est autorisée (domaine exact ou preview Vercel)
+    const isAllowed = allowedOrigins.includes(origin) ||
+                      (origin.endsWith('.vercel.app') && (origin.includes('boutique-parfums') || origin.includes('projet-vente-parfumeris')));
+
+    if (isAllowed) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    } else {
+      // Bloquer les origines non autorisées
+      return res.status(403).json({
+        success: false,
+        error: 'Origin not allowed'
+      });
+    }
   }
+  // Si pas d'origine (requête directe), continuer sans headers CORS
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
