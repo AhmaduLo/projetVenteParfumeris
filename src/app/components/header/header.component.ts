@@ -1,4 +1,4 @@
-import { Component, HostListener, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StripeCartService } from '../../services/stripe-cart.service';
@@ -22,9 +22,6 @@ export class HeaderComponent implements OnInit {
   /** Nombre d'articles dans le panier */
   cartItemCount = 0;
 
-  /** Événement d'ouverture du panier */
-  @Output() openCart = new EventEmitter<void>();
-
   constructor(
     private cartService: StripeCartService,
     private router: Router
@@ -46,10 +43,11 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Ouvre le panier
+   * Navigation vers la page panier
    */
   onCartClick(): void {
-    this.openCart.emit();
+    this.router.navigate(['/cart']);
+    this.closeMenu();
   }
 
   /**

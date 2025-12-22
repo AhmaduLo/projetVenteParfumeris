@@ -1,17 +1,11 @@
 <!-- Application principale -->
 <div class="app">
-  <!-- Header avec event binding pour le panier -->
-  <app-header (openCart)="openCart()"></app-header>
+  <!-- Header -->
+  <app-header></app-header>
 
   <!-- Contenu dynamique via router -->
   <router-outlet></router-outlet>
 
   <!-- Footer -->
   <app-footer></app-footer>
-
-  <!-- Panier (global à toute l'application) -->
-  <app-cart
-    [isOpen]="isCartOpen"
-    (closeCart)="closeCart()">
-  </app-cart>
 </div>

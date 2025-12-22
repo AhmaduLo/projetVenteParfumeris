@@ -1,12 +1,5 @@
-<!-- Modal Panier -->
-<div
-  class="cart-overlay"
-  *ngIf="isOpen"
-  (click)="onOverlayClick($event)"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Panier d'achat">
-
+<!-- Page Panier -->
+<div class="cart-page">
   <!-- Conteneur du panier -->
   <div class="cart-container">
     <!-- Header -->
@@ -18,7 +11,7 @@
         Mon Panier ({{ cartItems.length }})
       </h2>
 
-      <button class="cart-close" (click)="close()" aria-label="Fermer le panier">
+      <button class="cart-close" (click)="goBack()" aria-label="Retour à l'accueil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M6 6l12 12M6 18L18 6" stroke-width="2" stroke-linecap="round"/>
         </svg>
@@ -33,7 +26,7 @@
           <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <p>Votre panier est vide</p>
-        <button class="btn-continue" (click)="close()">
+        <button class="btn-continue" (click)="goBack()">
           Continuer mes achats
         </button>
       </div>

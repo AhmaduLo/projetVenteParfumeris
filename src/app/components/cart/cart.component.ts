@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { StripeCartService, StripeCartItem } from '../../services/stripe-cart.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
 
 /**
- * Composant panier avec checkout Stripe
+ * Composant page panier avec checkout Stripe
  */
 @Component({
     selector: 'app-cart',
@@ -13,11 +14,6 @@ import { StripeCheckoutService } from '../../services/stripe-checkout.service';
     styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-  /** État d'ouverture du panier */
-  @Input() isOpen = false;
-
-  /** Événement de fermeture */
-  @Output() closeCart = new EventEmitter<void>();
 
   /** Articles du panier */
   cartItems: StripeCartItem[] = [];
@@ -33,7 +29,8 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: StripeCartService,
-    private checkoutService: StripeCheckoutService
+    private checkoutService: StripeCheckoutService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -146,25 +143,16 @@ export class CartComponent implements OnInit {
   }
 
   /**
-   * Ferme le panier
+   * Retour à la page d'accueil
    */
-  close(): void {
-    this.closeCart.emit();
-  }
-
-  /**
-   * Gère le clic sur l'overlay
-   */
-  onOverlayClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.close();
-    }
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 
   /**
    * Tracking pour ngFor
    */
-  trackByCartItem(index: number, item: StripeCartItem): string {
+  trackByCartItem(_index: number, item: StripeCartItem): string {
     return item.product.id;
   }
 
