@@ -5,6 +5,7 @@ import { StripeProduct } from '../../models/stripe-product.model';
 import { StripeProductService } from '../../services/stripe-product.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
 import { StripeCartService } from '../../services/stripe-cart.service';
+import { StripeProductModalComponent } from '../stripe-product-modal/stripe-product-modal.component';
 
 /**
  * Composant d'affichage de la liste des produits Stripe
@@ -17,7 +18,7 @@ import { StripeCartService } from '../../services/stripe-cart.service';
  */
 @Component({
     selector: 'app-stripe-product-list',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, StripeProductModalComponent],
     templateUrl: './stripe-product-list.component.html',
     styleUrls: ['./stripe-product-list.component.scss']
 })
@@ -48,6 +49,9 @@ export class StripeProductListComponent implements OnInit {
 
   /** Événement émis lors du clic sur un produit pour ouvrir le modal */
   @Output() productSelected = new EventEmitter<StripeProduct>();
+
+  /** Produit sélectionné pour le modal */
+  selectedProduct: StripeProduct | null = null;
 
   constructor(
     private productService: StripeProductService,
@@ -242,6 +246,22 @@ export class StripeProductListComponent implements OnInit {
    * Ouvre le modal de détails du produit
    */
   openProductModal(product: StripeProduct): void {
+    this.selectedProduct = product;
     this.productSelected.emit(product);
+  }
+
+  /**
+   * Ferme le modal de produit
+   */
+  closeProductModal(): void {
+    this.selectedProduct = null;
+  }
+
+  /**
+   * Ouvre le modal de contact pour un produit spécifique
+   */
+  openContactModal(product: StripeProduct): void {
+    // TODO: Implémenter le modal de contact
+    alert(`Fonctionnalité de contact pour ${product.name} - À implémenter`);
   }
 }

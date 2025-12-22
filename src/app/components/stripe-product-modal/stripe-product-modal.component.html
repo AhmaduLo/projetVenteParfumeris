@@ -1,0 +1,110 @@
+<!-- Modal overlay -->
+<div
+  class="modal-overlay"
+  *ngIf="product"
+  [class.animating]="isAnimating"
+  (click)="onOverlayClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'Détails du produit ' + product.name">
+
+  <!-- Conteneur du modal -->
+  <div class="modal-container" [class.animating]="isAnimating">
+    <!-- Bouton de fermeture -->
+    <button
+      class="modal-close"
+      (click)="close()"
+      aria-label="Fermer le modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M6 6l12 12M6 18L18 6" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Contenu du modal -->
+    <div class="modal-content">
+      <!-- Image du produit -->
+      <div class="modal-image-container">
+        <img
+          [src]="product.images[0] || 'assets/images/placeholder.jpg'"
+          [alt]="product.name"
+          class="modal-image"
+          loading="eager">
+
+        <!-- Badge nouveau -->
+        <div class="modal-badge" *ngIf="product.metadata['nouveau'] === 'true'">
+          NOUVEAU
+        </div>
+      </div>
+
+      <!-- Informations du produit -->
+      <div class="modal-info">
+        <span class="modal-category">{{ getCategoryLabel() }}</span>
+        <h2 class="modal-title">{{ product.name }}</h2>
+        <p class="modal-price" *ngIf="product.price">{{ product.price.formatted }}</p>
+
+        <p class="modal-description">{{ product.description }}</p>
+
+        <!-- Caractéristiques -->
+        <div class="modal-characteristics" *ngIf="hasCharacteristics()">
+          <h3 class="characteristics-title">Caractéristiques</h3>
+
+          <div class="characteristic-item" *ngIf="product.metadata['contenance']">
+            <span class="characteristic-label">Contenance :</span>
+            <span class="characteristic-value">{{ product.metadata['contenance'] }}</span>
+          </div>
+
+          <div class="characteristic-item" *ngIf="product.metadata['origine']">
+            <span class="characteristic-label">Origine :</span>
+            <span class="characteristic-value">{{ product.metadata['origine'] }}</span>
+          </div>
+
+          <div class="characteristic-item" *ngIf="product.metadata['notes']">
+            <span class="characteristic-label">Notes :</span>
+            <span class="characteristic-value">{{ product.metadata['notes'] }}</span>
+          </div>
+
+          <div class="characteristic-item" *ngIf="product.metadata['duree']">
+            <span class="characteristic-label">Durée :</span>
+            <span class="characteristic-value">{{ product.metadata['duree'] }}</span>
+          </div>
+        </div>
+
+        <!-- Sélecteur de quantité -->
+        <div class="product-quantity">
+          <label class="quantity-label">Quantité :</label>
+          <div class="quantity-selector">
+            <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1" aria-label="Diminuer">-</button>
+            <span class="qty-value">{{ quantity }}</span>
+            <button class="qty-btn" (click)="increaseQuantity()" aria-label="Augmenter">+</button>
+          </div>
+        </div>
+
+        <!-- Message de confirmation -->
+        <div class="added-message" *ngIf="addedToCartMessage">
+          ✓ Ajouté au panier !
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="modal-actions">
+          <button
+            class="modal-cta modal-cta-cart"
+            (click)="addToCart()"
+            [disabled]="!product.price"
+            aria-label="Ajouter au panier">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Ajouter au panier
+          </button>
+
+          <button
+            class="modal-cta modal-cta-contact"
+            (click)="contactForProduct()"
+            aria-label="Demander des informations">
+            Ou demander des informations
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

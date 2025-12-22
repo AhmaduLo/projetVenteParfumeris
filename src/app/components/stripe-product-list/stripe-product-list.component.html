@@ -150,3 +150,10 @@
 
   </div>
 </div>
+
+<!-- Modal de produit -->
+<app-stripe-product-modal
+  [product]="selectedProduct"
+  (closeModal)="closeProductModal()"
+  (openContact)="openContactModal($event)">
+</app-stripe-product-modal>
