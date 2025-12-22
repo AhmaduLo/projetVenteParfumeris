@@ -31,6 +31,29 @@
   gap: $spacing-sm;
 }
 
+.footer-logo {
+  margin-bottom: $spacing-md;
+}
+
+.footer-logo-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: rgba($white, 0.1);
+  padding: $spacing-xs;
+  transition: transform $transition-speed-normal $transition-ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @include tablet {
+    width: 120px;
+    height: 120px;
+  }
+}
+
 .footer-title {
   font-family: $font-heading;
   font-size: $font-size-md;
