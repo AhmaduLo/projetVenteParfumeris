@@ -31,13 +31,14 @@ export default async function handler(
   const origin = req.headers.origin || '';
   const allowedOrigins = [
     'https://boutique-parfums.vercel.app',
+    'https://projet-vente-parfumeris.vercel.app',
     'http://localhost:4200',
     'http://localhost:3000'
   ];
 
   // Vérifier si l'origine est autorisée (domaine exact ou preview Vercel)
   const isAllowed = allowedOrigins.includes(origin) ||
-                    (origin.endsWith('.vercel.app') && origin.includes('boutique-parfums'));
+                    (origin.endsWith('.vercel.app') && (origin.includes('boutique-parfums') || origin.includes('projet-vente-parfumeris')));
 
   if (isAllowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
