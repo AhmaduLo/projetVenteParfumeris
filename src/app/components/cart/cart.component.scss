@@ -122,21 +122,40 @@
 
 .cart-item {
   display: grid;
-  grid-template-columns: 80px 1fr auto auto;
-  gap: $spacing-sm;
-  align-items: center;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: auto auto auto;
+  gap: $spacing-xs;
   padding: $spacing-sm;
+  padding-right: 40px; // Espace pour le bouton supprimer
   background-color: $light-bg;
   border-radius: $border-radius-md;
   position: relative;
+
+  @include tablet {
+    grid-template-columns: 80px 1fr auto auto;
+    grid-template-rows: auto;
+    gap: $spacing-sm;
+    align-items: center;
+    padding: $spacing-sm;
+    padding-right: $spacing-sm;
+  }
 }
 
 .item-image {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: $border-radius-md;
   overflow: hidden;
   background-color: $white;
+  grid-row: 1 / 4; // Span toutes les rangées sur mobile
+  grid-column: 1;
+
+  @include tablet {
+    width: 80px;
+    height: 80px;
+    grid-row: auto;
+    grid-column: auto;
+  }
 
   img {
     @include image-cover;
@@ -146,15 +165,27 @@
 .item-info {
   @include flex-column;
   gap: calc($spacing-xs / 2);
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0; // Permet le text-overflow
+
+  @include tablet {
+    grid-column: auto;
+    grid-row: auto;
+  }
 }
 
 .item-name {
   font-family: $font-heading;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
   font-weight: 600;
   color: $secondary-color;
   margin: 0;
   @include line-clamp(2);
+
+  @include tablet {
+    font-size: $font-size-base;
+  }
 }
 
 .item-category {
@@ -175,10 +206,20 @@
 
 .item-quantity {
   @include flex-center;
-  gap: $spacing-xs;
+  gap: calc($spacing-xs / 2);
   background-color: $white;
   border-radius: $border-radius-sm;
   padding: calc($spacing-xs / 2);
+  grid-column: 2;
+  grid-row: 3;
+  justify-self: start;
+
+  @include tablet {
+    grid-column: auto;
+    grid-row: auto;
+    gap: $spacing-xs;
+    justify-self: auto;
+  }
 }
 
 .qty-btn {
@@ -213,30 +254,60 @@
 }
 
 .item-total {
-  text-align: right;
+  grid-column: 2;
+  grid-row: 2;
+  text-align: left;
+
+  @include tablet {
+    grid-column: auto;
+    grid-row: auto;
+    text-align: right;
+  }
 }
 
 .total-price {
   font-family: $font-body;
-  font-size: $font-size-md;
+  font-size: $font-size-sm;
   font-weight: 700;
   color: $accent-color;
+
+  @include tablet {
+    font-size: $font-size-md;
+  }
   margin: 0;
   white-space: nowrap;
 }
 
 .item-remove {
   @include reset-button;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   @include flex-center;
   border-radius: 50%;
   transition: all $transition-speed-normal $transition-ease;
+  position: absolute;
+  top: 50%;
+  right: $spacing-xs;
+  transform: translateY(-50%);
+
+  @include tablet {
+    position: static;
+    width: 32px;
+    height: 32px;
+    top: auto;
+    right: auto;
+    transform: none;
+  }
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     color: $text-color;
+
+    @include tablet {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &:hover {
