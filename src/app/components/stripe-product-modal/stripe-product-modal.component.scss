@@ -62,10 +62,10 @@
   transition: all $transition-speed-normal $transition-ease;
 
   @include mobile {
-    top: $spacing-xs;
-    right: $spacing-xs;
-    width: 36px;
-    height: 36px;
+    top: 60px; // Position plus basse pour éviter la barre URL du navigateur
+    right: $spacing-sm;
+    width: 44px;
+    height: 44px;
   }
 
   svg {
