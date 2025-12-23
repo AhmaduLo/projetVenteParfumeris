@@ -127,16 +127,64 @@ export class StripeProductModalComponent implements OnChanges {
   hasCharacteristics(): boolean {
     if (!this.product) return false;
 
-    return !!(
-      this.product.metadata['contenance'] ||
-      this.product.metadata['contenance '] ||
-      this.product.metadata['origine'] ||
-      this.product.metadata['origine '] ||
-      this.product.metadata['notes'] ||
-      this.product.metadata['notes '] ||
-      this.product.metadata['duree'] ||
-      this.product.metadata['durée'] ||
-      this.product.metadata['durée ']
-    );
+    // Exclure les métadonnées utilisées pour d'autres usages
+    const excludedKeys = ['category', 'featured'];
+    const metadataKeys = Object.keys(this.product.metadata || {});
+
+    return metadataKeys.some(key => !excludedKeys.includes(key.trim().toLowerCase()));
+  }
+
+  /**
+   * Retourne la liste des caractéristiques à afficher
+   * Génère automatiquement les labels en capitalisant les clés
+   */
+  getCharacteristics(): Array<{ label: string; value: string }> {
+    if (!this.product || !this.product.metadata) return [];
+
+    // Clés à exclure de l'affichage (utilisées pour d'autres usages)
+    const excludedKeys = ['category', 'featured'];
+
+    // Mapping des clés vers des labels français
+    const labelMapping: { [key: string]: string } = {
+      'contenance': 'Contenance',
+      'origine': 'Origine',
+      'notes': 'Notes',
+      'duree': 'Durée',
+      'durée': 'Durée',
+      'saveur': 'Saveur'
+    };
+
+    const characteristics: Array<{ label: string; value: string }> = [];
+
+    // Parcourir toutes les métadonnées
+    Object.keys(this.product.metadata).forEach(key => {
+      const trimmedKey = key.trim().toLowerCase();
+
+      // Ignorer les clés exclues
+      if (excludedKeys.includes(trimmedKey)) {
+        return;
+      }
+
+      const value = this.product!.metadata[key];
+
+      // Ignorer les valeurs vides
+      if (!value || value.trim() === '') {
+        return;
+      }
+
+      // Utiliser le mapping si disponible, sinon capitaliser la clé
+      const label = labelMapping[trimmedKey] || this.capitalizeFirst(trimmedKey);
+
+      characteristics.push({ label, value });
+    });
+
+    return characteristics;
+  }
+
+  /**
+   * Capitalise la première lettre d'une chaîne
+   */
+  private capitalizeFirst(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 }
