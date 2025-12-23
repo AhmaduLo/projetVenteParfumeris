@@ -57,8 +57,8 @@
   </div>
 
   <!-- Menu mobile overlay -->
-  <div class="mobile-menu" [class.open]="menuOpen">
-    <nav class="mobile-nav">
+  <div class="mobile-menu" [class.open]="menuOpen" (click)="closeMenu()">
+    <nav class="mobile-nav" (click)="$event.stopPropagation()">
       <ul class="mobile-nav-list">
         <li class="mobile-nav-item">
           <a (click)="scrollToSection('hero')" class="mobile-nav-link">Accueil</a>

@@ -8,7 +8,7 @@
   right: 0;
   background-color: $white;
   box-shadow: $shadow-sm;
-  z-index: $z-index-sticky;
+  z-index: $z-index-modal + 2;
   transition: all $transition-speed-normal $transition-ease;
 
   &.sticky {
@@ -172,9 +172,9 @@
   justify-content: space-between;
   width: 30px;
   height: 24px;
-  z-index: $z-index-modal + 1;
+  z-index: $z-index-modal + 3; // Au-dessus du menu mobile
   margin-left: $spacing-sm;
-  position: relative; // S'assurer qu'il reste dans le header fixe
+  position: relative;
 
   @include tablet {
     display: none;
@@ -211,16 +211,15 @@
 // Menu mobile
 .mobile-menu {
   position: fixed;
-  top: 70px; // Juste en dessous du header fixe
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $white;
+  background-color: rgba(0, 0, 0, 0.5); // Overlay sombre
   transform: translateX(100%);
   transition: transform $transition-speed-normal $transition-ease;
-  z-index: $z-index-modal;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; // Smooth scroll sur iOS
+  z-index: $z-index-modal + 1;
+  backdrop-filter: blur(4px);
 
   &.open {
     transform: translateX(0);
@@ -232,7 +231,20 @@
 }
 
 .mobile-nav {
-  padding: $spacing-md;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 69vh;
+  width: 280px;
+  max-width: 85%;
+  background-color: $white;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: $spacing-xl $spacing-md;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-nav-list {

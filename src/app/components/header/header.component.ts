@@ -55,6 +55,7 @@ export class HeaderComponent implements OnInit {
    */
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
+    this.toggleBodyScroll();
   }
 
   /**
@@ -62,6 +63,25 @@ export class HeaderComponent implements OnInit {
    */
   closeMenu(): void {
     this.menuOpen = false;
+    this.enableBodyScroll();
+  }
+
+  /**
+   * Toggle le scroll du body
+   */
+  private toggleBodyScroll(): void {
+    if (this.menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  /**
+   * Active le scroll du body
+   */
+  private enableBodyScroll(): void {
+    document.body.style.overflow = '';
   }
 
   /**

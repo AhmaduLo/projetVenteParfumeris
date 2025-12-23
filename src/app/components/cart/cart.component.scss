@@ -376,7 +376,6 @@
 
 .cart-total {
   @include flex-between;
-  padding: $spacing-xl;
   background: linear-gradient(135deg, rgba($primary-color, 0.05) 0%, rgba($accent-color, 0.05) 100%);
   border-radius: $border-radius-lg;
   margin-bottom: $spacing-lg;
