@@ -16,6 +16,9 @@ export class ProductModalComponent implements OnChanges {
   /** Produit à afficher (null = modal fermé) */
   @Input() product: Product | null = null;
 
+  /** Masquer les boutons d'action (pour panier et commandes) */
+  @Input() hideActions = false;
+
   /** Événement de fermeture du modal */
   @Output() closeModal = new EventEmitter<void>();
 

@@ -72,7 +72,7 @@
         </div>
 
         <!-- Sélecteur de quantité -->
-        <div class="product-quantity">
+        <div class="product-quantity" *ngIf="!hideActions">
           <label class="quantity-label">Quantité :</label>
           <div class="quantity-selector">
             <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1" aria-label="Diminuer">-</button>
@@ -82,12 +82,12 @@
         </div>
 
         <!-- Message de confirmation -->
-        <div class="added-message" *ngIf="addedToCartMessage">
+        <div class="added-message" *ngIf="addedToCartMessage && !hideActions">
           ✓ Ajouté au panier !
         </div>
 
         <!-- Boutons d'action -->
-        <div class="modal-actions">
+        <div class="modal-actions" *ngIf="!hideActions">
           <button
             class="modal-cta modal-cta-cart"
             (click)="addToCart()"

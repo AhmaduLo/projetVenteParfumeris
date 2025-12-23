@@ -9,6 +9,7 @@
   opacity: 0;
   animation: fadeIn $transition-speed-normal $transition-ease forwards;
   overflow-y: auto;
+  z-index: 9999 !important; // Au-dessus de tout, y compris le header
 
   &.animating {
     opacity: 1;

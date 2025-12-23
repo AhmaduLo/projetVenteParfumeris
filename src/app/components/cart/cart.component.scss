@@ -204,6 +204,17 @@
   @include mobile {
     font-size: $font-size-lg;
   }
+
+  // Style pour le nom cliquable
+  &.clickable-name {
+    cursor: pointer;
+    transition: all $transition-speed-fast $transition-ease;
+
+    &:hover {
+      text-decoration: underline;
+      color: $primary-color;
+    }
+  }
 }
 
 .item-category {

@@ -2,19 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { OrderService, Order } from '../../services/order.service';
+import { ProductModalComponent } from '../product-modal/product-modal.component';
+import { Product } from '../../models/product.model';
 
 /**
  * Composant pour afficher l'historique des commandes
  */
 @Component({
     selector: 'app-orders',
-    imports: [CommonModule],
+    imports: [CommonModule, ProductModalComponent],
     templateUrl: './orders.component.html',
     styleUrl: './orders.component.scss'
 })
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   loading = true;
+
+  /** Produit sélectionné pour le modal */
+  selectedProduct: Product | null = null;
 
   constructor(
     private orderService: OrderService,
@@ -95,5 +100,37 @@ export class OrdersComponent implements OnInit {
 
     const addr = order.shippingAddress;
     return `${addr.line1}${addr.line2 ? ', ' + addr.line2 : ''}, ${addr.postalCode} ${addr.city}, ${addr.country}`;
+  }
+
+  /**
+   * Ouvre le modal avec les détails du produit
+   */
+  openProductModal(product: any): void {
+    this.selectedProduct = this.convertOrderProductToLocal(product);
+  }
+
+  /**
+   * Ferme le modal
+   */
+  closeProductModal(): void {
+    this.selectedProduct = null;
+  }
+
+  /**
+   * Convertit un produit de commande en modèle Product local
+   */
+  private convertOrderProductToLocal(orderProduct: any): Product {
+    return {
+      id: parseInt(orderProduct.id) || 0,
+      nom: orderProduct.name,
+      categorie: 'parfum', // Par défaut, car l'info n'est pas stockée dans les commandes
+      prix: orderProduct.unitPrice,
+      image: orderProduct.image || 'assets/images/placeholder.jpg',
+      description: orderProduct.description || '',
+      caracteristiques: {
+        origine: 'Non spécifié'
+      },
+      nouveau: false
+    };
   }
 }

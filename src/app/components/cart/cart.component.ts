@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StripeCartService, StripeCartItem } from '../../services/stripe-cart.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
+import { ProductModalComponent } from '../product-modal/product-modal.component';
+import { Product } from '../../models/product.model';
 
 /**
  * Composant page panier avec checkout Stripe
  */
 @Component({
     selector: 'app-cart',
-    imports: [CommonModule],
+    imports: [CommonModule, ProductModalComponent],
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.scss']
 })
@@ -26,6 +28,9 @@ export class CartComponent implements OnInit {
 
   /** Message d'erreur */
   errorMessage = '';
+
+  /** Produit sélectionné pour le modal */
+  selectedProduct: Product | null = null;
 
   constructor(
     private cartService: StripeCartService,
@@ -163,5 +168,68 @@ export class CartComponent implements OnInit {
     return item.product.images && item.product.images.length > 0
       ? item.product.images[0]
       : 'assets/images/placeholder.jpg';
+  }
+
+  /**
+   * Ouvre le modal avec les détails du produit
+   */
+  openProductModal(item: StripeCartItem): void {
+    console.log('=== CART: Opening modal ===');
+    console.log('Item:', item);
+    console.log('Product:', item.product);
+
+    try {
+      this.selectedProduct = this.convertStripeProductToLocal(item.product);
+      console.log('Converted product:', this.selectedProduct);
+    } catch (error) {
+      console.error('Error converting product:', error);
+    }
+  }
+
+  /**
+   * Ferme le modal
+   */
+  closeProductModal(): void {
+    console.log('=== CART: Closing modal ===');
+    this.selectedProduct = null;
+  }
+
+  /**
+   * Convertit un produit Stripe en modèle Product local
+   */
+  private convertStripeProductToLocal(stripeProduct: any): Product {
+    console.log('=== CONVERSION START ===');
+    console.log('Full Stripe product object:', JSON.stringify(stripeProduct, null, 2));
+
+    const metadata = stripeProduct.metadata || {};
+    console.log('Extracted metadata:', JSON.stringify(metadata, null, 2));
+    console.log('metadata.category:', metadata['category']);
+    console.log('metadata.contenance:', metadata['contenance']);
+    console.log('metadata.origine:', metadata['origine']);
+    console.log('metadata.notes:', metadata['notes']);
+    console.log('metadata.duree:', metadata['duree']);
+
+    const product: Product = {
+      id: parseInt(metadata['id'] || '0'),
+      nom: stripeProduct.name || 'Produit sans nom',
+      categorie: metadata['category'] === 'parfum' ? 'parfum' : 'incense',
+      prix: stripeProduct.price?.amount || 0,
+      image: (stripeProduct.images && stripeProduct.images.length > 0)
+        ? stripeProduct.images[0]
+        : 'assets/images/placeholder.jpg',
+      description: stripeProduct.description || 'Aucune description disponible',
+      caracteristiques: {
+        // Gérer les espaces et accents dans les clés Stripe
+        contenance: metadata['contenance'] || metadata['contenance '],
+        origine: metadata['origine'] || metadata['origine '] || 'Non spécifié',
+        notes: metadata['notes'] || metadata['notes '],
+        duree: metadata['duree'] || metadata['durée'] || metadata['durée ']
+      },
+      nouveau: metadata['nouveau'] === 'true' || metadata['featured'] === 'true' || metadata['featured '] === 'true'
+    };
+
+    console.log('=== CONVERSION END ===');
+    console.log('Final product object:', JSON.stringify(product, null, 2));
+    return product;
   }
 }

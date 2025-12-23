@@ -54,7 +54,7 @@
           <h4>Produits ({{ getTotalItems(order) }} article(s))</h4>
           <div class="product-list">
             <div *ngFor="let product of order.products" class="product-item">
-              <div class="product-image">
+              <div class="product-image" (click)="openProductModal(product)" style="cursor: pointer;" title="Voir les détails">
                 <img
                   [src]="product.image || 'assets/images/placeholder.jpg'"
                   [alt]="product.name"
@@ -115,3 +115,10 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de détails produit (sans actions) -->
+<app-product-modal
+  [product]="selectedProduct"
+  [hideActions]="true"
+  (closeModal)="closeProductModal()">
+</app-product-modal>

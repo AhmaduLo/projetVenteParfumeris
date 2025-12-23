@@ -35,13 +35,21 @@
             class="cart-item">
 
           <!-- Image produit -->
-          <div class="item-image">
-            <img [src]="getProductImage(item)" [alt]="item.product.name" loading="lazy">
+          <div class="item-image clickable">
+            <img
+              [src]="getProductImage(item)"
+              [alt]="item.product.name"
+              loading="lazy"
+              (click)="openProductModal(item)"
+              style="cursor: pointer; width: 100%; height: 100%; object-fit: cover;"
+              title="Cliquez pour voir les détails">
           </div>
 
           <!-- Infos produit -->
           <div class="item-info">
-            <h3 class="item-name">{{ item.product.name }}</h3>
+            <h3 class="item-name clickable-name" (click)="openProductModal(item)">
+              {{ item.product.name }}
+            </h3>
             <p class="item-category" *ngIf="item.product.metadata['category']">{{ item.product.metadata['category'] }}</p>
             <p class="item-price">{{ item.product.price?.formatted }} / unité</p>
           </div>
@@ -151,3 +159,10 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de détails produit (sans actions) -->
+<app-product-modal
+  [product]="selectedProduct"
+  [hideActions]="true"
+  (closeModal)="closeProductModal()">
+</app-product-modal>
