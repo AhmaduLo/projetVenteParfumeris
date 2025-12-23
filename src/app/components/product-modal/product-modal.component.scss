@@ -8,7 +8,7 @@
   padding: $spacing-md;
   opacity: 0;
   animation: fadeIn $transition-speed-normal $transition-ease forwards;
-  overflow-y: auto;
+  overflow: hidden;
   z-index: 9999 !important; // Au-dessus de tout, y compris le header
 
   &.animating {
@@ -23,7 +23,9 @@
   max-width: 900px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   box-shadow: $shadow-xl;
   transform: scale(0.9);
   opacity: 0;
@@ -68,6 +70,8 @@
 .modal-content {
   display: grid;
   grid-template-columns: 1fr;
+  flex: 1;
+  overflow: hidden;
 
   @include tablet {
     grid-template-columns: 1fr 1fr;
@@ -81,11 +85,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-
-  @include tablet {
-    min-height: 600px;
-  }
+  height: 100%;
 }
 
 .modal-image {
@@ -125,6 +125,8 @@
   padding: $spacing-md;
   @include flex-column;
   gap: $spacing-sm;
+  overflow: auto;
+  height: 100%;
 
   @include tablet {
     padding: $spacing-lg;

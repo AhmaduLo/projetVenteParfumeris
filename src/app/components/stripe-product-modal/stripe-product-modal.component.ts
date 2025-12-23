@@ -129,9 +129,14 @@ export class StripeProductModalComponent implements OnChanges {
 
     return !!(
       this.product.metadata['contenance'] ||
+      this.product.metadata['contenance '] ||
       this.product.metadata['origine'] ||
+      this.product.metadata['origine '] ||
       this.product.metadata['notes'] ||
-      this.product.metadata['duree']
+      this.product.metadata['notes '] ||
+      this.product.metadata['duree'] ||
+      this.product.metadata['durée'] ||
+      this.product.metadata['durée ']
     );
   }
 }

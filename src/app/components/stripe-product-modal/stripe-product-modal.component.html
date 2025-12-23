@@ -48,24 +48,24 @@
         <div class="modal-characteristics" *ngIf="hasCharacteristics()">
           <h3 class="characteristics-title">Caractéristiques</h3>
 
-          <div class="characteristic-item" *ngIf="product.metadata['contenance']">
+          <div class="characteristic-item" *ngIf="product.metadata['contenance'] || product.metadata['contenance ']">
             <span class="characteristic-label">Contenance :</span>
-            <span class="characteristic-value">{{ product.metadata['contenance'] }}</span>
+            <span class="characteristic-value">{{ product.metadata['contenance'] || product.metadata['contenance '] }}</span>
           </div>
 
-          <div class="characteristic-item" *ngIf="product.metadata['origine']">
+          <div class="characteristic-item" *ngIf="product.metadata['origine'] || product.metadata['origine ']">
             <span class="characteristic-label">Origine :</span>
-            <span class="characteristic-value">{{ product.metadata['origine'] }}</span>
+            <span class="characteristic-value">{{ product.metadata['origine'] || product.metadata['origine '] }}</span>
           </div>
 
-          <div class="characteristic-item" *ngIf="product.metadata['notes']">
+          <div class="characteristic-item" *ngIf="product.metadata['notes'] || product.metadata['notes ']">
             <span class="characteristic-label">Notes :</span>
-            <span class="characteristic-value">{{ product.metadata['notes'] }}</span>
+            <span class="characteristic-value">{{ product.metadata['notes'] || product.metadata['notes '] }}</span>
           </div>
 
-          <div class="characteristic-item" *ngIf="product.metadata['duree']">
+          <div class="characteristic-item" *ngIf="product.metadata['duree'] || product.metadata['durée'] || product.metadata['durée ']">
             <span class="characteristic-label">Durée :</span>
-            <span class="characteristic-value">{{ product.metadata['duree'] }}</span>
+            <span class="characteristic-value">{{ product.metadata['duree'] || product.metadata['durée'] || product.metadata['durée '] }}</span>
           </div>
         </div>
 
