@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
  */
 @Component({
     selector: 'app-cancel',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './cancel.component.html',
     styleUrl: './cancel.component.scss'

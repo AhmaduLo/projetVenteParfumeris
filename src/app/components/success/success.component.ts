@@ -10,6 +10,7 @@ import { OrderService } from '../../services/order.service';
  */
 @Component({
     selector: 'app-success',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './success.component.html',
     styleUrl: './success.component.scss'
