@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/boutique-parfums/browser",
+  "outputDirectory": "dist/les-senteurs-d-amira/browser",
   "framework": "angular",
   "rewrites": [
     {
