@@ -32,7 +32,6 @@ export default async function handler(
   if (origin) {
     const allowedOrigins = [
       'https://les-senteurs-d-amira.vercel.app',
-      'https://boutique-parfums.vercel.app',
       'https://projet-vente-parfumeris.vercel.app',
       'http://localhost:4200',
       'http://localhost:3000'
