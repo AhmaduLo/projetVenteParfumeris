@@ -27,10 +27,6 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  console.log('🔵 [send-email] Requête reçue:', req.method);
-  console.log('🔵 [send-email] Origin:', req.headers.origin);
-  console.log('🔵 [send-email] Authorization présent:', !!req.headers.authorization);
-
   // ===== CONFIGURATION CORS =====
   const origin = req.headers.origin;
 
@@ -69,12 +65,9 @@ export default async function handler(
   }
 
   // ===== VÉRIFICATION AUTHENTIFICATION =====
-  console.log('🔵 [send-email] Vérification authentification...');
   if (!requireAuth(req, res)) {
-    console.log('❌ [send-email] Authentification échouée');
     return;
   }
-  console.log('✅ [send-email] Authentification réussie');
 
   try {
     const { orderId, trackingNumber } = req.body;
