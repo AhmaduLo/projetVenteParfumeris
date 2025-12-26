@@ -213,7 +213,7 @@ export default async function handler(
 
     // ===== ENVOYER L'EMAIL VIA RESEND =====
     const emailData = await resend.emails.send({
-      from: 'Les Senteurs d\'Amira <onboarding@resend.dev>', // À remplacer par ton domaine vérifié
+      from: 'Les Senteurs d\'Amira <onboarding@resend.dev>',
       to: [customerEmail],
       subject: '📦 Votre commande a été expédiée !',
       html: emailHtml,
