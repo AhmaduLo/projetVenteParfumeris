@@ -171,18 +171,24 @@ export class OrdersListComponent implements OnInit {
   sendEmail(): void {
     if (!this.selectedOrder) return;
 
+    console.log('🔵 [Frontend] Début envoi email pour commande:', this.selectedOrder.id);
+    console.log('🔵 [Frontend] Tracking number:', this.trackingNumber || 'Aucun');
+
     this.emailSending = true;
     this.emailSuccess = null;
     this.emailError = null;
 
     // Envoyer l'email d'expédition
+    console.log('🔵 [Frontend] Appel sendShippingEmail...');
     this.adminService.sendShippingEmail(
       this.selectedOrder.id,
       this.trackingNumber || undefined
     ).subscribe({
       next: (response) => {
+        console.log('🔵 [Frontend] Réponse sendShippingEmail:', response);
         if (response.success) {
           // Mettre à jour le statut de la commande
+          console.log('🔵 [Frontend] Appel updateShippingStatus...');
           this.adminService.updateShippingStatus(this.selectedOrder!.id, 'shipped').subscribe({
             next: () => {
               this.emailSuccess = 'Email envoyé et commande marquée comme expédiée !';
@@ -215,7 +221,8 @@ export class OrdersListComponent implements OnInit {
         this.emailSending = false;
       },
       error: (error) => {
-        console.error('❌ Erreur envoi email:', error);
+        console.error('❌ [Frontend] Erreur envoi email:', error);
+        console.error('❌ [Frontend] Détails erreur:', JSON.stringify(error, null, 2));
         this.emailError = error.message || 'Erreur lors de l\'envoi de l\'email';
         this.emailSending = false;
       }

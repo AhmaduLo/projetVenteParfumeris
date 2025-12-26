@@ -75,8 +75,13 @@ export class AdminService {
       trackingNumber
     };
 
+    const url = `${this.apiUrl}/admin/send-email`;
+    console.log('🔵 [AdminService] POST vers:', url);
+    console.log('🔵 [AdminService] Body:', body);
+    console.log('🔵 [AdminService] Headers:', headers);
+
     return this.http.post<SendEmailResponse>(
-      `${this.apiUrl}/admin/send-email`,
+      url,
       body,
       { headers }
     ).pipe(
