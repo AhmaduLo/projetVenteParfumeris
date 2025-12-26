@@ -26,6 +26,10 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  console.log('🔵 [send-delivery-email] Requête reçue:', req.method);
+  console.log('🔵 [send-delivery-email] Origin:', req.headers.origin);
+  console.log('🔵 [send-delivery-email] Authorization présent:', !!req.headers.authorization);
+
   // ===== CONFIGURATION CORS =====
   const origin = req.headers.origin;
 
@@ -64,9 +68,12 @@ export default async function handler(
   }
 
   // ===== VÉRIFICATION AUTHENTIFICATION =====
+  console.log('🔵 [send-delivery-email] Vérification authentification...');
   if (!requireAuth(req, res)) {
+    console.log('❌ [send-delivery-email] Authentification échouée');
     return;
   }
+  console.log('✅ [send-delivery-email] Authentification réussie');
 
   try {
     const { orderId } = req.body;
