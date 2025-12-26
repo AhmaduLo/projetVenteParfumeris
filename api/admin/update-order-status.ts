@@ -13,7 +13,7 @@
 
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
-import { requireAuth } from '../utils/verifyJWT';
+import { requireAuth } from '../../lib/utils/verifyJWT';
 
 const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {
   apiVersion: '2023-10-16',

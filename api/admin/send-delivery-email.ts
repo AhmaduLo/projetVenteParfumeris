@@ -15,7 +15,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
 import Stripe from 'stripe';
-import { requireAuth } from '../utils/verifyJWT';
+import { requireAuth } from '../../lib/utils/verifyJWT';
 
 const resend = new Resend(process.env['RESEND_API_KEY']!);
 const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {

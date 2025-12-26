@@ -14,7 +14,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
-import { checkRateLimit, recordFailedAttempt, resetAttempts } from '../utils/rateLimiter';
+import { checkRateLimit, recordFailedAttempt, resetAttempts } from '../../lib/utils/rateLimiter';
 
 // Configuration admin (à déplacer dans des variables d'environnement en production)
 const ADMIN_EMAIL = process.env['ADMIN_EMAIL'] || 'admin@example.com';
