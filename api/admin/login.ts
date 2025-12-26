@@ -14,6 +14,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
+import { checkRateLimit, recordFailedAttempt, resetAttempts } from '../utils/rateLimiter';
 
 // Configuration admin (à déplacer dans des variables d'environnement en production)
 const ADMIN_EMAIL = process.env['ADMIN_EMAIL'] || 'admin@example.com';
@@ -63,6 +64,18 @@ export default async function handler(
   }
 
   try {
+    // ===== VÉRIFICATION RATE LIMITING =====
+    const rateLimitCheck = checkRateLimit(req);
+
+    if (!rateLimitCheck.allowed) {
+      console.log('⚠️ Tentative de connexion bloquée (trop de tentatives)');
+      return res.status(429).json({
+        success: false,
+        error: 'Trop de tentatives de connexion. Veuillez réessayer plus tard.',
+        retryAfter: rateLimitCheck.retryAfter
+      });
+    }
+
     // ===== VALIDATION DES DONNÉES =====
     const { email, password } = req.body;
 
@@ -78,7 +91,9 @@ export default async function handler(
       // Attendre un peu pour éviter les attaques par timing
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      console.log('❌ Tentative de connexion avec email invalide:', email);
+      // Enregistrer la tentative échouée
+      recordFailedAttempt(req);
+      console.log('❌ Tentative de connexion échouée');
       return res.status(401).json({
         success: false,
         error: 'Email ou mot de passe incorrect'
@@ -89,7 +104,9 @@ export default async function handler(
     const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
 
     if (!isPasswordValid) {
-      console.log('❌ Tentative de connexion avec mot de passe invalide pour:', email);
+      // Enregistrer la tentative échouée
+      recordFailedAttempt(req);
+      console.log('❌ Tentative de connexion échouée');
       return res.status(401).json({
         success: false,
         error: 'Email ou mot de passe incorrect'
@@ -106,7 +123,9 @@ export default async function handler(
       expiresIn: JWT_EXPIRATION
     });
 
-    console.log('✅ Connexion admin réussie:', email);
+    // Réinitialiser les tentatives après connexion réussie
+    resetAttempts(req);
+    console.log('✅ Connexion admin réussie');
 
     // ===== RETOURNER LE TOKEN =====
     return res.status(200).json({
