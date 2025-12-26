@@ -1,0 +1,187 @@
+<div class="orders-container">
+  <div class="orders-header">
+    <div class="header-content">
+      <button class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>Gestion des Commandes</h1>
+    </div>
+    <button class="btn-logout" (click)="logout()">Déconnexion</button>
+  </div>
+
+  <div class="orders-content">
+    <!-- Filtres par période -->
+    <div class="filters-section">
+      <h3>Filtrer par période</h3>
+      <div class="filter-buttons">
+        <button
+          *ngFor="let option of periodOptions"
+          [class.active]="selectedPeriod === option.value"
+          (click)="filterByPeriod(option.value)"
+          class="btn-filter">
+          {{ option.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtres par statut d'expédition -->
+    <div class="filters-section">
+      <h3>Filtrer par statut d'expédition</h3>
+      <div class="filter-buttons">
+        <button
+          *ngFor="let option of shippingStatusOptions"
+          [class.active]="selectedShippingStatus === option.value"
+          (click)="filterByShippingStatus(option.value)"
+          class="btn-filter">
+          {{ option.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Message de chargement -->
+    <div *ngIf="loading && orders.length === 0" class="loading-message">
+      <p>⏳ Chargement des commandes...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error && !loading" class="error-message">
+      <p>❌ {{ error }}</p>
+      <button (click)="loadOrders()" class="btn-retry">Réessayer</button>
+    </div>
+
+    <!-- Liste des commandes -->
+    <div *ngIf="!loading && !error && orders.length > 0" class="orders-list">
+      <div class="orders-count">
+        <p>{{ orders.length }} commande(s) affichée(s)</p>
+      </div>
+
+      <div class="order-card" *ngFor="let order of orders">
+        <div class="order-header">
+          <div class="order-info">
+            <h3 class="order-id">Commande #{{ order.id.substring(0, 12) }}...</h3>
+            <span class="order-date">{{ formatDate(order.createdDate) }}</span>
+          </div>
+          <div class="order-statuses">
+            <span [class]="getStatusClass(order.status)">
+              {{ getStatusLabel(order.status) }}
+            </span>
+            <span [class]="getShippingStatusClass(order.shippingStatus)">
+              {{ getShippingStatusLabel(order.shippingStatus) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="order-customer">
+          <div class="customer-info">
+            <p class="customer-name">👤 {{ order.customer.name }}</p>
+            <p class="customer-email">✉️ {{ order.customer.email }}</p>
+            <p *ngIf="order.trackingNumber" class="tracking-number">📦 Suivi : {{ order.trackingNumber }}</p>
+          </div>
+          <div class="order-actions">
+            <p class="amount">{{ order.amount.toFixed(2) }} €</p>
+            <!-- Bouton "Envoyer le colis" si statut = pending -->
+            <button
+              *ngIf="order.shippingStatus === 'pending'"
+              class="btn-send-email"
+              (click)="openEmailModal(order)"
+              title="Envoyer un email d'expédition">
+              📧 Envoyer le colis
+            </button>
+            <!-- Bouton "Marquer comme reçue" si statut = shipped -->
+            <button
+              *ngIf="order.shippingStatus === 'shipped'"
+              class="btn-mark-delivered"
+              (click)="markAsDelivered(order)"
+              title="Marquer comme reçue et envoyer email de confirmation">
+              ✅ Marquer comme reçue
+            </button>
+            <!-- Badge "Livrée" si statut = delivered -->
+            <span *ngIf="order.shippingStatus === 'delivered'" class="delivered-badge">
+              ✅ Livrée
+            </span>
+          </div>
+        </div>
+
+        <div class="order-items" *ngIf="order.items.length > 0">
+          <h4>Produits commandés :</h4>
+          <ul>
+            <li *ngFor="let item of order.items">
+              <div class="item-info">
+                <img *ngIf="item.image" [src]="item.image" [alt]="item.name" class="item-image">
+                <div class="item-placeholder" *ngIf="!item.image">📦</div>
+                <span class="item-name">{{ item.name }}</span>
+              </div>
+              <span class="item-details">
+                Quantité: {{ item.quantity }} × {{ item.price.toFixed(2) }} €
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bouton charger plus -->
+      <div *ngIf="hasMore" class="load-more-container">
+        <button class="btn-load-more" (click)="loadMore()" [disabled]="loading">
+          <span *ngIf="!loading">Charger plus de commandes</span>
+          <span *ngIf="loading">⏳ Chargement...</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Message si aucune commande -->
+    <div *ngIf="!loading && !error && orders.length === 0" class="no-orders">
+      <p>📦 Aucune commande trouvée</p>
+    </div>
+  </div>
+
+  <!-- Modal d'envoi d'email -->
+  <div *ngIf="showEmailModal" class="modal-overlay" (click)="closeEmailModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>📧 Envoyer un email d'expédition</h2>
+        <button class="btn-close-modal" (click)="closeEmailModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-info">
+          <strong>Client :</strong> {{ selectedOrder?.customer?.name }} ({{ selectedOrder?.customer?.email }})
+        </p>
+        <p class="modal-info">
+          <strong>Commande :</strong> #{{ selectedOrder?.id?.substring(0, 12) }}...
+        </p>
+        <p class="modal-info">
+          <strong>Montant :</strong> {{ (selectedOrder?.amount || 0).toFixed(2) }} €
+        </p>
+
+        <div class="form-group">
+          <label for="trackingNumber">Numéro de suivi (optionnel)</label>
+          <input
+            type="text"
+            id="trackingNumber"
+            [(ngModel)]="trackingNumber"
+            placeholder="Ex: FR123456789"
+            class="input-tracking">
+        </div>
+
+        <div *ngIf="emailSending" class="email-sending">
+          <p>⏳ Envoi de l'email en cours...</p>
+        </div>
+
+        <div *ngIf="emailSuccess" class="email-success">
+          <p>✅ {{ emailSuccess }}</p>
+        </div>
+
+        <div *ngIf="emailError" class="email-error">
+          <p>❌ {{ emailError }}</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeEmailModal()" [disabled]="emailSending">
+          Annuler
+        </button>
+        <button class="btn-confirm" (click)="sendEmail()" [disabled]="emailSending">
+          {{ emailSending ? 'Envoi...' : 'Envoyer l\'email' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

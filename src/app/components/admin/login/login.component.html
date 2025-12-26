@@ -1,0 +1,61 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Connexion Admin</h1>
+      <p>Accédez au panneau d'administration</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="admin@example.com"
+          [class.invalid]="email?.invalid && email?.touched"
+        />
+        <div class="error-message" *ngIf="email?.invalid && email?.touched">
+          <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+          <span *ngIf="email?.errors?.['email']">Email invalide</span>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.invalid]="password?.invalid && password?.touched"
+        />
+        <div class="error-message" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+          <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+        </div>
+      </div>
+
+      <!-- Message d'erreur global -->
+      <div class="alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Bouton de connexion -->
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="loading || loginForm.invalid"
+      >
+        <span *ngIf="!loading">Se connecter</span>
+        <span *ngIf="loading">Connexion en cours...</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Accès réservé aux administrateurs</p>
+    </div>
+  </div>
+</div>

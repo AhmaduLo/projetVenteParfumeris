@@ -1,0 +1,126 @@
+/**
+ * Vercel Serverless Function
+ * API de connexion admin avec JWT
+ *
+ * Route : POST /api/admin/login
+ * Body : { email: string, password: string }
+ *
+ * Sécurité :
+ * - Vérification email/password hashé avec bcrypt
+ * - Génération de JWT avec expiration
+ * - CORS sécurisé
+ */
+
+import { VercelRequest, VercelResponse } from '@vercel/node';
+import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+
+// Configuration admin (à déplacer dans des variables d'environnement en production)
+const ADMIN_EMAIL = process.env['ADMIN_EMAIL'] || 'admin@example.com';
+const ADMIN_PASSWORD_HASH = process.env['ADMIN_PASSWORD_HASH'] || '$2a$10$YourHashedPasswordHere';
+const JWT_SECRET = process.env['JWT_SECRET'] || 'your-secret-key-change-in-production';
+const JWT_EXPIRATION = '24h'; // Le token expire après 24h
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  // ===== CONFIGURATION CORS =====
+  const origin = req.headers.origin;
+
+  if (origin) {
+    const allowedOrigins = [
+      'https://les-senteurs-d-amira.vercel.app',
+      'https://projet-vente-parfumeris.vercel.app',
+      'http://localhost:4200',
+      'http://localhost:3000'
+    ];
+
+    const isAllowed = allowedOrigins.includes(origin) ||
+                      (origin.endsWith('.vercel.app') && origin.includes('les-senteurs-d-amira'));
+
+    if (isAllowed) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    } else {
+      return res.status(403).json({
+        success: false,
+        error: 'Origin not allowed'
+      });
+    }
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      success: false,
+      error: 'Method not allowed. Use POST.'
+    });
+  }
+
+  try {
+    // ===== VALIDATION DES DONNÉES =====
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email et mot de passe requis'
+      });
+    }
+
+    // ===== VÉRIFICATION EMAIL =====
+    if (email !== ADMIN_EMAIL) {
+      // Attendre un peu pour éviter les attaques par timing
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      console.log('❌ Tentative de connexion avec email invalide:', email);
+      return res.status(401).json({
+        success: false,
+        error: 'Email ou mot de passe incorrect'
+      });
+    }
+
+    // ===== VÉRIFICATION MOT DE PASSE =====
+    const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+
+    if (!isPasswordValid) {
+      console.log('❌ Tentative de connexion avec mot de passe invalide pour:', email);
+      return res.status(401).json({
+        success: false,
+        error: 'Email ou mot de passe incorrect'
+      });
+    }
+
+    // ===== GÉNÉRATION DU JWT =====
+    const payload = {
+      email: email,
+      role: 'admin',
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET, {
+      expiresIn: JWT_EXPIRATION
+    });
+
+    console.log('✅ Connexion admin réussie:', email);
+
+    // ===== RETOURNER LE TOKEN =====
+    return res.status(200).json({
+      success: true,
+      token: token,
+      message: 'Connexion réussie'
+    });
+
+  } catch (error: any) {
+    console.error('❌ Erreur login admin:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Erreur serveur lors de la connexion',
+      message: error.message
+    });
+  }
+}

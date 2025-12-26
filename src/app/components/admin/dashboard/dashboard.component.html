@@ -1,0 +1,94 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1>Dashboard Admin</h1>
+      <div class="user-info" *ngIf="currentUser">
+        <span class="user-email">{{ currentUser.email }}</span>
+        <span class="user-role">{{ currentUser.role }}</span>
+      </div>
+    </div>
+    <button class="btn-logout" (click)="logout()">
+      Déconnexion
+    </button>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="welcome-card">
+      <h2>Bienvenue dans le panneau d'administration</h2>
+      <p>Vous êtes connecté en tant qu'administrateur.</p>
+      <p *ngIf="currentUser" class="user-greeting">
+        Connecté avec : <strong>{{ currentUser.email }}</strong>
+      </p>
+    </div>
+
+    <!-- Message de chargement -->
+    <div *ngIf="loading" class="loading-message">
+      <p>⏳ Chargement des statistiques...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error && !loading" class="error-message">
+      <p>❌ {{ error }}</p>
+      <button (click)="loadStats()" class="btn-retry">Réessayer</button>
+    </div>
+
+    <!-- Statistiques -->
+    <div *ngIf="!loading && !error && stats" class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-content">
+          <h3>Commandes</h3>
+          <p class="stat-value">{{ stats.totalOrders }}</p>
+          <p class="stat-subtitle">{{ stats.recentOrders }} cette semaine</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🛍️</div>
+        <div class="stat-content">
+          <h3>Produits</h3>
+          <p class="stat-value">{{ stats.totalProducts }}</p>
+          <p class="stat-subtitle">Produits actifs</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>Revenus</h3>
+          <p class="stat-value">{{ stats.totalRevenue }} €</p>
+          <p class="stat-subtitle">{{ stats.recentRevenue }} € cette semaine</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <h3>Clients</h3>
+          <p class="stat-value">{{ stats.totalCustomers }}</p>
+          <p class="stat-subtitle">Panier moyen: {{ stats.averageOrderValue }} €</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <h3>Actions rapides</h3>
+      <div class="action-buttons">
+        <button class="btn-action" routerLink="/admin/orders">
+          <span class="action-icon">📦</span>
+          <span class="action-label">Voir toutes les commandes</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Fonctionnalités à venir</h3>
+      <ul>
+        <li>Gestion des produits</li>
+        <li>Gestion des clients</li>
+        <li>Statistiques détaillées</li>
+        <li>Paramètres du site</li>
+      </ul>
+    </div>
+  </div>
+</div>

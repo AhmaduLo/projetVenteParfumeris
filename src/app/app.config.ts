@@ -6,6 +6,10 @@ import { CartComponent } from './components/cart/cart.component';
 import { SuccessComponent } from './components/success/success.component';
 import { CancelComponent } from './components/cancel/cancel.component';
 import { OrdersComponent } from './components/orders/orders.component';
+import { LoginComponent } from './components/admin/login/login.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { OrdersListComponent } from './components/admin/orders-list/orders-list.component';
+import { authGuard } from './guards/auth.guard';
 
 /**
  * Routes de l'application
@@ -16,6 +20,20 @@ const routes: Routes = [
   { path: 'success', component: SuccessComponent },
   { path: 'cancel', component: CancelComponent },
   { path: 'orders', component: OrdersComponent },
+
+  // Routes admin
+  { path: 'admin/login', component: LoginComponent }, // Page de login admin (non protégée)
+  {
+    path: 'admin/dashboard',
+    component: DashboardComponent,
+    canActivate: [authGuard] // Route protégée par le guard
+  },
+  {
+    path: 'admin/orders',
+    component: OrdersListComponent,
+    canActivate: [authGuard] // Route protégée par le guard
+  },
+
   { path: '**', redirectTo: '' } // Redirection vers l'accueil pour les routes inconnues
 ];
 
