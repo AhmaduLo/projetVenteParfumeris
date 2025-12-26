@@ -22,6 +22,37 @@
       </div>
     </div>
 
+    <!-- Filtres par plage de dates personnalisée -->
+    <div class="filters-section">
+      <h3>Filtrer par plage de dates</h3>
+      <div class="date-range-filters">
+        <div class="date-input-group">
+          <label for="startDate">Date de début</label>
+          <input
+            type="date"
+            id="startDate"
+            [(ngModel)]="startDate"
+            (change)="applyCustomDateRange()"
+            class="date-input">
+        </div>
+        <div class="date-input-group">
+          <label for="endDate">Date de fin</label>
+          <input
+            type="date"
+            id="endDate"
+            [(ngModel)]="endDate"
+            (change)="applyCustomDateRange()"
+            class="date-input">
+        </div>
+        <button
+          *ngIf="startDate || endDate"
+          (click)="clearCustomDateRange()"
+          class="btn-clear-dates">
+          Réinitialiser les dates
+        </button>
+      </div>
+    </div>
+
     <!-- Filtres par statut d'expédition -->
     <div class="filters-section">
       <h3>Filtrer par statut d'expédition</h3>

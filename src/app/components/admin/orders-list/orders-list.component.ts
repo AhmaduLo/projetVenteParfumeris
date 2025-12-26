@@ -15,11 +15,16 @@ import { Order, OrderPeriod } from '../../../models/order.model';
 })
 export class OrdersListComponent implements OnInit {
   orders: Order[] = [];
+  allOrders: Order[] = []; // Toutes les commandes chargées
   loading = true;
   error: string | null = null;
   hasMore = false;
   selectedPeriod: OrderPeriod = 'all';
   selectedShippingStatus: string = 'all';
+
+  // Filtrage par dates personnalisées
+  startDate: string = '';
+  endDate: string = '';
 
   // Modal d'envoi d'email
   showEmailModal = false;
@@ -64,12 +69,15 @@ export class OrdersListComponent implements OnInit {
         if (response.success && response.orders) {
           if (startingAfter) {
             // Pagination : ajouter les nouvelles commandes
-            this.orders = [...this.orders, ...response.orders];
+            this.allOrders = [...this.allOrders, ...response.orders];
           } else {
             // Chargement initial
-            this.orders = response.orders;
+            this.allOrders = response.orders;
           }
           this.hasMore = response.hasMore || false;
+
+          // Appliquer le filtre par dates si nécessaire
+          this.applyDateFilter();
         } else {
           this.error = response.error || 'Impossible de charger les commandes';
         }
@@ -92,14 +100,53 @@ export class OrdersListComponent implements OnInit {
 
   filterByPeriod(period: OrderPeriod): void {
     this.selectedPeriod = period;
+    // Réinitialiser les dates personnalisées
+    this.startDate = '';
+    this.endDate = '';
     this.orders = []; // Réinitialiser la liste
+    this.allOrders = [];
     this.loadOrders(); // Recharger avec le nouveau filtre
   }
 
   filterByShippingStatus(status: string): void {
     this.selectedShippingStatus = status;
     this.orders = []; // Réinitialiser la liste
+    this.allOrders = [];
     this.loadOrders(); // Recharger avec le nouveau filtre
+  }
+
+  applyCustomDateRange(): void {
+    if (this.startDate || this.endDate) {
+      // Réinitialiser le filtre de période prédéfinie
+      this.selectedPeriod = 'all';
+      this.orders = [];
+      this.allOrders = [];
+      this.loadOrders();
+    }
+  }
+
+  clearCustomDateRange(): void {
+    this.startDate = '';
+    this.endDate = '';
+    this.applyDateFilter();
+  }
+
+  applyDateFilter(): void {
+    if (!this.startDate && !this.endDate) {
+      // Pas de filtre par dates, afficher toutes les commandes
+      this.orders = this.allOrders;
+      return;
+    }
+
+    // Convertir les dates en timestamps pour la comparaison
+    const startTimestamp = this.startDate ? new Date(this.startDate).getTime() : 0;
+    const endTimestamp = this.endDate ? new Date(this.endDate + 'T23:59:59').getTime() : Infinity;
+
+    // Filtrer les commandes par plage de dates
+    this.orders = this.allOrders.filter(order => {
+      const orderTimestamp = new Date(order.createdDate).getTime();
+      return orderTimestamp >= startTimestamp && orderTimestamp <= endTimestamp;
+    });
   }
 
   formatDate(dateString: string): string {
