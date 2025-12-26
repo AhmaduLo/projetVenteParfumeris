@@ -101,6 +101,9 @@ export default async function handler(
     const customerName = session.customer_details.name || 'Client';
     const orderAmount = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
 
+    console.log('📧 Destinataire de l\'email:', customerEmail);
+    console.log('📧 Expéditeur:', 'onboarding@resend.dev');
+
     // Construire la liste des produits
     const productsList = lineItems.data.map(item => {
       const product = item.price?.product as Stripe.Product;
@@ -220,6 +223,7 @@ export default async function handler(
     });
 
     console.log('✅ Email envoyé avec succès:', emailData.data?.id);
+    console.log('📧 Détails complets:', JSON.stringify(emailData, null, 2));
 
     // Note: Le statut sera mis à jour côté frontend via l'API update-order-status
 
