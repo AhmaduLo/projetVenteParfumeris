@@ -230,6 +230,123 @@
   }
 }
 
+// Skeleton loaders
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.skeleton-badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.skeleton-badge {
+  width: 80px;
+  height: 24px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+.skeleton-body {
+  margin-bottom: 1rem;
+}
+
+.skeleton-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+  width: 40%;
+  height: 20px;
+}
+
+.skeleton-text {
+  width: 60%;
+  height: 16px;
+}
+
+.skeleton-text-short {
+  width: 40%;
+  height: 16px;
+}
+
+.skeleton-price {
+  width: 80px;
+  height: 24px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.load-more-section {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+
+  .btn-load-more {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    min-width: 250px;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
 .no-orders p {
   color: #718096;
   font-weight: 500;

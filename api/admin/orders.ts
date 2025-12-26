@@ -116,6 +116,7 @@ export default async function handler(
     const sessionsParams: Stripe.Checkout.SessionListParams = {
       limit,
       status: 'complete',
+      expand: ['data.payment_intent'], // Récupérer les Payment Intents directement
     };
 
     if (startingAfter) {
@@ -144,18 +145,10 @@ export default async function handler(
           let shippingStatus = 'pending';
           let trackingNumber = '';
 
-          if (session.payment_intent) {
-            try {
-              const paymentIntentId = typeof session.payment_intent === 'string'
-                ? session.payment_intent
-                : session.payment_intent.id;
-
-              const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-              shippingStatus = paymentIntent.metadata.shipping_status || 'pending';
-              trackingNumber = paymentIntent.metadata.tracking_number || '';
-            } catch (error) {
-              console.log(`⚠️ Pas de Payment Intent pour ${session.id}`);
-            }
+          // Le Payment Intent est déjà chargé grâce à expand
+          if (session.payment_intent && typeof session.payment_intent !== 'string') {
+            shippingStatus = session.payment_intent.metadata?.shipping_status || 'pending';
+            trackingNumber = session.payment_intent.metadata?.tracking_number || '';
           }
 
           // Enrichir les items avec les images des produits

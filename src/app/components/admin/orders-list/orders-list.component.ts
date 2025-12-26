@@ -64,7 +64,7 @@ export class OrdersListComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.adminService.getOrders(50, startingAfter, this.selectedPeriod, this.selectedShippingStatus).subscribe({
+    this.adminService.getOrders(15, startingAfter, this.selectedPeriod, this.selectedShippingStatus).subscribe({
       next: (response) => {
         if (response.success && response.orders) {
           if (startingAfter) {
@@ -92,9 +92,11 @@ export class OrdersListComponent implements OnInit {
   }
 
   loadMore(): void {
-    if (this.orders.length > 0 && this.hasMore) {
-      const lastOrder = this.orders[this.orders.length - 1];
-      this.loadOrders(lastOrder.id);
+    if (this.allOrders.length > 0 && this.hasMore) {
+      const lastOrder = this.allOrders.at(-1);
+      if (lastOrder) {
+        this.loadOrders(lastOrder.id);
+      }
     }
   }
 
