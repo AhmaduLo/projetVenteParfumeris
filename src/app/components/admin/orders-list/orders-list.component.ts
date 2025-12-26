@@ -70,14 +70,13 @@ export class OrdersListComponent implements OnInit {
             this.orders = response.orders;
           }
           this.hasMore = response.hasMore || false;
-          console.log('✅ Commandes chargées:', response.count, 'Période:', this.selectedPeriod);
         } else {
           this.error = response.error || 'Impossible de charger les commandes';
         }
         this.loading = false;
       },
       error: (error) => {
-        console.error('❌ Erreur chargement commandes:', error);
+        console.error('Erreur chargement commandes:', error);
         this.error = error.message || 'Erreur lors du chargement des commandes';
         this.loading = false;
       }
@@ -203,7 +202,7 @@ export class OrdersListComponent implements OnInit {
               }, 2000);
             },
             error: (error) => {
-              console.warn('⚠️ Email envoyé mais erreur mise à jour statut:', error);
+              console.warn('Email envoyé mais erreur mise à jour statut:', error);
               this.emailSuccess = 'Email envoyé (erreur mise à jour statut)';
               setTimeout(() => this.closeEmailModal(), 2000);
             }
@@ -214,7 +213,7 @@ export class OrdersListComponent implements OnInit {
         this.emailSending = false;
       },
       error: (error) => {
-        console.error('❌ Erreur envoi email:', error);
+        console.error('Erreur envoi email:', error);
         this.emailError = error.message || 'Erreur lors de l\'envoi de l\'email';
         this.emailSending = false;
       }
@@ -233,7 +232,6 @@ export class OrdersListComponent implements OnInit {
           // Mettre à jour le statut
           this.adminService.updateShippingStatus(order.id, 'delivered').subscribe({
             next: () => {
-              console.log('✅ Email de réception envoyé et statut mis à jour');
               alert('Email envoyé et commande marquée comme reçue !');
 
               // Recharger la liste
@@ -241,7 +239,7 @@ export class OrdersListComponent implements OnInit {
               this.loadOrders();
             },
             error: (error) => {
-              console.error('❌ Erreur mise à jour statut:', error);
+              console.error('Erreur mise à jour statut:', error);
               alert('Email envoyé mais erreur lors de la mise à jour du statut');
             }
           });
@@ -250,7 +248,7 @@ export class OrdersListComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('❌ Erreur envoi email livraison:', error);
+        console.error('Erreur envoi email livraison:', error);
         alert('Erreur lors de l\'envoi de l\'email');
       }
     });

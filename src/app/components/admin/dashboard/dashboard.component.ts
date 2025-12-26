@@ -38,14 +38,13 @@ export class DashboardComponent implements OnInit {
       next: (response) => {
         if (response.success && response.stats) {
           this.stats = response.stats;
-          console.log('✅ Statistiques chargées:', this.stats);
         } else {
           this.error = response.error || 'Impossible de charger les statistiques';
         }
         this.loading = false;
       },
       error: (error) => {
-        console.error('❌ Erreur chargement stats:', error);
+        console.error('Erreur chargement stats:', error);
         this.error = error.message || 'Erreur lors du chargement des statistiques';
         this.loading = false;
       }
