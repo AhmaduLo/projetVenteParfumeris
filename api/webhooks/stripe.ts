@@ -1,11 +1,19 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
+import { buffer } from 'micro';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia'
 });
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+// Configuration pour désactiver le parsing automatique du body
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 /**
  * Webhook Stripe pour gérer les événements de paiement
@@ -27,9 +35,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let event: Stripe.Event;
 
   try {
+    // Récupérer le body brut (nécessaire pour la vérification de signature)
+    const rawBody = await buffer(req);
+
     // Vérifier la signature du webhook
     event = stripe.webhooks.constructEvent(
-      req.body,
+      rawBody,
       sig,
       endpointSecret
     );
