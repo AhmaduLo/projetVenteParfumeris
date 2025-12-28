@@ -167,12 +167,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (name !== undefined) updateData.name = name;
       if (description !== undefined) updateData.description = description;
       if (images !== undefined) updateData.images = images;
-      if (active !== undefined) updateData.active = active;
+
+      // Gestion du stock et de l'état actif
       if (stock !== undefined || metadata !== undefined) {
+        const finalStock = stock !== undefined ? stock : 0;
         updateData.metadata = {
           ...(metadata || {}),
-          stock: String(stock !== undefined ? stock : 0)
+          stock: String(finalStock)
         };
+
+        // Si stock = 0, forcer active = false
+        // Si stock > 0 et active n'est pas explicitement défini, activer le produit
+        if (finalStock === 0) {
+          updateData.active = false;
+        } else if (active !== undefined) {
+          updateData.active = active;
+        } else if (finalStock > 0) {
+          updateData.active = true;
+        }
+      } else if (active !== undefined) {
+        updateData.active = active;
       }
 
       const updatedProduct = await stripe.products.update(productId, updateData);

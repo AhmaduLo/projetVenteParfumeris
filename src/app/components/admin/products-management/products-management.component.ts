@@ -200,6 +200,11 @@ export class ProductsManagementComponent implements OnInit {
     this.successMessage = null;
     this.errorMessage = null;
 
+    // Désactiver automatiquement le produit si stock = 0
+    if (this.formData.stock === 0) {
+      this.formData.active = false;
+    }
+
     if (this.isEditMode && this.selectedProduct) {
       // Mise à jour
       this.adminService.updateProduct(this.selectedProduct.id, this.formData).subscribe({
