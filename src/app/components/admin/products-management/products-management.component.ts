@@ -15,9 +15,13 @@ import { StripeProduct, ProductFormData } from '../../../models/product.model';
 })
 export class ProductsManagementComponent implements OnInit {
   products: StripeProduct[] = [];
+  allProducts: StripeProduct[] = []; // Tous les produits
   loading = true;
   error: string | null = null;
   hasMore = false;
+
+  // Filtre actif/inactif
+  showOnlyInactive = false;
 
   // Modal d'édition/création
   showModal = false;
@@ -71,10 +75,11 @@ export class ProductsManagementComponent implements OnInit {
       next: (response) => {
         if (response.success && response.products) {
           if (startingAfter) {
-            this.products = [...this.products, ...response.products];
+            this.allProducts = [...this.allProducts, ...response.products];
           } else {
-            this.products = response.products;
+            this.allProducts = response.products;
           }
+          this.applyFilter();
         } else {
           this.error = response.error || 'Impossible de charger les produits';
         }
@@ -86,6 +91,21 @@ export class ProductsManagementComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  applyFilter(): void {
+    if (this.showOnlyInactive) {
+      // Afficher uniquement les produits désactivés
+      this.products = this.allProducts.filter(p => !p.active);
+    } else {
+      // Afficher uniquement les produits actifs
+      this.products = this.allProducts.filter(p => p.active);
+    }
+  }
+
+  toggleFilter(): void {
+    this.showOnlyInactive = !this.showOnlyInactive;
+    this.applyFilter();
   }
 
   openCreateModal(): void {

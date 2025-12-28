@@ -59,6 +59,33 @@
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
       }
+
+      &.btn-filter {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+        position: relative;
+
+        &.active {
+          background-color: #fc8181;
+          border-color: #fc8181;
+          color: white;
+
+          &:hover {
+            background-color: #f56565;
+            color: white;
+            border-color: #f56565;
+          }
+        }
+
+        &:not(.active) {
+          &:hover {
+            background-color: #48bb78;
+            border-color: #48bb78;
+            color: white;
+          }
+        }
+      }
     }
   }
 }

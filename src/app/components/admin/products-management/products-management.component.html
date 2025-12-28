@@ -9,6 +9,10 @@
       <button class="btn-create" (click)="openCreateModal()">
         + Nouveau Produit
       </button>
+      <button class="btn-filter" (click)="toggleFilter()" [class.active]="showOnlyInactive">
+        <span *ngIf="!showOnlyInactive">📦 Produits actifs ({{ allProducts.filter(p => p.active).length }})</span>
+        <span *ngIf="showOnlyInactive">🗄️ Produits archivés ({{ allProducts.filter(p => !p.active).length }})</span>
+      </button>
       <button class="btn-back" (click)="goBack()">
         ← Tableau de bord
       </button>
