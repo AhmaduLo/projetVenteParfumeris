@@ -9,9 +9,20 @@ export interface OrderItem {
   image: string | null;
 }
 
+export interface OrderAddress {
+  line1: string | null;
+  line2: string | null;
+  city: string | null;
+  postal_code: string | null;
+  state: string | null;
+  country: string | null;
+}
+
 export interface OrderCustomer {
   email: string;
   name: string;
+  phone: string | null;
+  address: OrderAddress | null;
 }
 
 export type ShippingStatus = 'pending' | 'shipped' | 'delivered';

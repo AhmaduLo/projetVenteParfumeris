@@ -119,6 +119,17 @@
           <div class="customer-info">
             <p class="customer-name">👤 {{ order.customer.name }}</p>
             <p class="customer-email">✉️ {{ order.customer.email }}</p>
+            <p *ngIf="order.customer.phone" class="customer-phone">📞 {{ order.customer.phone }}</p>
+            <div *ngIf="order.customer.address" class="customer-address">
+              <p class="address-label">📍 Adresse de livraison :</p>
+              <p class="address-line">{{ order.customer.address.line1 }}</p>
+              <p *ngIf="order.customer.address.line2" class="address-line">{{ order.customer.address.line2 }}</p>
+              <p class="address-line">
+                {{ order.customer.address.postal_code }} {{ order.customer.address.city }}
+                <span *ngIf="order.customer.address.state">, {{ order.customer.address.state }}</span>
+              </p>
+              <p class="address-line">{{ order.customer.address.country }}</p>
+            </div>
             <p *ngIf="order.trackingNumber" class="tracking-number">📦 Suivi : {{ order.trackingNumber }}</p>
           </div>
           <div class="order-actions">

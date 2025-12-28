@@ -279,6 +279,15 @@ async function handleOrders(req: VercelRequest, res: VercelResponse) {
           customer: {
             email: session.customer_details?.email || 'N/A',
             name: session.customer_details?.name || 'N/A',
+            phone: session.customer_details?.phone || null,
+            address: session.customer_details?.address ? {
+              line1: session.customer_details.address.line1 || null,
+              line2: session.customer_details.address.line2 || null,
+              city: session.customer_details.address.city || null,
+              postal_code: session.customer_details.address.postal_code || null,
+              state: session.customer_details.address.state || null,
+              country: session.customer_details.address.country || null,
+            } : null,
           },
           items: enrichedItems,
           created: session.created,
@@ -297,6 +306,15 @@ async function handleOrders(req: VercelRequest, res: VercelResponse) {
           customer: {
             email: session.customer_details?.email || 'N/A',
             name: session.customer_details?.name || 'N/A',
+            phone: session.customer_details?.phone || null,
+            address: session.customer_details?.address ? {
+              line1: session.customer_details.address.line1 || null,
+              line2: session.customer_details.address.line2 || null,
+              city: session.customer_details.address.city || null,
+              postal_code: session.customer_details.address.postal_code || null,
+              state: session.customer_details.address.state || null,
+              country: session.customer_details.address.country || null,
+            } : null,
           },
           items: [],
           created: session.created,
