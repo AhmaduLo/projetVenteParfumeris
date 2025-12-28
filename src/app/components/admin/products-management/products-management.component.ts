@@ -108,6 +108,14 @@ export class ProductsManagementComponent implements OnInit {
     this.applyFilter();
   }
 
+  get activeProductsCount(): number {
+    return this.allProducts.filter(p => p.active).length;
+  }
+
+  get inactiveProductsCount(): number {
+    return this.allProducts.filter(p => !p.active).length;
+  }
+
   openCreateModal(): void {
     this.isEditMode = false;
     this.selectedProduct = null;
