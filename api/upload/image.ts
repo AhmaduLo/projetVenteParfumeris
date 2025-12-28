@@ -22,31 +22,32 @@ export const config = {
  * Protégée par authentification admin
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS
+  // CORS - Configuration des headers
   const origin = req.headers.origin;
-  if (origin) {
-    const allowedOrigins = [
-      'https://les-senteurs-d-amira.vercel.app',
-      'https://projet-vente-parfumeris.vercel.app',
-      'http://localhost:4200',
-      'http://localhost:3000'
-    ];
+  const allowedOrigins = [
+    'https://les-senteurs-d-amira.vercel.app',
+    'https://projet-vente-parfumeris.vercel.app',
+    'http://localhost:4200',
+    'http://localhost:3000'
+  ];
 
-    const isAllowed = allowedOrigins.includes(origin) ||
-                      (origin.endsWith('.vercel.app') && origin.includes('les-senteurs-d-amira'));
+  const isAllowed = origin && (
+    allowedOrigins.includes(origin) ||
+    (origin.endsWith('.vercel.app') && origin.includes('les-senteurs-d-amira'))
+  );
 
-    if (isAllowed) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    } else {
-      return res.status(403).json({
-        success: false,
-        error: 'Origin not allowed'
-      });
-    }
+  if (isAllowed) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  } else if (origin) {
+    return res.status(403).json({
+      success: false,
+      error: 'Origin not allowed'
+    });
   }
 
+  // Gérer la requête OPTIONS (preflight)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -69,13 +70,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const form = formidable({
       maxFileSize: 5 * 1024 * 1024, // 5 MB max
       allowEmptyFiles: false,
-      filter: ({ mimetype }) => {
+      filter: ({ mimetype }: { mimetype?: string | null }) => {
         // Accepter uniquement les images
         return mimetype?.includes('image') || false;
       }
     });
 
-    const [fields, files] = await form.parse(req);
+    const [, files] = await form.parse(req);
 
     // Récupérer le fichier uploadé
     const file = files.image?.[0];
