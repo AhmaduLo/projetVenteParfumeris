@@ -73,8 +73,11 @@
             <button class="btn-edit" (click)="openEditModal(product)">
               ✏️ Modifier
             </button>
-            <button class="btn-delete" (click)="deleteProduct(product)">
+            <button *ngIf="product.active" class="btn-delete" (click)="deleteProduct(product)">
               🗑️ Désactiver
+            </button>
+            <button *ngIf="!product.active" class="btn-activate" (click)="activateProduct(product)">
+              ✅ Activer
             </button>
           </div>
         </div>

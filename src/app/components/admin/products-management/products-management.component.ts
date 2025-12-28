@@ -238,6 +238,27 @@ export class ProductsManagementComponent implements OnInit {
     });
   }
 
+  activateProduct(product: StripeProduct): void {
+    if (!confirm(`Êtes-vous sûr de vouloir réactiver le produit "${product.name}" ?`)) {
+      return;
+    }
+
+    this.adminService.updateProduct(product.id, { active: true }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          alert('Produit réactivé avec succès !');
+          this.loadProducts();
+        } else {
+          alert('Erreur : ' + (response.error || 'Erreur inconnue'));
+        }
+      },
+      error: (error) => {
+        console.error('Erreur activation produit:', error);
+        alert('Erreur lors de l\'activation');
+      }
+    });
+  }
+
   goBack(): void {
     this.router.navigate(['/admin/dashboard']);
   }

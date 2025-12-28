@@ -272,6 +272,17 @@
             box-shadow: 0 4px 8px rgba(245, 101, 101, 0.3);
           }
         }
+
+        &.btn-activate {
+          background-color: #48bb78;
+          color: white;
+
+          &:hover {
+            background-color: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+          }
+        }
       }
     }
   }
