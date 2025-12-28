@@ -5,6 +5,7 @@ import { StripeProduct } from '../../models/stripe-product.model';
 import { StripeProductService } from '../../services/stripe-product.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
 import { StripeCartService } from '../../services/stripe-cart.service';
+import { NotificationService } from '../../services/notification.service';
 import { StripeProductModalComponent } from '../stripe-product-modal/stripe-product-modal.component';
 
 /**
@@ -56,7 +57,8 @@ export class StripeProductListComponent implements OnInit {
   constructor(
     private productService: StripeProductService,
     private checkoutService: StripeCheckoutService,
-    private cartService: StripeCartService
+    private cartService: StripeCartService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -105,14 +107,14 @@ export class StripeProductListComponent implements OnInit {
    */
   addToCart(product: StripeProduct): void {
     if (!product.price) {
-      alert('Ce produit n\'a pas de prix configuré');
+      this.notificationService.warning('Ce produit n\'a pas de prix configuré');
       return;
     }
 
     this.cartService.addToCart(product, 1);
 
     // Afficher une notification de succès
-    alert(`✅ ${product.name} ajouté au panier!`);
+    this.notificationService.success(`${product.name} ajouté au panier!`);
   }
 
   /**
@@ -121,7 +123,7 @@ export class StripeProductListComponent implements OnInit {
    */
   buyProduct(product: StripeProduct, quantity: number = 1): void {
     if (!product.price) {
-      alert('Ce produit n\'a pas de prix configuré');
+      this.notificationService.warning('Ce produit n\'a pas de prix configuré');
       return;
     }
 
@@ -262,6 +264,6 @@ export class StripeProductListComponent implements OnInit {
    */
   openContactModal(product: StripeProduct): void {
     // TODO: Implémenter le modal de contact
-    alert(`Fonctionnalité de contact pour ${product.name} - À implémenter`);
+    this.notificationService.info(`Fonctionnalité de contact pour ${product.name} - À implémenter`);
   }
 }

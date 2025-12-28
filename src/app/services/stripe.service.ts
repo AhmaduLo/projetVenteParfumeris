@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from '../models/product.model';
+import { NotificationService } from './notification.service';
 
 /**
  * Service de gestion des paiements Stripe SANS backend
@@ -28,7 +29,7 @@ export class StripeService {
     // etc...
   };
 
-  constructor() {}
+  constructor(private notificationService: NotificationService) {}
 
   /**
    * Redirige vers le Payment Link Stripe pour un seul produit
@@ -37,7 +38,7 @@ export class StripeService {
     const paymentLink = this.paymentLinks[productId];
 
     if (!paymentLink) {
-      alert(`Payment Link non configuré pour le produit ID ${productId}.\n\nVeuillez créer un Payment Link sur Stripe Dashboard et l'ajouter dans stripe.service.ts`);
+      this.notificationService.error(`Payment Link non configuré pour le produit ID ${productId}.\n\nVeuillez créer un Payment Link sur Stripe Dashboard et l'ajouter dans stripe.service.ts`);
       console.error(`Payment Link manquant pour le produit ${productId}`);
       return;
     }

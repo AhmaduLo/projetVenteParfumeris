@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
 import { Order, OrderPeriod } from '../../../models/order.model';
 
 @Component({
@@ -53,7 +54,8 @@ export class OrdersListComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -281,7 +283,7 @@ export class OrdersListComponent implements OnInit {
           // Mettre à jour le statut
           this.adminService.updateShippingStatus(order.id, 'delivered').subscribe({
             next: () => {
-              alert('Email envoyé et commande marquée comme reçue !');
+              this.notificationService.success('Email envoyé et commande marquée comme reçue !');
 
               // Recharger la liste
               this.orders = [];
@@ -289,16 +291,16 @@ export class OrdersListComponent implements OnInit {
             },
             error: (error) => {
               console.error('Erreur mise à jour statut:', error);
-              alert('Email envoyé mais erreur lors de la mise à jour du statut');
+              this.notificationService.warning('Email envoyé mais erreur lors de la mise à jour du statut');
             }
           });
         } else {
-          alert('Erreur lors de l\'envoi de l\'email : ' + (response.error || 'Erreur inconnue'));
+          this.notificationService.error('Erreur lors de l\'envoi de l\'email : ' + (response.error || 'Erreur inconnue'));
         }
       },
       error: (error) => {
         console.error('Erreur envoi email livraison:', error);
-        alert('Erreur lors de l\'envoi de l\'email');
+        this.notificationService.error('Erreur lors de l\'envoi de l\'email');
       }
     });
   }

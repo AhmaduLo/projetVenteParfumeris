@@ -1,0 +1,34 @@
+<!-- Modal de notification -->
+<div
+  class="notification-overlay"
+  *ngIf="notification"
+  [class.animating]="isAnimating"
+  (click)="close()">
+
+  <div
+    class="notification-modal"
+    [class]="'notification-modal notification-' + getTypeClass()"
+    [class.animating]="isAnimating"
+    (click)="$event.stopPropagation()">
+
+    <!-- Icône -->
+    <div class="notification-icon">
+      <span>{{ getIcon() }}</span>
+    </div>
+
+    <!-- Message -->
+    <div class="notification-content">
+      <p class="notification-message">{{ notification.message }}</p>
+    </div>
+
+    <!-- Bouton de fermeture -->
+    <button
+      class="notification-close"
+      (click)="close()"
+      aria-label="Fermer la notification">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M6 6l12 12M6 18L18 6" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</div>

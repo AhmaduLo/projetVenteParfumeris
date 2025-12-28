@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CheckoutRequest, CheckoutResponse } from '../models/stripe-product.model';
 import { environment } from '../../environments/environment';
+import { NotificationService } from './notification.service';
 
 /**
  * Service de gestion du Checkout Stripe
@@ -25,7 +26,10 @@ export class StripeCheckoutService {
   /** URL de l'API Vercel */
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Crée une session Stripe Checkout
@@ -76,12 +80,12 @@ export class StripeCheckoutService {
           window.location.href = response.url;
         } else {
           console.error('❌ URL de checkout manquante dans la réponse');
-          alert('Erreur: Impossible de créer la session de paiement');
+          this.notificationService.error('Erreur: Impossible de créer la session de paiement');
         }
       },
       error: (error) => {
         console.error('❌ Erreur création session checkout:', error);
-        alert('Erreur lors de la création de la session de paiement. Veuillez réessayer.');
+        this.notificationService.error('Erreur lors de la création de la session de paiement. Veuillez réessayer.');
       }
     });
   }
@@ -113,12 +117,12 @@ export class StripeCheckoutService {
           window.location.href = response.url;
         } else {
           console.error('❌ URL de checkout manquante dans la réponse');
-          alert('Erreur: Impossible de créer la session de paiement');
+          this.notificationService.error('Erreur: Impossible de créer la session de paiement');
         }
       },
       error: (error) => {
         console.error('❌ Erreur création session checkout panier:', error);
-        alert('Erreur lors de la création de la session de paiement. Veuillez réessayer.');
+        this.notificationService.error('Erreur lors de la création de la session de paiement. Veuillez réessayer.');
       }
     });
   }
@@ -140,7 +144,7 @@ export class StripeCheckoutService {
       },
       error: (error) => {
         console.error('❌ Erreur création session checkout:', error);
-        alert('Erreur lors de la création de la session de paiement');
+        this.notificationService.error('Erreur lors de la création de la session de paiement');
       }
     });
   }

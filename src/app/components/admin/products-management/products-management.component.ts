@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
 import { StripeProduct, ProductFormData } from '../../../models/product.model';
 
 @Component({
@@ -63,7 +64,8 @@ export class ProductsManagementComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -192,13 +194,13 @@ export class ProductsManagementComponent implements OnInit {
 
     // Vérifier le type de fichier
     if (!file.type.startsWith('image/')) {
-      alert('Veuillez sélectionner une image valide');
+      this.notificationService.warning('Veuillez sélectionner une image valide');
       return;
     }
 
     // Vérifier la taille (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('L\'image est trop volumineuse (max 5MB)');
+      this.notificationService.warning('L\'image est trop volumineuse (max 5MB)');
       return;
     }
 
@@ -224,7 +226,7 @@ export class ProductsManagementComponent implements OnInit {
       if (result.success && result.url) {
         // Ajouter l'URL de l'image uploadée à la liste
         this.formData.images.push(result.url);
-        alert('✅ Image uploadée avec succès !');
+        this.notificationService.success('Image uploadée avec succès !');
       } else {
         throw new Error(result.error || 'Erreur lors de l\'upload');
       }
@@ -318,15 +320,15 @@ export class ProductsManagementComponent implements OnInit {
     this.adminService.deleteProduct(product.id).subscribe({
       next: (response) => {
         if (response.success) {
-          alert('Produit désactivé avec succès !');
+          this.notificationService.success('Produit désactivé avec succès !');
           this.loadProducts();
         } else {
-          alert('Erreur : ' + (response.error || 'Erreur inconnue'));
+          this.notificationService.error('Erreur : ' + (response.error || 'Erreur inconnue'));
         }
       },
       error: (error) => {
         console.error('Erreur suppression produit:', error);
-        alert('Erreur lors de la suppression');
+        this.notificationService.error('Erreur lors de la suppression');
       }
     });
   }
@@ -339,15 +341,15 @@ export class ProductsManagementComponent implements OnInit {
     this.adminService.updateProduct(product.id, { active: true }).subscribe({
       next: (response) => {
         if (response.success) {
-          alert('Produit réactivé avec succès !');
+          this.notificationService.success('Produit réactivé avec succès !');
           this.loadProducts();
         } else {
-          alert('Erreur : ' + (response.error || 'Erreur inconnue'));
+          this.notificationService.error('Erreur : ' + (response.error || 'Erreur inconnue'));
         }
       },
       error: (error) => {
         console.error('Erreur activation produit:', error);
-        alert('Erreur lors de l\'activation');
+        this.notificationService.error('Erreur lors de l\'activation');
       }
     });
   }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StripeCartService, StripeCartItem } from '../../services/stripe-cart.service';
 import { StripeCheckoutService } from '../../services/stripe-checkout.service';
+import { NotificationService } from '../../services/notification.service';
 import { ProductModalComponent } from '../product-modal/product-modal.component';
 import { Product } from '../../models/product.model';
 
@@ -35,7 +36,8 @@ export class CartComponent implements OnInit {
   constructor(
     private cartService: StripeCartService,
     private checkoutService: StripeCheckoutService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -109,7 +111,7 @@ export class CartComponent implements OnInit {
    */
   checkoutViaWhatsApp(): void {
     if (this.cartItems.length === 0) {
-      alert('Votre panier est vide');
+      this.notificationService.warning('Votre panier est vide');
       return;
     }
 
@@ -131,7 +133,7 @@ export class CartComponent implements OnInit {
    */
   checkoutViaEmail(): void {
     if (this.cartItems.length === 0) {
-      alert('Votre panier est vide');
+      this.notificationService.warning('Votre panier est vide');
       return;
     }
 
