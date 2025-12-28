@@ -55,7 +55,18 @@ export class StripeProductService {
         if (!response.success) {
           throw new Error('Erreur lors de la récupération des produits');
         }
-        return response.products;
+        // Filtrer pour ne retourner que les produits actifs (stock > 0 ou pas de gestion de stock)
+        return response.products.filter(product => {
+          // Si le produit est marqué comme inactif dans Stripe, le masquer
+          if (product.active === false) return false;
+
+          // Si pas de gestion de stock, le produit est disponible
+          const stock = product.metadata['stock'];
+          if (!stock) return true;
+
+          // Sinon, vérifier que le stock > 0
+          return parseInt(stock, 10) > 0;
+        });
       }),
       tap(products => {
         // Mettre à jour le cache
