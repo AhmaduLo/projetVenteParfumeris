@@ -145,7 +145,7 @@ export class StripeProductModalComponent implements OnChanges {
     if (!this.product) return false;
 
     // Exclure les métadonnées utilisées pour d'autres usages
-    const excludedKeys = ['category', 'featured'];
+    const excludedKeys = ['category', 'featured', 'stock'];
     const metadataKeys = Object.keys(this.product.metadata || {});
 
     return metadataKeys.some(key => !excludedKeys.includes(key.trim().toLowerCase()));
@@ -159,7 +159,7 @@ export class StripeProductModalComponent implements OnChanges {
     if (!this.product || !this.product.metadata) return [];
 
     // Clés à exclure de l'affichage (utilisées pour d'autres usages)
-    const excludedKeys = ['category', 'featured'];
+    const excludedKeys = ['category', 'featured', 'stock'];
 
     // Mapping des clés vers des labels français
     const labelMapping: { [key: string]: string } = {
