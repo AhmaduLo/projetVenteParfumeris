@@ -57,6 +57,9 @@ export class ProductsManagementComponent implements OnInit {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
+  // Upload d'images
+  uploading = false;
+
   constructor(
     private adminService: AdminService,
     private authService: AuthService,
@@ -176,6 +179,63 @@ export class ProductsManagementComponent implements OnInit {
 
   removeImage(index: number): void {
     this.formData.images.splice(index, 1);
+  }
+
+  /**
+   * Gère la sélection d'un fichier image
+   */
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    // Vérifier le type de fichier
+    if (!file.type.startsWith('image/')) {
+      alert('Veuillez sélectionner une image valide');
+      return;
+    }
+
+    // Vérifier la taille (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('L\'image est trop volumineuse (max 5MB)');
+      return;
+    }
+
+    this.uploading = true;
+    this.errorMessage = null;
+
+    try {
+      // Créer un FormData pour l'upload
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Upload vers l'API
+      const response = await fetch(`${this.adminService['apiUrl']}/upload/image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authService.getToken()}`
+        },
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.url) {
+        // Ajouter l'URL de l'image uploadée à la liste
+        this.formData.images.push(result.url);
+        alert('✅ Image uploadée avec succès !');
+      } else {
+        throw new Error(result.error || 'Erreur lors de l\'upload');
+      }
+    } catch (error: any) {
+      console.error('Erreur upload image:', error);
+      this.errorMessage = error.message || 'Erreur lors de l\'upload de l\'image';
+    } finally {
+      this.uploading = false;
+      // Réinitialiser l'input file
+      input.value = '';
+    }
   }
 
   addCustomMetadata(): void {

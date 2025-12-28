@@ -164,8 +164,23 @@
             </div>
           </div>
 
+          <!-- Upload depuis ordinateur/téléphone -->
           <div class="form-group">
-            <label for="imageUrl">Ajouter une image (URL)</label>
+            <label for="imageFile">📤 Upload depuis votre appareil</label>
+            <div class="upload-container">
+              <input type="file" id="imageFile" #fileInput accept="image/*"
+                     (change)="onFileSelected($event)" class="file-input">
+              <button type="button" class="btn-upload" (click)="fileInput.click()">
+                <span *ngIf="!uploading">📁 Choisir une image</span>
+                <span *ngIf="uploading">⏳ Upload en cours...</span>
+              </button>
+              <span class="file-hint">JPG, PNG, WebP (max 5MB)</span>
+            </div>
+          </div>
+
+          <!-- OU ajouter par URL -->
+          <div class="form-group">
+            <label for="imageUrl">🔗 Ou ajouter une image par URL</label>
             <div class="input-with-button">
               <input type="url" id="imageUrl" [(ngModel)]="tempImageUrl" name="tempImageUrl"
                      placeholder="https://exemple.com/image.jpg">
