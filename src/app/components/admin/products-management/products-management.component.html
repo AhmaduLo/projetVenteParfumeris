@@ -1,0 +1,250 @@
+<div class="products-container">
+  <!-- Header -->
+  <div class="products-header">
+    <div class="header-content">
+      <h1>Gestion des Produits</h1>
+      <p class="subtitle">Gérez vos produits Stripe - Création, édition et organisation</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-create" (click)="openCreateModal()">
+        + Nouveau Produit
+      </button>
+      <button class="btn-back" (click)="goBack()">
+        ← Tableau de bord
+      </button>
+      <button class="btn-logout" (click)="logout()">
+        Déconnexion
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="products-content">
+    <!-- Loading -->
+    <div *ngIf="loading && products.length === 0" class="loading-message">
+      <p>Chargement des produits...</p>
+    </div>
+
+    <!-- Erreur -->
+    <div *ngIf="error && !loading" class="error-message">
+      <p>{{ error }}</p>
+      <button class="btn-retry" (click)="loadProducts()">Réessayer</button>
+    </div>
+
+    <!-- Liste des produits -->
+    <div *ngIf="!loading && !error && products.length > 0" class="products-grid">
+      <div *ngFor="let product of products" class="product-card" [class.inactive]="!product.active">
+        <div class="product-image-container">
+          <img [src]="product.images[0] || 'assets/images/placeholder.png'"
+               [alt]="product.name"
+               class="product-image">
+          <span *ngIf="!product.active" class="inactive-badge">Désactivé</span>
+        </div>
+
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-description">{{ product.description || 'Aucune description' }}</p>
+
+          <div class="product-metadata">
+            <span *ngIf="product.metadata.category" class="metadata-badge category">
+              {{ product.metadata.category }}
+            </span>
+            <span *ngIf="product.metadata.origin" class="metadata-badge">
+              📍 {{ product.metadata.origin }}
+            </span>
+            <span *ngIf="product.metadata.duration" class="metadata-badge">
+              ⏱️ {{ product.metadata.duration }}
+            </span>
+          </div>
+
+          <div class="product-stock-price">
+            <div class="stock-info">
+              <span class="stock-label">Stock:</span>
+              <span class="stock-value" [class.low-stock]="product.stock < 10">
+                {{ product.stock }}
+              </span>
+            </div>
+            <div class="price-info">
+              <span class="price">{{ product.price }}€</span>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn-edit" (click)="openEditModal(product)">
+              ✏️ Modifier
+            </button>
+            <button class="btn-delete" (click)="deleteProduct(product)">
+              🗑️ Désactiver
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aucun produit -->
+    <div *ngIf="!loading && !error && products.length === 0" class="no-products">
+      <p>Aucun produit trouvé. Créez votre premier produit !</p>
+      <button class="btn-create-large" (click)="openCreateModal()">
+        + Créer un produit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de création/édition -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isEditMode ? 'Modifier le produit' : 'Créer un nouveau produit' }}</h2>
+      <button class="btn-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <form (ngSubmit)="saveProduct()">
+        <!-- Informations de base -->
+        <div class="form-section">
+          <h3>Informations de base</h3>
+
+          <div class="form-group">
+            <label for="name">Nom du produit *</label>
+            <input type="text" id="name" [(ngModel)]="formData.name" name="name"
+                   placeholder="Ex: Parfum Amira" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" [(ngModel)]="formData.description" name="description"
+                      rows="3" placeholder="Description détaillée du produit"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="price">Prix (€) *</label>
+              <input type="number" id="price" [(ngModel)]="formData.price" name="price"
+                     step="0.01" min="0" placeholder="25.00" required>
+            </div>
+
+            <div class="form-group">
+              <label for="stock">Stock *</label>
+              <input type="number" id="stock" [(ngModel)]="formData.stock" name="stock"
+                     min="0" placeholder="100" required>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label>
+                <input type="checkbox" [(ngModel)]="formData.active" name="active">
+                Produit actif
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Images -->
+        <div class="form-section">
+          <h3>Images</h3>
+
+          <div class="images-list" *ngIf="formData.images.length > 0">
+            <div *ngFor="let image of formData.images; let i = index" class="image-item">
+              <img [src]="image" [alt]="'Image ' + (i+1)" class="image-preview">
+              <button type="button" class="btn-remove-image" (click)="removeImage(i)">✕</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="imageUrl">Ajouter une image (URL)</label>
+            <div class="input-with-button">
+              <input type="url" id="imageUrl" [(ngModel)]="tempImageUrl" name="tempImageUrl"
+                     placeholder="https://exemple.com/image.jpg">
+              <button type="button" class="btn-add" (click)="addImage()">Ajouter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Métadonnées standard -->
+        <div class="form-section">
+          <h3>Caractéristiques</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Catégorie</label>
+              <select id="category" [(ngModel)]="formData.metadata.category" name="category">
+                <option value="parfum">Parfum</option>
+                <option value="encens">Encens</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="origin">Origine</label>
+              <input type="text" id="origin" [(ngModel)]="formData.metadata.origin" name="origin"
+                     placeholder="Ex: France, Maroc">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duration">Durée</label>
+              <input type="text" id="duration" [(ngModel)]="formData.metadata.duration" name="duration"
+                     placeholder="Ex: 8h-10h">
+            </div>
+
+            <div class="form-group">
+              <label for="flavor">Saveur</label>
+              <input type="text" id="flavor" [(ngModel)]="formData.metadata.flavor" name="flavor"
+                     placeholder="Ex: Vanille, Bois de santal">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <input type="text" id="notes" [(ngModel)]="formData.metadata.notes" name="notes"
+                   placeholder="Ex: Très recommandé">
+          </div>
+        </div>
+
+        <!-- Métadonnées personnalisées -->
+        <div class="form-section">
+          <h3>Métadonnées personnalisées</h3>
+
+          <div class="custom-metadata-list" *ngIf="getCustomMetadataKeys().length > 0">
+            <div *ngFor="let key of getCustomMetadataKeys()" class="metadata-item">
+              <span class="metadata-key">{{ key }}:</span>
+              <span class="metadata-value">{{ formData.metadata[key] }}</span>
+              <button type="button" class="btn-remove-metadata" (click)="removeCustomMetadata(key)">✕</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Ajouter une métadonnée</label>
+            <div class="metadata-inputs">
+              <input type="text" [(ngModel)]="customMetadataKey" name="customKey"
+                     placeholder="Clé (ex: contenance)">
+              <input type="text" [(ngModel)]="customMetadataValue" name="customValue"
+                     placeholder="Valeur (ex: 50ml)">
+              <button type="button" class="btn-add" (click)="addCustomMetadata()">Ajouter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message-modal">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Actions du formulaire -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="saving">
+            Annuler
+          </button>
+          <button type="submit" class="btn-save" [disabled]="saving">
+            <span *ngIf="!saving">{{ isEditMode ? 'Mettre à jour' : 'Créer le produit' }}</span>
+            <span *ngIf="saving">Enregistrement...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

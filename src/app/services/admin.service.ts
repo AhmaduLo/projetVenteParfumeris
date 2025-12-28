@@ -7,6 +7,7 @@ import { StatsResponse } from '../models/admin-stats.model';
 import { OrdersResponse, OrderPeriod } from '../models/order.model';
 import { SendEmailRequest, SendEmailResponse } from '../models/email.model';
 import { UpdateShippingStatusRequest, UpdateShippingStatusResponse, SendDeliveryEmailRequest, SendDeliveryEmailResponse } from '../models/shipping.model';
+import { StripeProduct, ProductFormData, ProductsResponse } from '../models/product.model';
 import { AuthService } from './auth.service';
 
 /**
@@ -119,6 +120,76 @@ export class AdminService {
       `${this.apiUrl}/admin/send-delivery-email`,
       body,
       { headers }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Récupère tous les produits
+   * @param limit Nombre de produits à récupérer
+   * @param startingAfter ID pour la pagination
+   */
+  getProducts(limit: number = 100, startingAfter?: string): Observable<ProductsResponse> {
+    const headers = this.getAuthHeaders();
+    let params = new HttpParams().set('limit', limit.toString());
+
+    if (startingAfter) {
+      params = params.set('starting_after', startingAfter);
+    }
+
+    return this.http.get<ProductsResponse>(
+      `${this.apiUrl}/admin/products`,
+      { headers, params }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Crée un nouveau produit
+   * @param productData Données du produit
+   */
+  createProduct(productData: ProductFormData): Observable<ProductsResponse> {
+    const headers = this.getAuthHeaders();
+
+    return this.http.post<ProductsResponse>(
+      `${this.apiUrl}/admin/products`,
+      productData,
+      { headers }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Met à jour un produit existant
+   * @param productId ID du produit
+   * @param productData Données à mettre à jour
+   */
+  updateProduct(productId: string, productData: Partial<ProductFormData>): Observable<ProductsResponse> {
+    const headers = this.getAuthHeaders();
+
+    return this.http.put<ProductsResponse>(
+      `${this.apiUrl}/admin/products`,
+      { productId, ...productData },
+      { headers }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Supprime (désactive) un produit
+   * @param productId ID du produit
+   */
+  deleteProduct(productId: string): Observable<ProductsResponse> {
+    const headers = this.getAuthHeaders();
+    const params = new HttpParams().set('productId', productId);
+
+    return this.http.delete<ProductsResponse>(
+      `${this.apiUrl}/admin/products`,
+      { headers, params }
     ).pipe(
       catchError(error => this.handleError(error))
     );

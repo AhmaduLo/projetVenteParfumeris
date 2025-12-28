@@ -9,6 +9,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { LoginComponent } from './components/admin/login/login.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { OrdersListComponent } from './components/admin/orders-list/orders-list.component';
+import { ProductsManagementComponent } from './components/admin/products-management/products-management.component';
 import { authGuard } from './guards/auth.guard';
 
 /**
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: 'admin/orders',
     component: OrdersListComponent,
+    canActivate: [authGuard] // Route protégée par le guard
+  },
+  {
+    path: 'admin/products',
+    component: ProductsManagementComponent,
     canActivate: [authGuard] // Route protégée par le guard
   },
 
