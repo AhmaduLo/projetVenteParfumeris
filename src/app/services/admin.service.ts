@@ -31,7 +31,7 @@ export class AdminService {
     const headers = this.getAuthHeaders();
 
     return this.http.get<StatsResponse>(
-      `${this.apiUrl}/admin/stats`,
+      `${this.apiUrl}/admin?action=stats`,
       { headers }
     ).pipe(
       catchError(error => this.handleError(error))
@@ -57,7 +57,7 @@ export class AdminService {
     }
 
     return this.http.get<OrdersResponse>(
-      `${this.apiUrl}/admin/orders`,
+      `${this.apiUrl}/admin?action=orders`,
       { headers, params }
     ).pipe(
       catchError(error => this.handleError(error))
@@ -77,7 +77,7 @@ export class AdminService {
     };
 
     return this.http.post<SendEmailResponse>(
-      `${this.apiUrl}/admin/send-email`,
+      `${this.apiUrl}/admin?action=send-email`,
       body,
       { headers }
     ).pipe(
@@ -98,7 +98,7 @@ export class AdminService {
     };
 
     return this.http.post<UpdateShippingStatusResponse>(
-      `${this.apiUrl}/admin/update-order-status`,
+      `${this.apiUrl}/admin?action=update-order-status`,
       body,
       { headers }
     ).pipe(
@@ -117,7 +117,7 @@ export class AdminService {
     };
 
     return this.http.post<SendDeliveryEmailResponse>(
-      `${this.apiUrl}/admin/send-delivery-email`,
+      `${this.apiUrl}/admin?action=send-delivery-email`,
       body,
       { headers }
     ).pipe(
@@ -139,7 +139,7 @@ export class AdminService {
     }
 
     return this.http.get<ProductsResponse>(
-      `${this.apiUrl}/admin/products`,
+      `${this.apiUrl}/admin?action=products`,
       { headers, params }
     ).pipe(
       catchError(error => this.handleError(error))
@@ -154,7 +154,7 @@ export class AdminService {
     const headers = this.getAuthHeaders();
 
     return this.http.post<ProductsResponse>(
-      `${this.apiUrl}/admin/products`,
+      `${this.apiUrl}/admin?action=products`,
       productData,
       { headers }
     ).pipe(
@@ -171,7 +171,7 @@ export class AdminService {
     const headers = this.getAuthHeaders();
 
     return this.http.put<ProductsResponse>(
-      `${this.apiUrl}/admin/products`,
+      `${this.apiUrl}/admin?action=products`,
       { productId, ...productData },
       { headers }
     ).pipe(
@@ -188,7 +188,7 @@ export class AdminService {
     const params = new HttpParams().set('productId', productId);
 
     return this.http.delete<ProductsResponse>(
-      `${this.apiUrl}/admin/products`,
+      `${this.apiUrl}/admin?action=products`,
       { headers, params }
     ).pipe(
       catchError(error => this.handleError(error))

@@ -42,7 +42,7 @@ export class AuthService {
     const request: LoginRequest = { email, password };
 
     return this.http.post<LoginResponse>(
-      `${this.apiUrl}/admin/login`,
+      `${this.apiUrl}/admin?action=login`,
       request
     ).pipe(
       map(response => {
