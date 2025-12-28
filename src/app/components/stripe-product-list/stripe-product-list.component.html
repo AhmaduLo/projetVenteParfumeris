@@ -116,12 +116,6 @@
             <span class="price-amount">{{ product.price.formatted }}</span>
           </div>
 
-          <!-- Stock -->
-          <div class="product-stock" *ngIf="getStock(product) !== null">
-            <span class="stock-label">Stock :</span>
-            <span class="stock-value">{{ getStock(product) }} unité(s)</span>
-          </div>
-
           <!-- Boutons d'action -->
           <div class="product-actions">
             <!-- Bouton Ajouter au panier -->
