@@ -22,17 +22,71 @@
 
     <!-- Contenu du modal -->
     <div class="modal-content">
-      <!-- Image du produit -->
-      <div class="modal-image-container">
+      <!-- Image du produit avec slider -->
+      <div class="modal-image-container"
+           (touchstart)="onTouchStart($event)"
+           (touchmove)="onTouchMove($event)"
+           (touchend)="onTouchEnd()">
+
+        <!-- Image principale -->
         <img
-          [src]="product.images[0] || 'assets/images/placeholder.jpg'"
+          [src]="getCurrentImage()"
           [alt]="product.name"
+          [class.zoomed]="isZoomed"
           class="modal-image"
+          (click)="onImageClick($event)"
           loading="eager">
 
         <!-- Badge nouveau -->
         <div class="modal-badge" *ngIf="product.metadata['nouveau'] === 'true'">
           NOUVEAU
+        </div>
+
+        <!-- Flèches de navigation (affichées seulement s'il y a plusieurs images) -->
+        <button
+          *ngIf="getImagesCount() > 1"
+          class="slider-arrow slider-arrow-left"
+          (click)="previousImage(); onArrowClick($event)"
+          aria-label="Image précédente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M15 18l-6-6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button
+          *ngIf="getImagesCount() > 1"
+          class="slider-arrow slider-arrow-right"
+          (click)="nextImage(); onArrowClick($event)"
+          aria-label="Image suivante">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- Indicateur de position (dots) -->
+        <div class="slider-dots" *ngIf="getImagesCount() > 1">
+          <button
+            *ngFor="let image of product.images; let i = index"
+            class="slider-dot"
+            [class.active]="i === currentImageIndex"
+            (click)="goToImage(i); onArrowClick($event)"
+            [attr.aria-label]="'Aller à l\'image ' + (i + 1)">
+          </button>
+        </div>
+
+        <!-- Compteur d'images -->
+        <div class="image-counter" *ngIf="getImagesCount() > 1">
+          {{ currentImageIndex + 1 }} / {{ getImagesCount() }}
+        </div>
+
+        <!-- Indicateur de zoom -->
+        <div class="zoom-indicator" *ngIf="!isZoomed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8" stroke-width="2"/>
+            <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round"/>
+            <path d="M11 8v6M8 11h6" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Cliquer pour zoomer
         </div>
       </div>
 

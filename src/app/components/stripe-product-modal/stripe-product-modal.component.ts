@@ -31,12 +31,29 @@ export class StripeProductModalComponent implements OnChanges {
   /** Message de confirmation d'ajout */
   addedToCartMessage = false;
 
+  /** Index de l'image actuellement affichée */
+  currentImageIndex = 0;
+
+  /** État du zoom */
+  isZoomed = false;
+
+  /** Position de départ du swipe */
+  private touchStartX = 0;
+
+  /** Position actuelle du swipe */
+  private touchCurrentX = 0;
+
+  /** Indique si un swipe est en cours */
+  private isSwiping = false;
+
   constructor(private cartService: StripeCartService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product'] && this.product) {
       this.isAnimating = true;
       this.quantity = 1; // Réinitialiser la quantité
+      this.currentImageIndex = 0; // Réinitialiser l'index d'image
+      this.isZoomed = false; // Réinitialiser le zoom
       // Empêcher le scroll du body quand le modal est ouvert
       document.body.style.overflow = 'hidden';
     } else if (changes['product'] && !this.product) {
@@ -186,5 +203,129 @@ export class StripeProductModalComponent implements OnChanges {
    */
   private capitalizeFirst(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // ===== SLIDER METHODS =====
+
+  /**
+   * Retourne le nombre d'images du produit
+   */
+  getImagesCount(): number {
+    return this.product?.images?.length || 0;
+  }
+
+  /**
+   * Retourne l'image actuelle
+   */
+  getCurrentImage(): string {
+    if (!this.product || !this.product.images || this.product.images.length === 0) {
+      return 'assets/images/placeholder.jpg';
+    }
+    return this.product.images[this.currentImageIndex] || this.product.images[0];
+  }
+
+  /**
+   * Passe à l'image suivante
+   */
+  nextImage(): void {
+    if (!this.product || !this.product.images) return;
+
+    if (this.currentImageIndex < this.product.images.length - 1) {
+      this.currentImageIndex++;
+    } else {
+      this.currentImageIndex = 0; // Boucle au début
+    }
+    this.isZoomed = false; // Désactive le zoom lors du changement d'image
+  }
+
+  /**
+   * Passe à l'image précédente
+   */
+  previousImage(): void {
+    if (!this.product || !this.product.images) return;
+
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    } else {
+      this.currentImageIndex = this.product.images.length - 1; // Boucle à la fin
+    }
+    this.isZoomed = false; // Désactive le zoom lors du changement d'image
+  }
+
+  /**
+   * Va à une image spécifique
+   */
+  goToImage(index: number): void {
+    if (!this.product || !this.product.images) return;
+
+    if (index >= 0 && index < this.product.images.length) {
+      this.currentImageIndex = index;
+      this.isZoomed = false;
+    }
+  }
+
+  /**
+   * Toggle le zoom de l'image
+   */
+  toggleZoom(): void {
+    this.isZoomed = !this.isZoomed;
+  }
+
+  // ===== SWIPE GESTURES =====
+
+  /**
+   * Début du swipe (touch)
+   */
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0].clientX;
+    this.touchCurrentX = this.touchStartX;
+    this.isSwiping = true;
+  }
+
+  /**
+   * Mouvement du swipe (touch)
+   */
+  onTouchMove(event: TouchEvent): void {
+    if (!this.isSwiping) return;
+    this.touchCurrentX = event.touches[0].clientX;
+  }
+
+  /**
+   * Fin du swipe (touch)
+   */
+  onTouchEnd(): void {
+    if (!this.isSwiping) return;
+
+    const diff = this.touchStartX - this.touchCurrentX;
+    const threshold = 50; // Distance minimale pour déclencher le swipe
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe vers la gauche -> image suivante
+        this.nextImage();
+      } else {
+        // Swipe vers la droite -> image précédente
+        this.previousImage();
+      }
+    }
+
+    this.isSwiping = false;
+    this.touchStartX = 0;
+    this.touchCurrentX = 0;
+  }
+
+  /**
+   * Empêche la propagation du clic sur l'image (pour ne pas fermer le modal)
+   */
+  onImageClick(event: MouseEvent): void {
+    event.stopPropagation();
+    this.toggleZoom();
+  }
+
+  /**
+   * Empêche la propagation du clic sur les flèches
+   */
+  onArrowClick(event: MouseEvent): void {
+    event.stopPropagation();
   }
 }
