@@ -81,13 +81,13 @@
           </div>
 
           <div class="product-actions">
-            <button class="btn-edit" (click)="openEditModal(product)">
+            <button class="btn-edit" (click)="openEditModal(product); $event.stopPropagation()">
               ✏️ Modifier
             </button>
-            <button *ngIf="product.active" class="btn-delete" (click)="deleteProduct(product)">
+            <button *ngIf="product.active" class="btn-delete" (click)="openDeleteConfirmModal(product); $event.stopPropagation()">
               🗑️ Désactiver
             </button>
-            <button *ngIf="!product.active" class="btn-activate" (click)="activateProduct(product)">
+            <button *ngIf="!product.active" class="btn-activate" (click)="openActivateConfirmModal(product); $event.stopPropagation()">
               ✅ Activer
             </button>
           </div>
@@ -106,7 +106,7 @@
 </div>
 
 <!-- Modal de création/édition -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h2>{{ isEditMode ? 'Modifier le produit' : 'Créer un nouveau produit' }}</h2>
@@ -196,10 +196,17 @@
           <div class="form-row">
             <div class="form-group">
               <label for="category">Catégorie</label>
-              <select id="category" [(ngModel)]="formData.metadata.category" name="category">
-                <option value="parfum">Parfum</option>
-                <option value="encens">Encens</option>
-              </select>
+              <input
+                type="text"
+                id="category"
+                [(ngModel)]="formData.metadata.category"
+                name="category"
+                placeholder="Ex: parfum, encens, bougies..."
+                list="categories-list">
+              <datalist id="categories-list">
+                <option *ngFor="let category of categories" [value]="category.slug">{{ category.name }}</option>
+              </datalist>
+              <small>Vous pouvez sélectionner une catégorie existante ou en créer une nouvelle</small>
             </div>
 
             <div class="form-group">
@@ -277,3 +284,51 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de confirmation de désactivation -->
+<div *ngIf="showDeleteConfirmModal" class="modal-overlay" (click)="closeDeleteConfirmModal()">
+  <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>les-senteurs-d-amira.vercel.app indique</h2>
+      </div>
+
+      <div class="modal-body">
+        <p class="confirm-message">
+          Êtes-vous sûr de vouloir désactiver le produit "{{ productToDelete?.name }}" ?
+        </p>
+      </div>
+
+      <div class="modal-footer confirm-footer">
+        <button class="btn-confirm-ok" (click)="confirmDeleteProduct()">
+          OK
+        </button>
+        <button class="btn-confirm-cancel" (click)="closeDeleteConfirmModal()">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal de confirmation de réactivation -->
+<div *ngIf="showActivateConfirmModal" class="modal-overlay" (click)="closeActivateConfirmModal()">
+  <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>les-senteurs-d-amira.vercel.app indique</h2>
+      </div>
+
+      <div class="modal-body">
+        <p class="confirm-message">
+          Êtes-vous sûr de vouloir réactiver le produit "{{ productToActivate?.name }}" ?
+        </p>
+      </div>
+
+      <div class="modal-footer confirm-footer">
+        <button class="btn-confirm-ok" (click)="confirmActivateProduct()">
+          OK
+        </button>
+        <button class="btn-confirm-cancel" (click)="closeActivateConfirmModal()">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>

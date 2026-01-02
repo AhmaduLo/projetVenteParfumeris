@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
+import { CategoryService } from '../../../services/category.service';
 import { StripeProduct, ProductFormData } from '../../../models/product.model';
+import { Category } from '../../../models/category.model';
 
 @Component({
   selector: 'app-products-management',
@@ -20,6 +22,9 @@ export class ProductsManagementComponent implements OnInit {
   loading = true;
   error: string | null = null;
   hasMore = false;
+
+  // Catégories disponibles
+  categories: Category[] = [];
 
   // Filtre actif/inactif
   showOnlyInactive = false;
@@ -61,15 +66,29 @@ export class ProductsManagementComponent implements OnInit {
   // Upload d'images
   uploading = false;
 
+  // Modals de confirmation
+  showDeleteConfirmModal = false;
+  showActivateConfirmModal = false;
+  productToDelete: StripeProduct | null = null;
+  productToActivate: StripeProduct | null = null;
+
   constructor(
     private adminService: AdminService,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
+    this.loadCategories();
     this.loadProducts();
+  }
+
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe(categories => {
+      this.categories = categories.filter(cat => cat.active);
+    });
   }
 
   loadProducts(startingAfter?: string): void {
@@ -312,10 +331,21 @@ export class ProductsManagementComponent implements OnInit {
     }
   }
 
-  deleteProduct(product: StripeProduct): void {
-    if (!confirm(`Êtes-vous sûr de vouloir désactiver le produit "${product.name}" ?`)) {
-      return;
-    }
+  openDeleteConfirmModal(product: StripeProduct): void {
+    this.productToDelete = product;
+    this.showDeleteConfirmModal = true;
+  }
+
+  closeDeleteConfirmModal(): void {
+    this.showDeleteConfirmModal = false;
+    this.productToDelete = null;
+  }
+
+  confirmDeleteProduct(): void {
+    if (!this.productToDelete) return;
+
+    const product = this.productToDelete;
+    this.closeDeleteConfirmModal();
 
     this.adminService.deleteProduct(product.id).subscribe({
       next: (response) => {
@@ -333,10 +363,21 @@ export class ProductsManagementComponent implements OnInit {
     });
   }
 
-  activateProduct(product: StripeProduct): void {
-    if (!confirm(`Êtes-vous sûr de vouloir réactiver le produit "${product.name}" ?`)) {
-      return;
-    }
+  openActivateConfirmModal(product: StripeProduct): void {
+    this.productToActivate = product;
+    this.showActivateConfirmModal = true;
+  }
+
+  closeActivateConfirmModal(): void {
+    this.showActivateConfirmModal = false;
+    this.productToActivate = null;
+  }
+
+  confirmActivateProduct(): void {
+    if (!this.productToActivate) return;
+
+    const product = this.productToActivate;
+    this.closeActivateConfirmModal();
 
     this.adminService.updateProduct(product.id, { active: true }).subscribe({
       next: (response) => {
