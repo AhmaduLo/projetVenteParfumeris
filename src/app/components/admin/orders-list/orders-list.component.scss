@@ -958,3 +958,61 @@
     }
   }
 }
+
+// Modal de confirmation
+.confirm-modal {
+  max-width: 400px;
+
+  .modal-header {
+    background: #2d3748;
+
+    h2 {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+  }
+
+  .modal-body {
+    padding: 2rem 1.5rem;
+
+    .confirm-message {
+      color: #2d3748;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin: 0;
+      text-align: center;
+    }
+  }
+
+  .confirm-footer {
+    padding: 1rem 1.5rem;
+    justify-content: center;
+    gap: 0.75rem;
+
+    button {
+      min-width: 100px;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .btn-confirm-ok {
+    background: #e2d4c0;
+    color: #2d3748;
+    border: 1px solid #c7b199;
+
+    &:hover {
+      background: #d4c5ae;
+    }
+  }
+
+  .btn-confirm-cancel {
+    background: #4a5568;
+    color: white;
+    border: 1px solid #4a5568;
+
+    &:hover {
+      background: #2d3748;
+    }
+  }
+}

@@ -35,6 +35,10 @@ export class OrdersListComponent implements OnInit {
   emailSuccess: string | null = null;
   emailError: string | null = null;
 
+  // Modal de confirmation pour marquer comme reçue
+  showDeliveryConfirmModal = false;
+  orderToMarkAsDelivered: Order | null = null;
+
   // Options de filtrage par période
   periodOptions: Array<{value: OrderPeriod, label: string}> = [
     { value: 'all', label: 'Toutes' },
@@ -271,10 +275,21 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  markAsDelivered(order: Order): void {
-    if (!confirm(`Marquer la commande #${order.id.substring(0, 12)}... comme reçue et envoyer un email de confirmation au client ?`)) {
-      return;
-    }
+  openDeliveryConfirmModal(order: Order): void {
+    this.orderToMarkAsDelivered = order;
+    this.showDeliveryConfirmModal = true;
+  }
+
+  closeDeliveryConfirmModal(): void {
+    this.showDeliveryConfirmModal = false;
+    this.orderToMarkAsDelivered = null;
+  }
+
+  confirmMarkAsDelivered(): void {
+    if (!this.orderToMarkAsDelivered) return;
+
+    const order = this.orderToMarkAsDelivered;
+    this.closeDeliveryConfirmModal();
 
     // Envoyer l'email de livraison
     this.adminService.sendDeliveryEmail(order.id).subscribe({

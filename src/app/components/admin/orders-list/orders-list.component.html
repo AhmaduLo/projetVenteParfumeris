@@ -146,7 +146,7 @@
             <button
               *ngIf="order.shippingStatus === 'shipped'"
               class="btn-mark-delivered"
-              (click)="markAsDelivered(order)"
+              (click)="openDeliveryConfirmModal(order)"
               title="Marquer comme reçue et envoyer email de confirmation">
               ✅ Marquer comme reçue
             </button>
@@ -245,6 +245,30 @@
         </button>
         <button class="btn-confirm" (click)="sendEmail()" [disabled]="emailSending">
           {{ emailSending ? 'Envoi...' : 'Envoyer l\'email' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation pour marquer comme reçue -->
+  <div *ngIf="showDeliveryConfirmModal" class="modal-overlay" (click)="closeDeliveryConfirmModal()">
+    <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>les-senteurs-d-amira.vercel.app indique</h2>
+      </div>
+
+      <div class="modal-body">
+        <p class="confirm-message">
+          Marquer la commande #{{ orderToMarkAsDelivered?.id?.substring(0, 12) }}... comme reçue et envoyer un email de confirmation au client ?
+        </p>
+      </div>
+
+      <div class="modal-footer confirm-footer">
+        <button class="btn-confirm-ok" (click)="confirmMarkAsDelivered()">
+          OK
+        </button>
+        <button class="btn-confirm-cancel" (click)="closeDeliveryConfirmModal()">
+          Annuler
         </button>
       </div>
     </div>
