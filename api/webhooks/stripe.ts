@@ -171,6 +171,7 @@ async function sendConfirmationEmail(
         email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
         name: 'Les Senteurs d\'Amira'
       },
+      replyTo: process.env.SENDGRID_FROM_EMAIL || 'gbamba123@gmail.com',
       subject: 'Confirmation de votre commande - Les Senteurs d\'Amira',
       html: emailHtml
     };

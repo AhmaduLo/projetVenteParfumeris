@@ -757,6 +757,7 @@ async function handleSendEmail(req: VercelRequest, res: VercelResponse) {
       email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
       name: 'Les Senteurs d\'Amira'
     },
+    replyTo: process.env.SENDGRID_FROM_EMAIL || 'gbamba123@gmail.com',
     subject: '📦 Votre commande a été expédiée !',
     html: emailHtml,
   };
@@ -898,6 +899,7 @@ async function handleSendDeliveryEmail(req: VercelRequest, res: VercelResponse) 
       email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
       name: 'Les Senteurs d\'Amira'
     },
+    replyTo: process.env.SENDGRID_FROM_EMAIL || 'gbamba123@gmail.com',
     subject: '✅ Merci pour votre confiance !',
     html: emailHtml,
   };
