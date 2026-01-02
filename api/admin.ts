@@ -18,7 +18,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
-import { Resend } from 'resend';
+import sgMail from '@sendgrid/mail';
 import { requireAuth } from '../lib/utils/verifyJWT';
 import { checkRateLimit, recordFailedAttempt, resetAttempts } from '../lib/utils/rateLimiter';
 
@@ -26,7 +26,8 @@ const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {
   apiVersion: '2024-11-20.acacia'
 });
 
-const resend = new Resend(process.env['RESEND_API_KEY']!);
+// Configuration de SendGrid
+sgMail.setApiKey(process.env['SENDGRID_API_KEY']!);
 
 // Configuration admin
 const ADMIN_EMAIL = process.env['ADMIN_EMAIL'] || 'admin@example.com';
@@ -750,19 +751,23 @@ async function handleSendEmail(req: VercelRequest, res: VercelResponse) {
 </html>
   `;
 
-  const emailData = await resend.emails.send({
-    from: 'Les Senteurs d\'Amira <onboarding@resend.dev>',
-    to: [customerEmail],
+  const msg = {
+    to: customerEmail,
+    from: {
+      email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
+      name: 'Les Senteurs d\'Amira'
+    },
     subject: '📦 Votre commande a été expédiée !',
     html: emailHtml,
-  });
+  };
 
-  console.log('✅ Email envoyé avec succès:', emailData.data?.id);
+  await sgMail.send(msg);
+
+  console.log('✅ Email envoyé avec succès à:', customerEmail);
 
   return res.status(200).json({
     success: true,
-    message: `Email envoyé à ${customerEmail}`,
-    emailId: emailData.data?.id
+    message: `Email envoyé à ${customerEmail}`
   });
 }
 
@@ -887,19 +892,23 @@ async function handleSendDeliveryEmail(req: VercelRequest, res: VercelResponse) 
 </html>
   `;
 
-  const emailData = await resend.emails.send({
-    from: 'Les Senteurs d\'Amira <onboarding@resend.dev>',
-    to: [customerEmail],
+  const msg = {
+    to: customerEmail,
+    from: {
+      email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
+      name: 'Les Senteurs d\'Amira'
+    },
     subject: '✅ Merci pour votre confiance !',
     html: emailHtml,
-  });
+  };
 
-  console.log('✅ Email de réception envoyé avec succès:', emailData.data?.id);
+  await sgMail.send(msg);
+
+  console.log('✅ Email de réception envoyé avec succès à:', customerEmail);
 
   return res.status(200).json({
     success: true,
-    message: `Email de réception envoyé à ${customerEmail}`,
-    emailId: emailData.data?.id
+    message: `Email de réception envoyé à ${customerEmail}`
   });
 }
 

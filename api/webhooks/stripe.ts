@@ -1,13 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
-import { Resend } from 'resend';
+import sgMail from '@sendgrid/mail';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia'
 });
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+// Configuration de SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 // Configuration pour désactiver le parsing automatique du body
@@ -164,16 +165,24 @@ async function sendConfirmationEmail(
   try {
     const emailHtml = generateEmailTemplate(customerName, orderItems, totalAmount, orderId);
 
-    await resend.emails.send({
-      from: 'Les Senteurs d\'Amira <onboarding@resend.dev>',
+    const msg = {
       to: customerEmail,
+      from: {
+        email: process.env.SENDGRID_FROM_EMAIL || 'noreply@lessenteursdamira.com',
+        name: 'Les Senteurs d\'Amira'
+      },
       subject: 'Confirmation de votre commande - Les Senteurs d\'Amira',
       html: emailHtml
-    });
+    };
+
+    await sgMail.send(msg);
 
     console.log(`✅ Email envoyé à ${customerEmail}`);
   } catch (error: any) {
     console.error('❌ Erreur envoi email:', error);
+    if (error.response) {
+      console.error('Détails SendGrid:', error.response.body);
+    }
   }
 }
 
