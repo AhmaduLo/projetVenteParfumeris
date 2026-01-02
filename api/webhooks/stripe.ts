@@ -199,8 +199,8 @@ function generateEmailTemplate(
   const itemsHtml = orderItems.map(item => `
     <tr>
       <td style="padding: 15px; border-bottom: 1px solid #eee;">
-        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 10px; vertical-align: middle;">` : ''}
-        <strong>${item.name}</strong>
+        ${item.image ? `<img src="${item.image}" alt="${item.name}" width="60" height="60" style="display: block; width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 10px; vertical-align: middle; border: 0;">` : ''}
+        <strong style="display: inline-block; vertical-align: middle;">${item.name}</strong>
       </td>
       <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
       <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: right;">${item.price.toFixed(2)} €</td>
