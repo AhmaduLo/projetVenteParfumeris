@@ -120,6 +120,39 @@
   }
 }
 
+// Actions header (login + panier)
+.header-actions {
+  @include flex-center;
+  gap: $spacing-sm;
+}
+
+// Bouton login admin
+.login-button {
+  @include reset-button;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  @include flex-center;
+  border-radius: 50%;
+  background-color: $light-bg;
+  transition: all $transition-speed-normal $transition-ease;
+
+  .login-icon {
+    width: 20px;
+    height: 20px;
+    color: $secondary-color;
+    transition: color $transition-speed-normal $transition-ease;
+  }
+
+  &:hover {
+    background-color: $secondary-color;
+
+    .login-icon {
+      color: $white;
+    }
+  }
+}
+
 // Bouton panier
 .cart-button {
   @include reset-button;
@@ -130,7 +163,6 @@
   border-radius: 50%;
   background-color: $light-bg;
   transition: all $transition-speed-normal $transition-ease;
-  margin-left: $spacing-sm;
 
   .cart-icon {
     width: 22px;

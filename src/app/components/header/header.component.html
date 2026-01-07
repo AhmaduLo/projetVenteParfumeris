@@ -32,16 +32,29 @@
       </ul>
     </nav>
 
-    <!-- Bouton panier -->
-    <button
-      class="cart-button"
-      (click)="onCartClick()"
-      aria-label="Ouvrir le panier">
-      <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
-    </button>
+    <!-- Actions header -->
+    <div class="header-actions">
+      <!-- Bouton login admin -->
+      <button
+        class="login-button"
+        (click)="goToAdminLogin()"
+        aria-label="Connexion admin">
+        <svg class="login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Bouton panier -->
+      <button
+        class="cart-button"
+        (click)="onCartClick()"
+        aria-label="Ouvrir le panier">
+        <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+      </button>
+    </div>
 
     <!-- Bouton menu burger mobile -->
     <button

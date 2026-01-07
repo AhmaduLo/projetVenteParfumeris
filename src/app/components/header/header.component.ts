@@ -121,4 +121,12 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/orders']);
     this.closeMenu();
   }
+
+  /**
+   * Navigation vers la page de login admin
+   */
+  goToAdminLogin(): void {
+    this.router.navigate(['/admin/login']);
+    this.closeMenu();
+  }
 }
