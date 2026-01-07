@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS - Configuration des headers
   const origin = req.headers.origin;
   const allowedOrigins = [
-    'https://les-senteurs-d-amira-tan.vercel.app',
+    'https://les-senteurs-amira.vercel.app',
     'http://localhost:4200',
     'http://localhost:3000'
   ];

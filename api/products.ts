@@ -33,7 +33,7 @@ export default async function handler(
   // Si une origine est présente, vérifier qu'elle est autorisée
   if (origin) {
     const allowedOrigins = [
-      'https://les-senteurs-d-amira-tan.vercel.app',
+      'https://les-senteurs-amira.vercel.app',
       'http://localhost:4200',
       'http://localhost:3000'
     ];
