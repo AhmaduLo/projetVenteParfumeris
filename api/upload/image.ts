@@ -26,6 +26,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin;
   const allowedOrigins = [
     'https://les-senteurs-d-amira.vercel.app',
+    'https://les-senteurs-d-amira-tan.vercel.app',
+    'https://les-senteurs-amira.vercel.app',
     'https://projet-vente-parfumeris.vercel.app',
     'http://localhost:4200',
     'http://localhost:3000'
@@ -33,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const isAllowed = origin && (
     allowedOrigins.includes(origin) ||
-    (origin.endsWith('.vercel.app') && origin.includes('les-senteurs-d-amira'))
+    (origin.endsWith('.vercel.app') && (origin.includes('les-senteurs-d-amira') || origin.includes('les-senteurs-amira')))
   );
 
   if (isAllowed) {

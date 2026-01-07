@@ -42,13 +42,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (origin) {
     const allowedOrigins = [
       'https://les-senteurs-d-amira.vercel.app',
+      'https://les-senteurs-d-amira-tan.vercel.app',
+      'https://les-senteurs-amira.vercel.app',
       'https://projet-vente-parfumeris.vercel.app',
       'http://localhost:4200',
       'http://localhost:3000'
     ];
 
     const isAllowed = allowedOrigins.includes(origin) ||
-                      (origin.endsWith('.vercel.app') && origin.includes('les-senteurs-d-amira'));
+                      (origin.endsWith('.vercel.app') && (origin.includes('les-senteurs-d-amira') || origin.includes('les-senteurs-amira')));
 
     if (isAllowed) {
       res.setHeader('Access-Control-Allow-Origin', origin);
