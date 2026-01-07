@@ -53,8 +53,6 @@ export class AuthService {
           // Décoder et mettre à jour l'utilisateur courant
           const user = this.getUserFromToken();
           this.currentUserSubject.next(user);
-
-          console.log('✅ Token stocké et utilisateur authentifié');
         }
         return response;
       }),
@@ -71,8 +69,6 @@ export class AuthService {
 
     // Réinitialiser l'utilisateur courant
     this.currentUserSubject.next(null);
-
-    console.log('🚪 Déconnexion réussie');
   }
 
   /**

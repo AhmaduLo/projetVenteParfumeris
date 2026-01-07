@@ -18,7 +18,6 @@ export const authGuard: CanActivateFn = (_route, state) => {
   }
 
   // Rediriger vers la page de login
-  console.log('🚫 Accès refusé - Redirection vers login');
   router.navigate(['/admin/login'], {
     queryParams: { returnUrl: state.url }
   });

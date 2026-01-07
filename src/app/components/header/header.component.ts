@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StripeCartService } from '../../services/stripe-cart.service';
+import { AuthService } from '../../services/auth.service';
 
 /**
  * Composant Header avec navigation et menu burger responsive
@@ -22,8 +23,12 @@ export class HeaderComponent implements OnInit {
   /** Nombre d'articles dans le panier */
   cartItemCount = 0;
 
+  /** État d'authentification admin */
+  isAdminAuthenticated = false;
+
   constructor(
     private cartService: StripeCartService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -31,6 +36,11 @@ export class HeaderComponent implements OnInit {
     // S'abonner au compteur de panier
     this.cartService.cartCount$.subscribe(count => {
       this.cartItemCount = count;
+    });
+
+    // S'abonner à l'état d'authentification admin
+    this.authService.currentUser$.subscribe(user => {
+      this.isAdminAuthenticated = !!user;
     });
   }
 
@@ -127,6 +137,14 @@ export class HeaderComponent implements OnInit {
    */
   goToAdminLogin(): void {
     this.router.navigate(['/admin/login']);
+    this.closeMenu();
+  }
+
+  /**
+   * Navigation vers le dashboard admin
+   */
+  goToDashboard(): void {
+    this.router.navigate(['/admin/dashboard']);
     this.closeMenu();
   }
 }

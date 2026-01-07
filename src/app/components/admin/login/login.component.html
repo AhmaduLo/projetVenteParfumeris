@@ -14,6 +14,7 @@
           type="email"
           formControlName="email"
           placeholder="admin@example.com"
+          autocomplete="email"
           [class.invalid]="email?.invalid && email?.touched"
         />
         <div class="error-message" *ngIf="email?.invalid && email?.touched">
@@ -30,6 +31,7 @@
           type="password"
           formControlName="password"
           placeholder="••••••••"
+          autocomplete="current-password"
           [class.invalid]="password?.invalid && password?.touched"
         />
         <div class="error-message" *ngIf="password?.invalid && password?.touched">

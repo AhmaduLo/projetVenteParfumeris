@@ -176,23 +176,13 @@ export class CartComponent implements OnInit {
    * Ouvre le modal avec les détails du produit
    */
   openProductModal(item: StripeCartItem): void {
-    console.log('=== CART: Opening modal ===');
-    console.log('Item:', item);
-    console.log('Product:', item.product);
-
-    try {
-      this.selectedProduct = this.convertStripeProductToLocal(item.product);
-      console.log('Converted product:', this.selectedProduct);
-    } catch (error) {
-      console.error('Error converting product:', error);
-    }
+    this.selectedProduct = this.convertStripeProductToLocal(item.product);
   }
 
   /**
    * Ferme le modal
    */
   closeProductModal(): void {
-    console.log('=== CART: Closing modal ===');
     this.selectedProduct = null;
   }
 
@@ -200,16 +190,7 @@ export class CartComponent implements OnInit {
    * Convertit un produit Stripe en modèle Product local
    */
   private convertStripeProductToLocal(stripeProduct: any): Product {
-    console.log('=== CONVERSION START ===');
-    console.log('Full Stripe product object:', JSON.stringify(stripeProduct, null, 2));
-
     const metadata = stripeProduct.metadata || {};
-    console.log('Extracted metadata:', JSON.stringify(metadata, null, 2));
-    console.log('metadata.category:', metadata['category']);
-    console.log('metadata.contenance:', metadata['contenance']);
-    console.log('metadata.origine:', metadata['origine']);
-    console.log('metadata.notes:', metadata['notes']);
-    console.log('metadata.duree:', metadata['duree']);
 
     const product: Product = {
       id: parseInt(metadata['id'] || '0'),
@@ -230,8 +211,6 @@ export class CartComponent implements OnInit {
       nouveau: metadata['nouveau'] === 'true' || metadata['featured'] === 'true' || metadata['featured '] === 'true'
     };
 
-    console.log('=== CONVERSION END ===');
-    console.log('Final product object:', JSON.stringify(product, null, 2));
     return product;
   }
 }

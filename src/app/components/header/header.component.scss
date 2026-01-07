@@ -126,7 +126,50 @@
   gap: $spacing-sm;
 }
 
-// Bouton login admin
+// Bouton dashboard admin (quand connecté)
+.dashboard-button {
+  @include reset-button;
+  position: relative;
+  height: 44px;
+  @include flex-center;
+  gap: calc($spacing-xs / 2);
+  padding: 0 $spacing-sm;
+  border-radius: 22px;
+  background-color: $accent-color;
+  transition: all $transition-speed-normal $transition-ease;
+
+  .dashboard-icon {
+    width: 20px;
+    height: 20px;
+    color: $secondary-color;
+    transition: color $transition-speed-normal $transition-ease;
+  }
+
+  .admin-badge {
+    font-family: $font-body;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $secondary-color;
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &:hover {
+    background-color: $secondary-color;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+
+    .dashboard-icon,
+    .admin-badge {
+      color: $white;
+    }
+  }
+}
+
+// Bouton login admin (quand non connecté)
 .login-button {
   @include reset-button;
   position: relative;

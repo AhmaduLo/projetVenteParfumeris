@@ -41,7 +41,6 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe({
       next: (response) => {
         if (response.success && response.token) {
-          console.log('✅ Connexion réussie');
           // Rediriger vers le dashboard admin
           this.router.navigate(['/admin/dashboard']);
         } else {
@@ -50,7 +49,6 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        console.error('❌ Erreur de connexion:', error);
         this.errorMessage = error.message || 'Email ou mot de passe incorrect';
         this.loading = false;
       }
