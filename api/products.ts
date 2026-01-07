@@ -132,16 +132,17 @@ export default async function handler(
 
   } catch (error: any) {
     // Gestion des erreurs
-    console.error('❌ Erreur Stripe API:', error);
-    console.error('❌ Message:', error.message);
-    console.error('❌ Stack:', error.stack);
+    // Log pour monitoring (sans exposer au client)
+    console.error('❌ Erreur Stripe API:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      statusCode: error.statusCode
+    });
 
     return res.status(500).json({
       success: false,
-      error: 'Erreur lors de la récupération des produits',
-      message: error.message, // Afficher temporairement même en production
-      type: error.type,
-      stripeKey: process.env['STRIPE_SECRET_KEY'] ? 'Present' : 'Missing',
+      error: 'Erreur lors de la récupération des produits'
     });
   }
 }
