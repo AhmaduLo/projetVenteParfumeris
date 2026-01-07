@@ -4,7 +4,7 @@ import { buffer } from 'micro';
 import sgMail from '@sendgrid/mail';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia'
+  apiVersion: '2023-10-16'
 });
 
 // Configuration de SendGrid
