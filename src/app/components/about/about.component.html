@@ -11,30 +11,29 @@
       <!-- Histoire -->
       <div class="about-story">
         <p class="story-text">
-          Bienvenue chez <strong>Les Senteurs d'Amira</strong>, votre destination privilégiée
-          pour découvrir l'excellence de la parfumerie orientale traditionnelle.
+          <strong>Les Senteurs d’Amira</strong> est une marque née d’une passion profonde pour l’univers du parfum et
+          son pouvoir
+          émotionnel. Chaque fragrance raconte une histoire, évoque une émotion et révèle une personnalité.
         </p>
 
         <p class="story-text">
-          Depuis notre création, nous nous consacrons à la sélection et à l'importation des plus belles
-          fragrances du Moyen-Orient et d'Asie. Chaque produit de notre catalogue est choisi avec le plus
-          grand soin pour vous offrir une expérience olfactive unique et authentique.
+          Inspirés des grandes maisons, mes parfums allient qualité, élégance et accessibilité, afin que chacun puisse
+          trouver une senteur qui lui ressemble. Sélectionnés avec soin auprès de fournisseurs reconnus et présentés
+          dans un packaging raffiné, ils offrent une expérience à la fois authentique et mémorable.
         </p>
 
         <p class="story-text">
-          Nos parfums et encens sont élaborés selon des méthodes ancestrales, utilisant uniquement des
-          ingrédients naturels de première qualité. Que vous recherchiez un parfum envoûtant pour une
-          occasion spéciale ou un encens apaisant pour votre méditation quotidienne, vous trouverez chez
-          nous le produit parfait.
+          Formée professionnellement en parfumerie, je mets mon expertise au service de créations sincères et de
+          conseils personnalisés.<br><strong>Les Senteurs d’Amira</strong>, c’est l’engagement de proposer des parfums
+          porteurs d’émotion,
+          de confiance et de passion.
         </p>
       </div>
 
       <!-- Image illustrative -->
       <div class="about-image">
-        <img
-          src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&h=600&fit=crop"
-          alt="Parfums et encens traditionnels"
-          loading="lazy">
+        <img src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&h=600&fit=crop"
+          alt="Parfums et encens traditionnels" loading="lazy">
       </div>
     </div>
 
@@ -43,14 +42,11 @@
       <h3 class="values-title">Nos Valeurs</h3>
 
       <div class="values-grid">
-        <div
-          *ngFor="let value of values; let i = index"
-          class="value-card"
-          [class]="'fade-in-up delay-' + (i + 1)">
+        <div *ngFor="let value of values; let i = index" class="value-card" [class]="'fade-in-up delay-' + (i + 1)">
 
           <div class="value-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path [attr.d]="value.icon" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path [attr.d]="value.icon" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </div>
 

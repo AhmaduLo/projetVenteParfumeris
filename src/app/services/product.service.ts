@@ -14,10 +14,10 @@ export class ProductService {
    */
   private readonly contactInfo: ContactInfo = {
     nom: "Les Senteurs d'Amira",
-    telephone: '+33 6 12 34 56 78',
-    email: 'contact@lessenteursdamira.fr',
-    whatsapp: '+33 6 12 34 56 78',
-    adresse: '123 Rue de la Paix, 75002 Paris'
+    telephone: '0758793064',
+    email: 'lessenteursdamira@gmail.com',
+    whatsapp: '0758793064',
+    adresse: 'Paris'
   };
 
   constructor() { }
