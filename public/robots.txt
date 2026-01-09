@@ -1,0 +1,38 @@
+# robots.txt pour Les Senteurs d'Amira
+# Permet à tous les moteurs de recherche d'indexer le site
+
+User-agent: *
+Allow: /
+
+# Bloquer les routes admin
+Disallow: /admin/
+Disallow: /api/admin
+
+# Fichiers statiques autorisés
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.webp$
+
+# Sitemap
+Sitemap: https://les-senteurs-amira.vercel.app/sitemap.xml
+
+# Crawl-delay pour éviter la surcharge (optionnel)
+Crawl-delay: 1
+
+# Instructions spécifiques pour les principaux moteurs de recherche
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
