@@ -12,6 +12,16 @@
       Merci pour votre commande. Vous allez recevoir un email de confirmation à l'adresse indiquée.
     </p>
 
+    <div class="email-warning">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      <p>
+        <strong>Important :</strong> L'email de confirmation peut arriver dans votre dossier <strong>Spam/Courrier indésirable</strong>.
+        <br>Pensez à vérifier ce dossier si vous ne recevez pas l'email dans quelques minutes.
+      </p>
+    </div>
+
     <div class="session-info" *ngIf="sessionId">
       <p class="session-id">Numéro de commande : <strong>{{ sessionId }}</strong></p>
     </div>
