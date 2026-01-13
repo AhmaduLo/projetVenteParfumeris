@@ -102,7 +102,7 @@
       <div class="order-card" *ngFor="let order of orders">
         <div class="order-header">
           <div class="order-info">
-            <h3 class="order-id">Commande {{ order.metadata?.['orderNumber'] || '#' + order.id.substring(0, 12) + '...' }}</h3>
+            <h3 class="order-id">Commande {{ order.metadata?.['orderNumber'] || order.id }}</h3>
             <span class="order-date">{{ formatDate(order.createdDate) }}</span>
           </div>
           <div class="order-statuses">
@@ -210,7 +210,7 @@
           <strong>Client :</strong> {{ selectedOrder?.customer?.name }} ({{ selectedOrder?.customer?.email }})
         </p>
         <p class="modal-info">
-          <strong>Commande :</strong> {{ selectedOrder?.metadata?.['orderNumber'] || '#' + selectedOrder?.id?.substring(0, 12) + '...' }}
+          <strong>Commande :</strong> {{ selectedOrder?.metadata?.['orderNumber'] || selectedOrder?.id }}
         </p>
         <p class="modal-info">
           <strong>Montant :</strong> {{ (selectedOrder?.amount || 0).toFixed(2) }} €
@@ -259,7 +259,7 @@
 
       <div class="modal-body">
         <p class="confirm-message">
-          Marquer la commande #{{ orderToMarkAsDelivered?.id?.substring(0, 12) }}... comme reçue et envoyer un email de confirmation au client ?
+          Marquer la commande {{ orderToMarkAsDelivered?.metadata?.['orderNumber'] || orderToMarkAsDelivered?.id }} comme reçue et envoyer un email de confirmation au client ?
         </p>
       </div>
 
