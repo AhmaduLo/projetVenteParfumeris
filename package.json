@@ -8,7 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "deploy": "deploy.bat",
-    "deploy:prod": "vercel --prod --yes"
+    "deploy:prod": "vercel --prod --yes",
+    "dev:local": "dev-local.bat",
+    "dev:api": "vercel dev --listen 3000"
   },
   "private": true,
   "dependencies": {
