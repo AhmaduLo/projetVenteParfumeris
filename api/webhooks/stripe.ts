@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
 import sgMail from '@sendgrid/mail';
+import { generateOrderNumber, storeOrderNumber } from '../lib/utils/orderNumber';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16'
@@ -86,6 +87,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   console.log('🛒 Checkout complété:', session.id);
 
   try {
+    // Générer un numéro de commande unique
+    const orderNumber = await generateOrderNumber();
+    console.log(`📝 Numéro de commande généré: ${orderNumber}`);
+
+    // Stocker le numéro dans les métadonnées Stripe
+    await storeOrderNumber(session.id, orderNumber);
+
     // Récupérer les line items de la session
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
       expand: ['data.price.product']
@@ -143,7 +151,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         session.customer_details.name || 'Client',
         orderItems,
         totalAmount,
-        session.id
+        orderNumber  // Utiliser le numéro de commande au lieu de session.id
       );
     }
   } catch (error: any) {

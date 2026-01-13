@@ -22,8 +22,8 @@
       </p>
     </div>
 
-    <div class="session-info" *ngIf="sessionId">
-      <p class="session-id">Numéro de commande : <strong>{{ sessionId }}</strong></p>
+    <div class="session-info" *ngIf="orderNumber || sessionId">
+      <p class="session-id">Numéro de commande : <strong>{{ orderNumber || sessionId }}</strong></p>
     </div>
 
     <div class="actions">

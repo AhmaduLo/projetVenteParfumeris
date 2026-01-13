@@ -102,7 +102,7 @@
       <div class="order-card" *ngFor="let order of orders">
         <div class="order-header">
           <div class="order-info">
-            <h3 class="order-id">Commande #{{ order.id.substring(0, 12) }}...</h3>
+            <h3 class="order-id">Commande {{ order.metadata?.['orderNumber'] || '#' + order.id.substring(0, 12) + '...' }}</h3>
             <span class="order-date">{{ formatDate(order.createdDate) }}</span>
           </div>
           <div class="order-statuses">
@@ -210,7 +210,7 @@
           <strong>Client :</strong> {{ selectedOrder?.customer?.name }} ({{ selectedOrder?.customer?.email }})
         </p>
         <p class="modal-info">
-          <strong>Commande :</strong> #{{ selectedOrder?.id?.substring(0, 12) }}...
+          <strong>Commande :</strong> {{ selectedOrder?.metadata?.['orderNumber'] || '#' + selectedOrder?.id?.substring(0, 12) + '...' }}
         </p>
         <p class="modal-info">
           <strong>Montant :</strong> {{ (selectedOrder?.amount || 0).toFixed(2) }} €

@@ -14,6 +14,7 @@
 
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
+import { getOrderNumber } from '../lib/utils/orderNumber';
 
 const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!, {
   apiVersion: '2023-10-16',
@@ -137,11 +138,16 @@ export default async function handler(
       currency: session.currency || 'eur',
     };
 
+    // Récupérer le numéro de commande depuis les métadonnées
+    const orderNumber = await getOrderNumber(session.id);
+
     // ===== RETOURNER LES DÉTAILS =====
     return res.status(200).json({
       success: true,
+      orderNumber, // Ajouter le numéro de commande dans la réponse
       order: {
         id: session.id,
+        orderNumber, // Aussi dans l'objet order
         createdAt: new Date(session.created * 1000).toISOString(),
         customer: customerDetails,
         shippingAddress,

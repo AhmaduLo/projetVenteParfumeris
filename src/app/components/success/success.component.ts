@@ -17,6 +17,7 @@ import { OrderService } from '../../services/order.service';
 })
 export class SuccessComponent implements OnInit {
   sessionId: string | null = null;
+  orderNumber: string | null = null;
   loading = true;
   error: string | null = null;
 
@@ -37,7 +38,9 @@ export class SuccessComponent implements OnInit {
 
       // Enregistrer la commande dans l'historique
       this.orderService.fetchOrderDetails(this.sessionId).subscribe({
-        next: (response) => {
+        next: (response: any) => {
+          // Récupérer le numéro de commande depuis la réponse
+          this.orderNumber = response.orderNumber || this.sessionId;
           this.loading = false;
         },
         error: (err) => {
